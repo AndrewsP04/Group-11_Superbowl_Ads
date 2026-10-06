@@ -1,5 +1,5 @@
-"""
-Super Bowl Ads Intelligence Dashboard - Group 11
+"""Super Bowl Ads Intelligence Dashboard - Group 11
+
 Touchdowns and Tactics: Decoding Super Bowl Ads
 Interactive Prototype for Presentation II (Due Oct 20, 2026)
 """
@@ -257,9 +257,9 @@ with tab1:
           x="Avg YouTube Likes",
           y="Trait",
           orientation="h",
-          text=q1_df.sort_values("Avg YouTube Likes")[
-              "Avg YouTube Likes"
-          ].round(0),
+          text=q1_df.sort_values("Avg YouTube Likes")["Avg YouTube Likes"].round(
+              0
+          ),
           color="Avg YouTube Likes",
           color_continuous_scale="Blues",
           template="plotly_dark",
@@ -272,7 +272,7 @@ with tab1:
           xaxis_title="Average YouTube Likes",
           yaxis_title="",
       )
-      st.plotly_chart(fig1, use_container_width=True)
+      st.plotly_chart(fig1, width="stretch")
 
     with c2:
       fig2 = px.bar(
@@ -297,7 +297,7 @@ with tab1:
           xaxis_title="Wikipedia Search Spike (× Normal)",
           yaxis_title="",
       )
-      st.plotly_chart(fig2, use_container_width=True)
+      st.plotly_chart(fig2, width="stretch")
 
     with st.expander("📋 View Trait Statistics Table"):
       show_tbl = q1_df.copy()
@@ -307,7 +307,7 @@ with tab1:
       show_tbl["Avg Wikipedia Spike (× normal)"] = show_tbl[
           "Avg Wikipedia Spike (× normal)"
       ].map("{:.2f}×".format)
-      st.dataframe(show_tbl.set_index("Trait"), use_container_width=True)
+      st.dataframe(show_tbl.set_index("Trait"), width="stretch")
 
     st.markdown(
         '<div class="insight">💡 <b>Executive Insight:</b> Celebrity casting'
@@ -354,7 +354,7 @@ with tab2:
       legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left"),
       margin=dict(l=20, r=20, t=50, b=20),
   )
-  st.plotly_chart(fig_trend, use_container_width=True)
+  st.plotly_chart(fig_trend, width="stretch")
 
   st.markdown(
       '<div class="insight">💡 <b>Saturation Dynamics:</b> Celebrity presence'
@@ -399,7 +399,7 @@ with tab3:
   )
   fig_brand.update_traces(textposition="top center")
   fig_brand.update_layout(height=480, showlegend=False)
-  st.plotly_chart(fig_brand, use_container_width=True)
+  st.plotly_chart(fig_brand, width="stretch")
 
   st.markdown(
       '<div class="insight">💡 <b>Competitive Quadrants:</b> Doritos captures'
@@ -414,12 +414,8 @@ with tab4:
   st.markdown(
       "### Q4 · Do Highly Viewed Ads Also Generate Strong Audience Dialogue?"
   )
-  sc_df = filtered.dropna(
-      subset=["yt_view_count", "yt_comment_count"]
-  ).copy()
-  sc_df = sc_df[
-      (sc_df["yt_view_count"] > 0) & (sc_df["yt_comment_count"] > 0)
-  ]
+  sc_df = filtered.dropna(subset=["yt_view_count", "yt_comment_count"]).copy()
+  sc_df = sc_df[(sc_df["yt_view_count"] > 0) & (sc_df["yt_comment_count"] > 0)]
 
   fig_sc = px.scatter(
       sc_df,
@@ -439,7 +435,7 @@ with tab4:
       hover_data=["brand", "year"],
   )
   fig_sc.update_layout(height=480)
-  st.plotly_chart(fig_sc, use_container_width=True)
+  st.plotly_chart(fig_sc, width="stretch")
 
   st.markdown(
       '<div class="insight">💡 <b>Power-Law Regression Slope = 0.66:</b> Across'
@@ -485,7 +481,7 @@ with tab5:
       )
       fig_q.update_traces(textposition="outside")
       fig_q.update_layout(height=380, showlegend=False)
-      st.plotly_chart(fig_q, use_container_width=True)
+      st.plotly_chart(fig_q, width="stretch")
 
   with cb:
     st.subheader("Shareholder Value: 7-Day Stock CAR (%) vs S&P 500")
@@ -502,7 +498,7 @@ with tab5:
           labels={"car_7d_pct": "7-Day Stock CAR (%)"},
       )
       fig_c.update_layout(height=380, showlegend=False)
-      st.plotly_chart(fig_c, use_container_width=True)
+      st.plotly_chart(fig_c, width="stretch")
 
   st.markdown(
       '<div class="insight">💡 <b>Broadcast & Financial Takeaway:</b> Quarter'

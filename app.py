@@ -242,34 +242,33 @@ with tab1:
     on = filtered[filtered[trait] == True]
     rows_q1.append({
         "Trait": TRAIT_LABELS[trait],
-        "Avg YouTube Likes": on["yt_like_count"].mean(),
-        "Median Comments": on["yt_comment_count"].median(),
+        "Ads (n)": len(on),
+        "Avg Engagement Rate (%)": on["yt_engagement_rate"].mean() * 100,
         "Avg Wikipedia Spike (× normal)": on["wiki_spike"].mean(),
-        "Commercial Count": len(on),
     })
-  q1_df = pd.DataFrame(rows_q1).dropna(subset=["Avg YouTube Likes"])
+  q1_df = pd.DataFrame(rows_q1).dropna(subset=["Avg Engagement Rate (%)"])
 
   if not q1_df.empty:
     c1, c2 = st.columns(2)
     with c1:
       fig1 = px.bar(
-          q1_df.sort_values("Avg YouTube Likes"),
-          x="Avg YouTube Likes",
+          q1_df.sort_values("Avg Engagement Rate (%)"),
+          x="Avg Engagement Rate (%)",
           y="Trait",
           orientation="h",
-          text=q1_df.sort_values("Avg YouTube Likes")["Avg YouTube Likes"].round(
-              0
-          ),
-          color="Avg YouTube Likes",
+          text=q1_df.sort_values("Avg Engagement Rate (%)")[
+              "Avg Engagement Rate (%)"
+          ].round(2),
+          color="Avg Engagement Rate (%)",
           color_continuous_scale="Blues",
           template="plotly_dark",
       )
-      fig1.update_traces(texttemplate="%{text:,.0f}", textposition="outside")
+      fig1.update_traces(texttemplate="%{text:.2f}%", textposition="outside")
       fig1.update_layout(
           coloraxis_showscale=False,
           height=360,
           margin=dict(l=10, r=80, t=10, b=10),
-          xaxis_title="Average YouTube Likes",
+          xaxis_title="Average engagement rate (%) — likes + comments ÷ views",
           yaxis_title="",
       )
       st.plotly_chart(fig1, width="stretch")
@@ -301,19 +300,19 @@ with tab1:
 
     with st.expander("📋 View Trait Statistics Table"):
       show_tbl = q1_df.copy()
-      show_tbl["Avg YouTube Likes"] = show_tbl["Avg YouTube Likes"].map(
-          "{:,.0f}".format
-      )
+      show_tbl["Avg Engagement Rate (%)"] = show_tbl[
+          "Avg Engagement Rate (%)"
+      ].map("{:.2f}%".format)
       show_tbl["Avg Wikipedia Spike (× normal)"] = show_tbl[
           "Avg Wikipedia Spike (× normal)"
       ].map("{:.2f}×".format)
       st.dataframe(show_tbl.set_index("Trait"), width="stretch")
 
     st.markdown(
-        '<div class="insight">💡 <b>Executive Insight:</b> Celebrity casting'
-        " drives the highest social like and comment volume. However,"
-        " <b>Humor</b> drives the largest second-screen Wikipedia search"
-        " spikes (>2.5× baseline), indicating active brand consideration.</div>",
+        '<div class="insight">💡 <b>How to read this:</b> Engagement rate'
+        " is the share of YouTube views that resulted in a like or comment."
+        " Wikipedia spike shows search activity compared with a brand’s"
+        " normal level. These measure different kinds of audience response.</div>",
         unsafe_allow_html=True,
     )
 

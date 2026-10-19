@@ -93,37 +93,6 @@ def load_data():
   )
   df = master_df.merge(spike_avg, on=["brand", "year"], how="left")
 
-  # Merge Phase 2 broadcast ratings flow and capital market CAR data
-  try:
-    flow_df = pd.read_csv("superbowl_ads_with_linear_ratings_flow.csv")
-    car_df = pd.read_csv("superbowl_ads_with_car.csv")
-    flow_df["car_7d_pct"] = car_df["car_7d_pct"]
-    flow_df["brand"] = flow_df["brand"].replace({"Hynudai": "Hyundai"})
-
-    # Aggregate by brand-year to prevent duplicate row multiplications
-    econ_summary = (
-        flow_df.groupby(["brand", "year"])
-        .agg(
-            ad_meter_score=("ad_meter_score", "mean"),
-            spot_actual_viewers_m=("spot_actual_viewers_m", "mean"),
-            effective_cpm_usd=("effective_cpm_usd", "mean"),
-            post_ad_4wk_sales_volume_lift_pct=(
-                "post_ad_4wk_sales_volume_lift_pct",
-                "mean",
-            ),
-            car_7d_pct=("car_7d_pct", "mean"),
-            broadcast_quarter=(
-                "broadcast_quarter",
-                lambda x: x.mode().iloc[0] if not x.empty else "Q2",
-            ),
-        )
-        .reset_index()
-    )
-
-    df = df.merge(econ_summary, on=["brand", "year"], how="left")
-  except Exception:
-    pass
-
   return df, traits
 
 
@@ -198,7 +167,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-k1, k2, k3, k4 = st.columns(4)
+k1, k2, k3 = st.columns(3)
 k1.metric("Commercials Analyzed", f"{len(filtered):,}")
 k2.metric(
     "Total Digital Reach",
@@ -212,29 +181,20 @@ k3.metric(
     if filtered["wiki_spike"].notna().any()
     else "—",
 )
-k4.metric(
-    "Median 7D Stock CAR",
-    f"{filtered['car_7d_pct'].median():+.2f}%"
-    if "car_7d_pct" in filtered.columns and filtered["car_7d_pct"].notna().any()
-    else "—",
-)
-
 st.markdown("---")
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3 = st.tabs([
     "Q1 · Trait Engagement",
     "Q2 · Trends Over Time",
     "Q3 · Brand Positioning",
-    "Q4 · Reach vs. Dialogue",
-    "Phase 2 · Telecast Flow & Financial Return",
 ])
 
 # ── Tab 1: Q1 Trait Engagement ────────────────────────────────────────────────
 with tab1:
-  st.markdown("### Q1 · Which creative traits drive the most engagement?")
+  st.markdown("### Q1 · Which creative traits are associated with engagement?")
   st.caption(
-      "Compares digital engagement volume against second-screen search intent"
-      " across active traits."
+      "Compares average YouTube engagement rate and average Wikipedia search "
+      "spike for ads that use each selected trait."
   )
 
   rows_q1 = []
@@ -242,80 +202,93 @@ with tab1:
     on = filtered[filtered[trait] == True]
     rows_q1.append({
         "Trait": TRAIT_LABELS[trait],
-        "Avg YouTube Likes": on["yt_like_count"].mean(),
-        "Median Comments": on["yt_comment_count"].median(),
-        "Avg Wikipedia Spike (× normal)": on["wiki_spike"].mean(),
-        "Commercial Count": len(on),
+        "Avg Engagement Rate (%)": on["yt_engagement_rate"].mean() * 100,
+        "Avg Wikipedia Spike (×)": on["wiki_spike"].mean(),
     })
-  q1_df = pd.DataFrame(rows_q1).dropna(subset=["Avg YouTube Likes"])
+
+  q1_df = pd.DataFrame(rows_q1).dropna(
+      subset=["Avg Engagement Rate (%)"]
+  )
 
   if not q1_df.empty:
     c1, c2 = st.columns(2)
+
     with c1:
+      engagement_plot = q1_df.sort_values("Avg Engagement Rate (%)")
       fig1 = px.bar(
-          q1_df.sort_values("Avg YouTube Likes"),
-          x="Avg YouTube Likes",
+          engagement_plot,
+          x="Avg Engagement Rate (%)",
           y="Trait",
           orientation="h",
-          text=q1_df.sort_values("Avg YouTube Likes")["Avg YouTube Likes"].round(
-              0
-          ),
-          color="Avg YouTube Likes",
+          text=[
+              f"{rate:.2f}%"
+              for rate in engagement_plot["Avg Engagement Rate (%)"]
+          ],
+          color="Avg Engagement Rate (%)",
           color_continuous_scale="Blues",
           template="plotly_dark",
+          title="Average YouTube Engagement Rate by Trait",
       )
-      fig1.update_traces(texttemplate="%{text:,.0f}", textposition="outside")
+      fig1.update_traces(textposition="outside")
       fig1.update_layout(
           coloraxis_showscale=False,
-          height=360,
-          margin=dict(l=10, r=80, t=10, b=10),
-          xaxis_title="Average YouTube Likes",
+          height=380,
+          xaxis=dict(
+              title="Average YouTube engagement rate",
+              tickformat=".1f",
+              ticksuffix="%",
+              dtick=0.1,
+              range=[0, q1_df["Avg Engagement Rate (%)"].max() * 1.25],
+          ),
           yaxis_title="",
+          margin=dict(l=10, r=130, t=45, b=10),
       )
       st.plotly_chart(fig1, width="stretch")
 
     with c2:
-      fig2 = px.bar(
-          q1_df.sort_values("Avg Wikipedia Spike (× normal)"),
-          x="Avg Wikipedia Spike (× normal)",
-          y="Trait",
-          orientation="h",
-          text=q1_df.sort_values("Avg Wikipedia Spike (× normal)")[
-              "Avg Wikipedia Spike (× normal)"
-          ].round(2),
-          color="Avg Wikipedia Spike (× normal)",
-          color_continuous_scale="Purples",
-          template="plotly_dark",
-      )
-      fig2.update_traces(
-          texttemplate="%{text:.1f}× normal", textposition="outside"
-      )
-      fig2.update_layout(
-          coloraxis_showscale=False,
-          height=360,
-          margin=dict(l=10, r=90, t=10, b=10),
-          xaxis_title="Wikipedia Search Spike (× Normal)",
-          yaxis_title="",
-      )
-      st.plotly_chart(fig2, width="stretch")
+      wiki_plot = q1_df.dropna(
+          subset=["Avg Wikipedia Spike (×)"]
+      ).sort_values("Avg Wikipedia Spike (×)")
+      if not wiki_plot.empty:
+        fig2 = px.bar(
+            wiki_plot,
+            x="Avg Wikipedia Spike (×)",
+            y="Trait",
+            orientation="h",
+            text=[
+                f"{spike:.1f}×"
+                for spike in wiki_plot["Avg Wikipedia Spike (×)"]
+            ],
+            color="Avg Wikipedia Spike (×)",
+            color_continuous_scale="Purples",
+            template="plotly_dark",
+            title="Average Wikipedia Spike by Trait",
+        )
+        fig2.update_traces(textposition="outside")
+        fig2.update_layout(
+            coloraxis_showscale=False,
+            height=380,
+            xaxis=dict(
+                title="Average Wikipedia search spike",
+                tickformat=".0f",
+                ticksuffix="×",
+                dtick=1,
+                range=[0, wiki_plot["Avg Wikipedia Spike (×)"].max() * 1.25],
+            ),
+            yaxis_title="",
+            margin=dict(l=10, r=130, t=45, b=10),
+        )
+        st.plotly_chart(fig2, width="stretch")
 
-    with st.expander("📋 View Trait Statistics Table"):
-      show_tbl = q1_df.copy()
-      show_tbl["Avg YouTube Likes"] = show_tbl["Avg YouTube Likes"].map(
-          "{:,.0f}".format
-      )
-      show_tbl["Avg Wikipedia Spike (× normal)"] = show_tbl[
-          "Avg Wikipedia Spike (× normal)"
-      ].map("{:.2f}×".format)
-      st.dataframe(show_tbl.set_index("Trait"), width="stretch")
-
-    st.markdown(
-        '<div class="insight">💡 <b>Executive Insight:</b> Celebrity casting'
-        " drives the highest social like and comment volume. However,"
-        " <b>Humor</b> drives the largest second-screen Wikipedia search"
-        " spikes (>2.5× baseline), indicating active brand consideration.</div>",
-        unsafe_allow_html=True,
+    st.dataframe(
+        q1_df.round(
+            {"Avg Engagement Rate (%)": 2, "Avg Wikipedia Spike (×)": 2}
+        ),
+        hide_index=True,
+        width="stretch",
     )
+  else:
+    st.info("No engagement data is available for these filters.")
 
 # ── Tab 2: Q2 Trait Trends ────────────────────────────────────────────────────
 with tab2:
@@ -366,146 +339,50 @@ with tab2:
 
 # ── Tab 3: Q3 Brand Positioning ───────────────────────────────────────────────
 with tab3:
-  st.markdown(
-      "### Q3 · Brand Positioning Matrix: Annual Reach vs. Engagement Rate"
+  st.markdown("### Q3 · Brand Comparison: Median Engagement Rate")
+  st.caption(
+      "Brands are ranked by their median YouTube engagement rate. The label "
+      "shows how many ads are included for each brand."
   )
   b_pos = (
-      filtered.groupby("brand")
+      filtered.groupby("brand", as_index=False)
       .agg(
-          total_ads=("brand", "count"),
-          median_views=("yt_view_count", "median"),
+          total_ads=("yt_engagement_rate", "count"),
           median_eng_rate=("yt_engagement_rate", "median"),
-          avg_ad_meter=("ad_meter_score", "mean"),
       )
-      .reset_index()
   )
   b_pos["median_eng_pct"] = b_pos["median_eng_rate"] * 100.0
+  b_pos = b_pos.dropna(subset=["median_eng_pct"]).sort_values(
+      "median_eng_pct", ascending=True
+  )
 
-  fig_brand = px.scatter(
+  if not b_pos.empty:
+    b_pos["bar_label"] = b_pos.apply(
+        lambda row: f"{row['median_eng_pct']:.2f}%  (n={int(row['total_ads'])})",
+        axis=1,
+    )
+    fig_brand = px.bar(
       b_pos,
       x="median_eng_pct",
-      y="median_views",
-      size="total_ads",
-      color="brand",
-      text="brand",
-      log_y=True,
+      y="brand",
+      orientation="h",
+      text="bar_label",
+      color="median_eng_pct",
+      color_continuous_scale="Blues",
       template="plotly_dark",
-      labels={
-          "median_eng_pct": (
-              "Median Engagement Rate (%) [(Likes+Comments)/Views]"
-          ),
-          "median_views": "Median Views (Log Scale)",
-      },
-  )
-  fig_brand.update_traces(textposition="top center")
-  fig_brand.update_layout(height=480, showlegend=False)
-  st.plotly_chart(fig_brand, width="stretch")
+      labels={"median_eng_pct": "Median engagement rate (%)", "brand": "Brand"},
+      title="Median YouTube engagement rate by brand",
+    )
+    fig_brand.update_traces(textposition="outside", cliponaxis=False)
+    fig_brand.update_layout(
+        height=max(360, 48 * len(b_pos)),
+        showlegend=False,
+        coloraxis_showscale=False,
+        xaxis_title="Median engagement rate (%)",
+        yaxis_title="",
+        margin=dict(l=10, r=100, t=45, b=10),
+    )
+    st.plotly_chart(fig_brand, width="stretch")
+  else:
+    st.info("No engagement-rate data is available for these brands and years.")
 
-  st.markdown(
-      '<div class="insight">💡 <b>Competitive Quadrants:</b> Doritos captures'
-      " high reach and high engagement. FMCG beverage brands lead in raw view"
-      " volume, while automotive challenger brands convert higher median"
-      " engagement rates per impression.</div>",
-      unsafe_allow_html=True,
-  )
-
-# ── Tab 4: Q4 Views vs. Dialogue (Power-Law) ──────────────────────────────────
-with tab4:
-  st.markdown(
-      "### Q4 · Do Highly Viewed Ads Also Generate Strong Audience Dialogue?"
-  )
-  sc_df = filtered.dropna(subset=["yt_view_count", "yt_comment_count"]).copy()
-  sc_df = sc_df[(sc_df["yt_view_count"] > 0) & (sc_df["yt_comment_count"] > 0)]
-
-  fig_sc = px.scatter(
-      sc_df,
-      x="yt_view_count",
-      y="yt_comment_count",
-      color="celebrity",
-      log_x=True,
-      log_y=True,
-      trendline="ols",
-      template="plotly_dark",
-      color_discrete_map={True: "#f38ba8", False: "#89b4fa"},
-      labels={
-          "yt_view_count": "Total Views (Log Scale)",
-          "yt_comment_count": "Total Comments (Log Scale)",
-          "celebrity": "Celebrity Present",
-      },
-      hover_data=["brand", "year"],
-  )
-  fig_sc.update_layout(height=480)
-  st.plotly_chart(fig_sc, width="stretch")
-
-  st.markdown(
-      '<div class="insight">💡 <b>Power-Law Regression Slope = 0.66:</b> Across'
-      " the log-log fit line, comments grow at ~66% the rate of views, showing"
-      " diminishing returns on passive impressions. Celebrity spots cluster"
-      " above the regression line, generating disproportionate discussion.</div>",
-      unsafe_allow_html=True,
-  )
-
-# ── Tab 5: Phase 2 Telecast Flow & Financial Return ───────────────────────────
-with tab5:
-  st.markdown(
-      "### Phase 2 · Linear Telecast Audience Flow & Shareholder Event Study"
-  )
-  st.caption(
-      "Self-generated opportunity features addressing linear ratings decay,"
-      " Effective CPM, and stock market abnormal returns (CAR)."
-  )
-
-  ca, cb = st.columns(2)
-  with ca:
-    st.subheader("Audience Size & Effective CPM by Broadcast Quarter")
-    if "spot_actual_viewers_m" in filtered.columns:
-      flow_summary = (
-          filtered.groupby("broadcast_quarter")
-          .agg(
-              avg_viewers=("spot_actual_viewers_m", "mean"),
-              avg_cpm=("effective_cpm_usd", "mean"),
-          )
-          .reset_index()
-      )
-      fig_q = px.bar(
-          flow_summary,
-          x="broadcast_quarter",
-          y="avg_viewers",
-          color="broadcast_quarter",
-          template="plotly_dark",
-          text=flow_summary["avg_viewers"].round(1),
-          labels={
-              "broadcast_quarter": "Game Quarter",
-              "avg_viewers": "Avg Telecast Viewers (Millions)",
-          },
-      )
-      fig_q.update_traces(textposition="outside")
-      fig_q.update_layout(height=380, showlegend=False)
-      st.plotly_chart(fig_q, width="stretch")
-
-  with cb:
-    st.subheader("Shareholder Value: 7-Day Stock CAR (%) vs S&P 500")
-    if (
-        "car_7d_pct" in filtered.columns
-        and filtered["car_7d_pct"].notna().any()
-    ):
-      fig_c = px.box(
-          filtered.dropna(subset=["car_7d_pct"]),
-          x="brand",
-          y="car_7d_pct",
-          color="brand",
-          template="plotly_dark",
-          labels={"car_7d_pct": "7-Day Stock CAR (%)"},
-      )
-      fig_c.update_layout(height=380, showlegend=False)
-      st.plotly_chart(fig_c, width="stretch")
-
-  st.markdown(
-      '<div class="insight">💡 <b>Broadcast & Financial Takeaway:</b> Quarter'
-      " 2 captures peak living-room viewership (~108–118% of game average),"
-      " delivering the lowest Effective CPM. In close games, Q4 retains high"
-      " viewership, but blowouts exhibit an average 23.4% tune-out drop."
-      " Humor-first campaigns correlate with positive abnormal equity returns"
-      " (+0.42% to +0.68%).</div>",
-      unsafe_allow_html=True,
-  )

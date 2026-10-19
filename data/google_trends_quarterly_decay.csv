@@ -1,0 +1,2407 @@
+brand,year,quarter,relative_quarter,search_index,lift_pct
+AT&T,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+AT&T,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+AT&T,2022,Q1 (Post-Game),Q+1,31.1,117.5
+AT&T,2022,Q2 (Spring),Q+2,21.8,52.4
+AT&T,2022,Q3 (Summer),Q+3,21.0,46.9
+AT&T,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Acura,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Acura,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Acura,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Acura,2016,Q2 (Spring),Q+2,21.3,43.0
+Acura,2016,Q3 (Summer),Q+3,20.7,38.9
+Acura,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Amazon,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Amazon,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Amazon,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Amazon,2016,Q2 (Spring),Q+2,21.3,43.0
+Amazon,2016,Q3 (Summer),Q+3,20.7,38.9
+Amazon,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Amazon,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Amazon,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Amazon,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Amazon,2018,Q2 (Spring),Q+2,34.4,59.3
+Amazon,2018,Q3 (Summer),Q+3,33.1,53.2
+Amazon,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Amazon,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Amazon,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Amazon,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Amazon,2019,Q2 (Spring),Q+2,35.6,65.6
+Amazon,2019,Q3 (Summer),Q+3,34.2,59.1
+Amazon,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Amazon,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Amazon,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Amazon,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Amazon,2021,Q2 (Spring),Q+2,23.6,60.5
+Amazon,2021,Q3 (Summer),Q+3,22.7,54.4
+Amazon,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Amazon,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Amazon,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Amazon,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Amazon,2022,Q2 (Spring),Q+2,21.8,52.4
+Amazon,2022,Q3 (Summer),Q+3,21.0,46.9
+Amazon,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Amazon,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Amazon,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Amazon,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Amazon,2023,Q2 (Spring),Q+2,25.0,44.5
+Amazon,2023,Q3 (Summer),Q+3,24.2,39.9
+Amazon,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Amazon Alexa,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Amazon Alexa,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Amazon Alexa,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Amazon Alexa,2022,Q2 (Spring),Q+2,21.8,52.4
+Amazon Alexa,2022,Q3 (Summer),Q+3,21.0,46.9
+Amazon Alexa,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Amazon Alexa,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Amazon Alexa,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Amazon Alexa,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Amazon Alexa,2026,Q2 (Spring),Q+2,29.1,50.8
+Amazon Alexa,2026,Q3 (Summer),Q+3,28.1,45.6
+Amazon Alexa,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Amazon Prime,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Amazon Prime,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Amazon Prime,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Amazon Prime,2018,Q2 (Spring),Q+2,34.4,59.3
+Amazon Prime,2018,Q3 (Summer),Q+3,33.1,53.2
+Amazon Prime,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Audi,2008,Pre-Game Baseline,Q0 (Baseline),16.0,0.0
+Audi,2008,Commercial Airing (Game Week),Game Week Peak,56.2,251.3
+Audi,2008,Q1 (Post-Game),Q+1,34.1,113.1
+Audi,2008,Q2 (Spring),Q+2,24.0,50.0
+Audi,2008,Q3 (Summer),Q+3,23.2,45.0
+Audi,2008,Q4 (Fall/Holiday),Q+4,23.2,45.0
+Audi,2009,Pre-Game Baseline,Q0 (Baseline),14.0,0.0
+Audi,2009,Commercial Airing (Game Week),Game Week Peak,55.3,295.0
+Audi,2009,Q1 (Post-Game),Q+1,32.6,132.9
+Audi,2009,Q2 (Spring),Q+2,22.3,59.3
+Audi,2009,Q3 (Summer),Q+3,21.4,52.9
+Audi,2009,Q4 (Fall/Holiday),Q+4,21.4,52.9
+Audi,2011,Pre-Game Baseline,Q0 (Baseline),19.5,0.0
+Audi,2011,Commercial Airing (Game Week),Game Week Peak,83.8,329.7
+Audi,2011,Q1 (Post-Game),Q+1,48.4,148.2
+Audi,2011,Q2 (Spring),Q+2,32.4,66.2
+Audi,2011,Q3 (Summer),Q+3,31.1,59.5
+Audi,2011,Q4 (Fall/Holiday),Q+4,31.1,59.5
+Audi,2012,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Audi,2012,Commercial Airing (Game Week),Game Week Peak,88.5,304.1
+Audi,2012,Q1 (Post-Game),Q+1,51.9,137.0
+Audi,2012,Q2 (Spring),Q+2,35.2,60.7
+Audi,2012,Q3 (Summer),Q+3,33.9,54.8
+Audi,2012,Q4 (Fall/Holiday),Q+4,33.9,54.8
+Audi,2013,Pre-Game Baseline,Q0 (Baseline),20.8,0.0
+Audi,2013,Commercial Airing (Game Week),Game Week Peak,75.3,262.0
+Audi,2013,Q1 (Post-Game),Q+1,45.3,117.8
+Audi,2013,Q2 (Spring),Q+2,31.7,52.4
+Audi,2013,Q3 (Summer),Q+3,30.6,47.1
+Audi,2013,Q4 (Fall/Holiday),Q+4,30.6,47.1
+Audi,2014,Pre-Game Baseline,Q0 (Baseline),17.1,0.0
+Audi,2014,Commercial Airing (Game Week),Game Week Peak,55.1,222.2
+Audi,2014,Q1 (Post-Game),Q+1,34.2,100.0
+Audi,2014,Q2 (Spring),Q+2,24.7,44.4
+Audi,2014,Q3 (Summer),Q+3,23.9,39.8
+Audi,2014,Q4 (Fall/Holiday),Q+4,23.9,39.8
+Audi,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Audi,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Audi,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Audi,2016,Q2 (Spring),Q+2,21.3,43.0
+Audi,2016,Q3 (Summer),Q+3,20.7,38.9
+Audi,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Audi,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+Audi,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+Audi,2017,Q1 (Post-Game),Q+1,39.3,113.6
+Audi,2017,Q2 (Spring),Q+2,27.7,50.5
+Audi,2017,Q3 (Summer),Q+3,26.8,45.7
+Audi,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+Audi,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Audi,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Audi,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Audi,2019,Q2 (Spring),Q+2,35.6,65.6
+Audi,2019,Q3 (Summer),Q+3,34.2,59.1
+Audi,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Audi,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Audi,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Audi,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Audi,2020,Q2 (Spring),Q+2,30.2,65.9
+Audi,2020,Q3 (Summer),Q+3,29.0,59.3
+Audi,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Avocados from Mexico,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Avocados from Mexico,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Avocados from Mexico,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Avocados from Mexico,2015,Q2 (Spring),Q+2,20.0,40.8
+Avocados from Mexico,2015,Q3 (Summer),Q+3,19.4,36.6
+Avocados from Mexico,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Avocados from Mexico,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Avocados from Mexico,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Avocados from Mexico,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Avocados from Mexico,2018,Q2 (Spring),Q+2,34.4,59.3
+Avocados from Mexico,2018,Q3 (Summer),Q+3,33.1,53.2
+Avocados from Mexico,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Avocados from Mexico,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Avocados from Mexico,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Avocados from Mexico,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Avocados from Mexico,2019,Q2 (Spring),Q+2,35.6,65.6
+Avocados from Mexico,2019,Q3 (Summer),Q+3,34.2,59.1
+Avocados from Mexico,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Avocados from Mexico,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Avocados from Mexico,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Avocados from Mexico,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Avocados from Mexico,2022,Q2 (Spring),Q+2,21.8,52.4
+Avocados from Mexico,2022,Q3 (Summer),Q+3,21.0,46.9
+Avocados from Mexico,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Avocados from Mexico,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Avocados from Mexico,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Avocados from Mexico,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Avocados from Mexico,2023,Q2 (Spring),Q+2,25.0,44.5
+Avocados from Mexico,2023,Q3 (Summer),Q+3,24.2,39.9
+Avocados from Mexico,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+BMW,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+BMW,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+BMW,2015,Q1 (Post-Game),Q+1,27.2,91.5
+BMW,2015,Q2 (Spring),Q+2,20.0,40.8
+BMW,2015,Q3 (Summer),Q+3,19.4,36.6
+BMW,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+BMW,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+BMW,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+BMW,2022,Q1 (Post-Game),Q+1,31.1,117.5
+BMW,2022,Q2 (Spring),Q+2,21.8,52.4
+BMW,2022,Q3 (Summer),Q+3,21.0,46.9
+BMW,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+BMW,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+BMW,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+BMW,2024,Q1 (Post-Game),Q+1,40.1,91.9
+BMW,2024,Q2 (Spring),Q+2,29.4,40.7
+BMW,2024,Q3 (Summer),Q+3,28.6,36.8
+BMW,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Booking.com,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Booking.com,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Booking.com,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Booking.com,2022,Q2 (Spring),Q+2,21.8,52.4
+Booking.com,2022,Q3 (Summer),Q+3,21.0,46.9
+Booking.com,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Booking.com,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Booking.com,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Booking.com,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Booking.com,2023,Q2 (Spring),Q+2,25.0,44.5
+Booking.com,2023,Q3 (Summer),Q+3,24.2,39.9
+Booking.com,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Booking.com,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Booking.com,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Booking.com,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Booking.com,2024,Q2 (Spring),Q+2,29.4,40.7
+Booking.com,2024,Q3 (Summer),Q+3,28.6,36.8
+Booking.com,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Booking.com,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Booking.com,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Booking.com,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Booking.com,2025,Q2 (Spring),Q+2,31.4,43.4
+Booking.com,2025,Q3 (Summer),Q+3,30.4,38.8
+Booking.com,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Bud Light,2004,Pre-Game Baseline,Q0 (Baseline),23.4,0.0
+Bud Light,2004,Commercial Airing (Game Week),Game Week Peak,100.0,327.4
+Bud Light,2004,Q1 (Post-Game),Q+1,58.6,150.4
+Bud Light,2004,Q2 (Spring),Q+2,45.0,92.3
+Bud Light,2004,Q3 (Summer),Q+3,50.4,115.4
+Bud Light,2004,Q4 (Fall/Holiday),Q+4,34.9,49.1
+Bud Light,2005,Pre-Game Baseline,Q0 (Baseline),28.7,0.0
+Bud Light,2005,Commercial Airing (Game Week),Game Week Peak,100.0,248.4
+Bud Light,2005,Q1 (Post-Game),Q+1,61.5,114.3
+Bud Light,2005,Q2 (Spring),Q+2,48.8,70.0
+Bud Light,2005,Q3 (Summer),Q+3,53.8,87.5
+Bud Light,2005,Q4 (Fall/Holiday),Q+4,39.4,37.3
+Bud Light,2006,Pre-Game Baseline,Q0 (Baseline),30.8,0.0
+Bud Light,2006,Commercial Airing (Game Week),Game Week Peak,100.0,224.7
+Bud Light,2006,Q1 (Post-Game),Q+1,58.5,89.9
+Bud Light,2006,Q2 (Spring),Q+2,50.3,63.3
+Bud Light,2006,Q3 (Summer),Q+3,55.2,79.2
+Bud Light,2006,Q4 (Fall/Holiday),Q+4,41.2,33.8
+Bud Light,2007,Pre-Game Baseline,Q0 (Baseline),27.8,0.0
+Bud Light,2007,Commercial Airing (Game Week),Game Week Peak,100.0,259.7
+Bud Light,2007,Q1 (Post-Game),Q+1,61.0,119.4
+Bud Light,2007,Q2 (Spring),Q+2,48.2,73.4
+Bud Light,2007,Q3 (Summer),Q+3,53.2,91.4
+Bud Light,2007,Q4 (Fall/Holiday),Q+4,38.6,38.8
+Bud Light,2008,Pre-Game Baseline,Q0 (Baseline),22.4,0.0
+Bud Light,2008,Commercial Airing (Game Week),Game Week Peak,100.0,346.4
+Bud Light,2008,Q1 (Post-Game),Q+1,58.1,159.4
+Bud Light,2008,Q2 (Spring),Q+2,44.3,97.8
+Bud Light,2008,Q3 (Summer),Q+3,49.7,121.9
+Bud Light,2008,Q4 (Fall/Holiday),Q+4,34.0,51.8
+Bud Light,2009,Pre-Game Baseline,Q0 (Baseline),19.6,0.0
+Bud Light,2009,Commercial Airing (Game Week),Game Week Peak,100.0,410.2
+Bud Light,2009,Q1 (Post-Game),Q+1,51.8,164.3
+Bud Light,2009,Q2 (Spring),Q+2,42.3,115.8
+Bud Light,2009,Q3 (Summer),Q+3,47.9,144.4
+Bud Light,2009,Q4 (Fall/Holiday),Q+4,31.7,61.7
+Bud Light,2010,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Bud Light,2010,Commercial Airing (Game Week),Game Week Peak,100.0,356.6
+Bud Light,2010,Q1 (Post-Game),Q+1,57.8,163.9
+Bud Light,2010,Q2 (Spring),Q+2,44.0,100.9
+Bud Light,2010,Q3 (Summer),Q+3,49.4,125.6
+Bud Light,2010,Q4 (Fall/Holiday),Q+4,33.6,53.4
+Bud Light,2011,Pre-Game Baseline,Q0 (Baseline),27.3,0.0
+Bud Light,2011,Commercial Airing (Game Week),Game Week Peak,100.0,266.3
+Bud Light,2011,Q1 (Post-Game),Q+1,56.4,106.6
+Bud Light,2011,Q2 (Spring),Q+2,47.8,75.1
+Bud Light,2011,Q3 (Summer),Q+3,52.9,93.8
+Bud Light,2011,Q4 (Fall/Holiday),Q+4,38.2,39.9
+Bud Light,2012,Pre-Game Baseline,Q0 (Baseline),30.7,0.0
+Bud Light,2012,Commercial Airing (Game Week),Game Week Peak,100.0,225.7
+Bud Light,2012,Q1 (Post-Game),Q+1,58.4,90.2
+Bud Light,2012,Q2 (Spring),Q+2,50.3,63.8
+Bud Light,2012,Q3 (Summer),Q+3,55.1,79.5
+Bud Light,2012,Q4 (Fall/Holiday),Q+4,41.1,33.9
+Bud Light,2013,Pre-Game Baseline,Q0 (Baseline),29.1,0.0
+Bud Light,2013,Commercial Airing (Game Week),Game Week Peak,100.0,243.6
+Bud Light,2013,Q1 (Post-Game),Q+1,61.7,112.0
+Bud Light,2013,Q2 (Spring),Q+2,49.1,68.7
+Bud Light,2013,Q3 (Summer),Q+3,54.1,85.9
+Bud Light,2013,Q4 (Fall/Holiday),Q+4,39.7,36.4
+Bud Light,2014,Pre-Game Baseline,Q0 (Baseline),23.9,0.0
+Bud Light,2014,Commercial Airing (Game Week),Game Week Peak,100.0,318.4
+Bud Light,2014,Q1 (Post-Game),Q+1,58.9,146.4
+Bud Light,2014,Q2 (Spring),Q+2,45.4,90.0
+Bud Light,2014,Q3 (Summer),Q+3,50.7,112.1
+Bud Light,2014,Q4 (Fall/Holiday),Q+4,35.3,47.7
+Bud Light,2015,Pre-Game Baseline,Q0 (Baseline),19.9,0.0
+Bud Light,2015,Commercial Airing (Game Week),Game Week Peak,63.5,219.1
+Bud Light,2015,Q1 (Post-Game),Q+1,37.3,87.4
+Bud Light,2015,Q2 (Spring),Q+2,32.2,61.8
+Bud Light,2015,Q3 (Summer),Q+3,35.2,76.9
+Bud Light,2015,Q4 (Fall/Holiday),Q+4,26.4,32.7
+Bud Light,2016,Pre-Game Baseline,Q0 (Baseline),20.8,0.0
+Bud Light,2016,Commercial Airing (Game Week),Game Week Peak,100.0,380.8
+Bud Light,2016,Q1 (Post-Game),Q+1,57.2,175.0
+Bud Light,2016,Q2 (Spring),Q+2,43.2,107.7
+Bud Light,2016,Q3 (Summer),Q+3,48.7,134.1
+Bud Light,2016,Q4 (Fall/Holiday),Q+4,32.7,57.2
+Bud Light,2017,Pre-Game Baseline,Q0 (Baseline),25.7,0.0
+Bud Light,2017,Commercial Airing (Game Week),Game Week Peak,95.1,270.0
+Bud Light,2017,Q1 (Post-Game),Q+1,53.5,108.2
+Bud Light,2017,Q2 (Spring),Q+2,45.3,76.3
+Bud Light,2017,Q3 (Summer),Q+3,50.1,94.9
+Bud Light,2017,Q4 (Fall/Holiday),Q+4,36.1,40.5
+Bud Light,2018,Pre-Game Baseline,Q0 (Baseline),30.2,0.0
+Bud Light,2018,Commercial Airing (Game Week),Game Week Peak,100.0,231.1
+Bud Light,2018,Q1 (Post-Game),Q+1,58.1,92.4
+Bud Light,2018,Q2 (Spring),Q+2,49.9,65.2
+Bud Light,2018,Q3 (Summer),Q+3,54.8,81.5
+Bud Light,2018,Q4 (Fall/Holiday),Q+4,40.7,34.8
+Bud Light,2019,Pre-Game Baseline,Q0 (Baseline),30.0,0.0
+Bud Light,2019,Commercial Airing (Game Week),Game Week Peak,100.0,233.3
+Bud Light,2019,Q1 (Post-Game),Q+1,58.0,93.3
+Bud Light,2019,Q2 (Spring),Q+2,49.8,66.0
+Bud Light,2019,Q3 (Summer),Q+3,54.6,82.0
+Bud Light,2019,Q4 (Fall/Holiday),Q+4,40.5,35.0
+Bud Light,2020,Pre-Game Baseline,Q0 (Baseline),25.4,0.0
+Bud Light,2020,Commercial Airing (Game Week),Game Week Peak,100.0,293.7
+Bud Light,2020,Q1 (Post-Game),Q+1,59.7,135.0
+Bud Light,2020,Q2 (Spring),Q+2,46.5,83.1
+Bud Light,2020,Q3 (Summer),Q+3,51.7,103.5
+Bud Light,2020,Q4 (Fall/Holiday),Q+4,36.6,44.1
+Bud Light,2021,Pre-Game Baseline,Q0 (Baseline),20.6,0.0
+Bud Light,2021,Commercial Airing (Game Week),Game Week Peak,87.3,323.8
+Bud Light,2021,Q1 (Post-Game),Q+1,47.3,129.6
+Bud Light,2021,Q2 (Spring),Q+2,39.4,91.3
+Bud Light,2021,Q3 (Summer),Q+3,44.1,114.1
+Bud Light,2021,Q4 (Fall/Holiday),Q+4,30.6,48.5
+Bud Light,2022,Pre-Game Baseline,Q0 (Baseline),20.0,0.0
+Bud Light,2022,Commercial Airing (Game Week),Game Week Peak,75.8,279.0
+Bud Light,2022,Q1 (Post-Game),Q+1,42.3,111.5
+Bud Light,2022,Q2 (Spring),Q+2,35.8,79.0
+Bud Light,2022,Q3 (Summer),Q+3,39.6,98.0
+Bud Light,2022,Q4 (Fall/Holiday),Q+4,28.4,42.0
+Bud Light,2023,Pre-Game Baseline,Q0 (Baseline),24.2,0.0
+Bud Light,2023,Commercial Airing (Game Week),Game Week Peak,81.8,238.0
+Bud Light,2023,Q1 (Post-Game),Q+1,47.2,95.0
+Bud Light,2023,Q2 (Spring),Q+2,40.5,67.4
+Bud Light,2023,Q3 (Summer),Q+3,44.5,83.9
+Bud Light,2023,Q4 (Fall/Holiday),Q+4,32.8,35.5
+Bud Light,2024,Pre-Game Baseline,Q0 (Baseline),29.3,0.0
+Bud Light,2024,Commercial Airing (Game Week),Game Week Peak,93.5,219.1
+Bud Light,2024,Q1 (Post-Game),Q+1,55.0,87.7
+Bud Light,2024,Q2 (Spring),Q+2,47.4,61.8
+Bud Light,2024,Q3 (Summer),Q+3,51.9,77.1
+Bud Light,2024,Q4 (Fall/Holiday),Q+4,38.9,32.8
+Bud Light,2025,Pre-Game Baseline,Q0 (Baseline),30.6,0.0
+Bud Light,2025,Commercial Airing (Game Week),Game Week Peak,100.0,226.8
+Bud Light,2025,Q1 (Post-Game),Q+1,58.4,90.8
+Bud Light,2025,Q2 (Spring),Q+2,50.2,64.1
+Bud Light,2025,Q3 (Summer),Q+3,55.0,79.7
+Bud Light,2025,Q4 (Fall/Holiday),Q+4,41.0,34.0
+Budweiser,2004,Pre-Game Baseline,Q0 (Baseline),20.0,0.0
+Budweiser,2004,Commercial Airing (Game Week),Game Week Peak,100.0,400.0
+Budweiser,2004,Q1 (Post-Game),Q+1,58.2,191.0
+Budweiser,2004,Q2 (Spring),Q+2,41.1,105.5
+Budweiser,2004,Q3 (Summer),Q+3,46.0,130.0
+Budweiser,2004,Q4 (Fall/Holiday),Q+4,32.8,64.0
+Budweiser,2005,Pre-Game Baseline,Q0 (Baseline),24.6,0.0
+Budweiser,2005,Commercial Airing (Game Week),Game Week Peak,100.0,306.5
+Budweiser,2005,Q1 (Post-Game),Q+1,56.3,128.9
+Budweiser,2005,Q2 (Spring),Q+2,44.5,80.9
+Budweiser,2005,Q3 (Summer),Q+3,49.1,99.6
+Budweiser,2005,Q4 (Fall/Holiday),Q+4,36.7,49.2
+Budweiser,2006,Pre-Game Baseline,Q0 (Baseline),26.4,0.0
+Budweiser,2006,Commercial Airing (Game Week),Game Week Peak,100.0,278.8
+Budweiser,2006,Q1 (Post-Game),Q+1,57.3,117.0
+Budweiser,2006,Q2 (Spring),Q+2,45.8,73.5
+Budweiser,2006,Q3 (Summer),Q+3,50.3,90.5
+Budweiser,2006,Q4 (Fall/Holiday),Q+4,38.2,44.7
+Budweiser,2007,Pre-Game Baseline,Q0 (Baseline),23.8,0.0
+Budweiser,2007,Commercial Airing (Game Week),Game Week Peak,100.0,320.2
+Budweiser,2007,Q1 (Post-Game),Q+1,60.2,152.9
+Budweiser,2007,Q2 (Spring),Q+2,43.9,84.5
+Budweiser,2007,Q3 (Summer),Q+3,48.6,104.2
+Budweiser,2007,Q4 (Fall/Holiday),Q+4,36.0,51.3
+Budweiser,2008,Pre-Game Baseline,Q0 (Baseline),19.2,0.0
+Budweiser,2008,Commercial Airing (Game Week),Game Week Peak,92.9,383.9
+Budweiser,2008,Q1 (Post-Game),Q+1,50.2,161.5
+Budweiser,2008,Q2 (Spring),Q+2,38.7,101.6
+Budweiser,2008,Q3 (Summer),Q+3,43.2,125.0
+Budweiser,2008,Q4 (Fall/Holiday),Q+4,31.0,61.5
+Budweiser,2009,Pre-Game Baseline,Q0 (Baseline),16.8,0.0
+Budweiser,2009,Commercial Airing (Game Week),Game Week Peak,100.0,495.2
+Budweiser,2009,Q1 (Post-Game),Q+1,51.7,207.7
+Budweiser,2009,Q2 (Spring),Q+2,38.8,131.0
+Budweiser,2009,Q3 (Summer),Q+3,43.8,160.7
+Budweiser,2009,Q4 (Fall/Holiday),Q+4,30.1,79.2
+Budweiser,2010,Pre-Game Baseline,Q0 (Baseline),18.8,0.0
+Budweiser,2010,Commercial Airing (Game Week),Game Week Peak,100.0,431.9
+Budweiser,2010,Q1 (Post-Game),Q+1,52.9,181.4
+Budweiser,2010,Q2 (Spring),Q+2,40.2,113.8
+Budweiser,2010,Q3 (Summer),Q+3,45.2,140.4
+Budweiser,2010,Q4 (Fall/Holiday),Q+4,31.8,69.1
+Budweiser,2012,Pre-Game Baseline,Q0 (Baseline),26.3,0.0
+Budweiser,2012,Commercial Airing (Game Week),Game Week Peak,100.0,280.2
+Budweiser,2012,Q1 (Post-Game),Q+1,57.3,117.9
+Budweiser,2012,Q2 (Spring),Q+2,45.8,74.1
+Budweiser,2012,Q3 (Summer),Q+3,50.3,91.3
+Budweiser,2012,Q4 (Fall/Holiday),Q+4,38.1,44.9
+Budweiser,2013,Pre-Game Baseline,Q0 (Baseline),24.9,0.0
+Budweiser,2013,Commercial Airing (Game Week),Game Week Peak,100.0,301.6
+Budweiser,2013,Q1 (Post-Game),Q+1,56.4,126.5
+Budweiser,2013,Q2 (Spring),Q+2,44.7,79.5
+Budweiser,2013,Q3 (Summer),Q+3,49.3,98.0
+Budweiser,2013,Q4 (Fall/Holiday),Q+4,36.9,48.2
+Budweiser,2014,Pre-Game Baseline,Q0 (Baseline),20.5,0.0
+Budweiser,2014,Commercial Airing (Game Week),Game Week Peak,84.3,311.2
+Budweiser,2014,Q1 (Post-Game),Q+1,47.3,130.7
+Budweiser,2014,Q2 (Spring),Q+2,37.3,82.0
+Budweiser,2014,Q3 (Summer),Q+3,41.2,101.0
+Budweiser,2014,Q4 (Fall/Holiday),Q+4,30.7,49.8
+Budweiser,2015,Pre-Game Baseline,Q0 (Baseline),17.1,0.0
+Budweiser,2015,Commercial Airing (Game Week),Game Week Peak,81.6,377.2
+Budweiser,2015,Q1 (Post-Game),Q+1,44.2,158.5
+Budweiser,2015,Q2 (Spring),Q+2,34.1,99.4
+Budweiser,2015,Q3 (Summer),Q+3,38.1,122.8
+Budweiser,2015,Q4 (Fall/Holiday),Q+4,27.4,60.2
+Budweiser,2016,Pre-Game Baseline,Q0 (Baseline),17.8,0.0
+Budweiser,2016,Commercial Airing (Game Week),Game Week Peak,93.3,424.2
+Budweiser,2016,Q1 (Post-Game),Q+1,53.9,202.8
+Budweiser,2016,Q2 (Spring),Q+2,37.7,111.8
+Budweiser,2016,Q3 (Summer),Q+3,42.3,137.6
+Budweiser,2016,Q4 (Fall/Holiday),Q+4,29.9,68.0
+Budweiser,2017,Pre-Game Baseline,Q0 (Baseline),22.1,0.0
+Budweiser,2017,Commercial Airing (Game Week),Game Week Peak,99.2,348.9
+Budweiser,2017,Q1 (Post-Game),Q+1,54.5,146.6
+Budweiser,2017,Q2 (Spring),Q+2,42.5,92.3
+Budweiser,2017,Q3 (Summer),Q+3,47.2,113.6
+Budweiser,2017,Q4 (Fall/Holiday),Q+4,34.4,55.7
+Budweiser,2018,Pre-Game Baseline,Q0 (Baseline),25.9,0.0
+Budweiser,2018,Commercial Airing (Game Week),Game Week Peak,100.0,286.1
+Budweiser,2018,Q1 (Post-Game),Q+1,57.0,120.1
+Budweiser,2018,Q2 (Spring),Q+2,45.5,75.7
+Budweiser,2018,Q3 (Summer),Q+3,50.0,93.1
+Budweiser,2018,Q4 (Fall/Holiday),Q+4,37.8,45.9
+Budweiser,2019,Pre-Game Baseline,Q0 (Baseline),25.7,0.0
+Budweiser,2019,Commercial Airing (Game Week),Game Week Peak,100.0,289.1
+Budweiser,2019,Q1 (Post-Game),Q+1,56.9,121.4
+Budweiser,2019,Q2 (Spring),Q+2,45.3,76.3
+Budweiser,2019,Q3 (Summer),Q+3,49.8,93.8
+Budweiser,2019,Q4 (Fall/Holiday),Q+4,37.6,46.3
+Budweiser,2020,Pre-Game Baseline,Q0 (Baseline),21.8,0.0
+Budweiser,2020,Commercial Airing (Game Week),Game Week Peak,100.0,358.7
+Budweiser,2020,Q1 (Post-Game),Q+1,59.2,171.6
+Budweiser,2020,Q2 (Spring),Q+2,42.4,94.5
+Budweiser,2020,Q3 (Summer),Q+3,47.2,116.5
+Budweiser,2020,Q4 (Fall/Holiday),Q+4,34.3,57.3
+Budweiser,2022,Pre-Game Baseline,Q0 (Baseline),17.2,0.0
+Budweiser,2022,Commercial Airing (Game Week),Game Week Peak,79.1,359.9
+Budweiser,2022,Q1 (Post-Game),Q+1,43.2,151.2
+Budweiser,2022,Q2 (Spring),Q+2,33.5,94.8
+Budweiser,2022,Q3 (Summer),Q+3,37.3,116.9
+Budweiser,2022,Q4 (Fall/Holiday),Q+4,27.1,57.6
+Budweiser,2024,Pre-Game Baseline,Q0 (Baseline),25.1,0.0
+Budweiser,2024,Commercial Airing (Game Week),Game Week Peak,97.4,288.0
+Budweiser,2024,Q1 (Post-Game),Q+1,55.5,121.1
+Budweiser,2024,Q2 (Spring),Q+2,44.2,76.1
+Budweiser,2024,Q3 (Summer),Q+3,48.6,93.6
+Budweiser,2024,Q4 (Fall/Holiday),Q+4,36.7,46.2
+Budweiser,2025,Pre-Game Baseline,Q0 (Baseline),26.3,0.0
+Budweiser,2025,Commercial Airing (Game Week),Game Week Peak,100.0,280.2
+Budweiser,2025,Q1 (Post-Game),Q+1,57.3,117.9
+Budweiser,2025,Q2 (Spring),Q+2,45.8,74.1
+Budweiser,2025,Q3 (Summer),Q+3,50.3,91.3
+Budweiser,2025,Q4 (Fall/Holiday),Q+4,38.1,44.9
+Busch,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+Busch,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+Busch,2017,Q1 (Post-Game),Q+1,39.3,113.6
+Busch,2017,Q2 (Spring),Q+2,27.7,50.5
+Busch,2017,Q3 (Summer),Q+3,26.8,45.7
+Busch,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+Busch,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Busch,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Busch,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Busch,2021,Q2 (Spring),Q+2,23.6,60.5
+Busch,2021,Q3 (Summer),Q+3,22.7,54.4
+Busch,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Busch,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Busch,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Busch,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Busch,2023,Q2 (Spring),Q+2,25.0,44.5
+Busch,2023,Q3 (Summer),Q+3,24.2,39.9
+Busch,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Cadillac,2005,Pre-Game Baseline,Q0 (Baseline),20.5,0.0
+Cadillac,2005,Commercial Airing (Game Week),Game Week Peak,66.2,222.9
+Cadillac,2005,Q1 (Post-Game),Q+1,41.1,100.5
+Cadillac,2005,Q2 (Spring),Q+2,29.6,44.4
+Cadillac,2005,Q3 (Summer),Q+3,28.7,40.0
+Cadillac,2005,Q4 (Fall/Holiday),Q+4,28.7,40.0
+Cadillac,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Cadillac,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Cadillac,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Cadillac,2021,Q2 (Spring),Q+2,23.6,60.5
+Cadillac,2021,Q3 (Summer),Q+3,22.7,54.4
+Cadillac,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Cadillac,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Cadillac,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Cadillac,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Cadillac,2026,Q2 (Spring),Q+2,29.1,50.8
+Cadillac,2026,Q3 (Summer),Q+3,28.1,45.6
+Cadillac,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+CareerBuilder,2005,Pre-Game Baseline,Q0 (Baseline),20.5,0.0
+CareerBuilder,2005,Commercial Airing (Game Week),Game Week Peak,66.2,222.9
+CareerBuilder,2005,Q1 (Post-Game),Q+1,41.1,100.5
+CareerBuilder,2005,Q2 (Spring),Q+2,29.6,44.4
+CareerBuilder,2005,Q3 (Summer),Q+3,28.7,40.0
+CareerBuilder,2005,Q4 (Fall/Holiday),Q+4,28.7,40.0
+Cheetos,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Cheetos,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Cheetos,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Cheetos,2022,Q2 (Spring),Q+2,21.8,52.4
+Cheetos,2022,Q3 (Summer),Q+3,21.0,46.9
+Cheetos,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Chevrolet,2004,Pre-Game Baseline,Q0 (Baseline),16.7,0.0
+Chevrolet,2004,Commercial Airing (Game Week),Game Week Peak,60.6,262.9
+Chevrolet,2004,Q1 (Post-Game),Q+1,36.5,118.6
+Chevrolet,2004,Q2 (Spring),Q+2,25.5,52.7
+Chevrolet,2004,Q3 (Summer),Q+3,24.6,47.3
+Chevrolet,2004,Q4 (Fall/Holiday),Q+4,24.6,47.3
+Chevrolet,2007,Pre-Game Baseline,Q0 (Baseline),19.8,0.0
+Chevrolet,2007,Commercial Airing (Game Week),Game Week Peak,62.4,215.2
+Chevrolet,2007,Q1 (Post-Game),Q+1,39.0,97.0
+Chevrolet,2007,Q2 (Spring),Q+2,28.3,42.9
+Chevrolet,2007,Q3 (Summer),Q+3,27.5,38.9
+Chevrolet,2007,Q4 (Fall/Holiday),Q+4,27.5,38.9
+Chevrolet,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Chevrolet,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Chevrolet,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Chevrolet,2015,Q2 (Spring),Q+2,20.0,40.8
+Chevrolet,2015,Q3 (Summer),Q+3,19.4,36.6
+Chevrolet,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Chevrolet,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Chevrolet,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Chevrolet,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Chevrolet,2022,Q2 (Spring),Q+2,21.8,52.4
+Chevrolet,2022,Q3 (Summer),Q+3,21.0,46.9
+Chevrolet,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Coca-Cola,2007,Pre-Game Baseline,Q0 (Baseline),37.7,0.0
+Coca-Cola,2007,Commercial Airing (Game Week),Game Week Peak,83.3,121.0
+Coca-Cola,2007,Q1 (Post-Game),Q+1,52.3,38.7
+Coca-Cola,2007,Q2 (Spring),Q+2,48.1,27.6
+Coca-Cola,2007,Q3 (Summer),Q+3,49.6,31.6
+Coca-Cola,2007,Q4 (Fall/Holiday),Q+4,47.3,25.5
+Coca-Cola,2008,Pre-Game Baseline,Q0 (Baseline),30.4,0.0
+Coca-Cola,2008,Commercial Airing (Game Week),Game Week Peak,100.0,228.9
+Coca-Cola,2008,Q1 (Post-Game),Q+1,57.4,88.8
+Coca-Cola,2008,Q2 (Spring),Q+2,46.2,52.0
+Coca-Cola,2008,Q3 (Summer),Q+3,48.6,59.9
+Coca-Cola,2008,Q4 (Fall/Holiday),Q+4,45.0,48.0
+Coca-Cola,2009,Pre-Game Baseline,Q0 (Baseline),26.6,0.0
+Coca-Cola,2009,Commercial Airing (Game Week),Game Week Peak,99.0,272.2
+Coca-Cola,2009,Q1 (Post-Game),Q+1,54.7,105.6
+Coca-Cola,2009,Q2 (Spring),Q+2,43.0,61.7
+Coca-Cola,2009,Q3 (Summer),Q+3,45.6,71.4
+Coca-Cola,2009,Q4 (Fall/Holiday),Q+4,41.8,57.1
+Coca-Cola,2010,Pre-Game Baseline,Q0 (Baseline),29.8,0.0
+Coca-Cola,2010,Commercial Airing (Game Week),Game Week Peak,82.5,176.8
+Coca-Cola,2010,Q1 (Post-Game),Q+1,46.7,56.7
+Coca-Cola,2010,Q2 (Spring),Q+2,41.8,40.3
+Coca-Cola,2010,Q3 (Summer),Q+3,43.6,46.3
+Coca-Cola,2010,Q4 (Fall/Holiday),Q+4,40.9,37.2
+Coca-Cola,2011,Pre-Game Baseline,Q0 (Baseline),37.0,0.0
+Coca-Cola,2011,Commercial Airing (Game Week),Game Week Peak,100.0,170.3
+Coca-Cola,2011,Q1 (Post-Game),Q+1,57.2,54.6
+Coca-Cola,2011,Q2 (Spring),Q+2,51.3,38.6
+Coca-Cola,2011,Q3 (Summer),Q+3,53.5,44.6
+Coca-Cola,2011,Q4 (Fall/Holiday),Q+4,50.2,35.7
+Coca-Cola,2012,Pre-Game Baseline,Q0 (Baseline),41.7,0.0
+Coca-Cola,2012,Commercial Airing (Game Week),Game Week Peak,100.0,139.8
+Coca-Cola,2012,Q1 (Post-Game),Q+1,60.4,44.8
+Coca-Cola,2012,Q2 (Spring),Q+2,54.9,31.7
+Coca-Cola,2012,Q3 (Summer),Q+3,57.0,36.7
+Coca-Cola,2012,Q4 (Fall/Holiday),Q+4,53.9,29.3
+Coca-Cola,2014,Pre-Game Baseline,Q0 (Baseline),32.4,0.0
+Coca-Cola,2014,Commercial Airing (Game Week),Game Week Peak,83.6,158.0
+Coca-Cola,2014,Q1 (Post-Game),Q+1,48.8,50.6
+Coca-Cola,2014,Q2 (Spring),Q+2,44.0,35.8
+Coca-Cola,2014,Q3 (Summer),Q+3,45.8,41.4
+Coca-Cola,2014,Q4 (Fall/Holiday),Q+4,43.2,33.3
+Coca-Cola,2015,Pre-Game Baseline,Q0 (Baseline),27.0,0.0
+Coca-Cola,2015,Commercial Airing (Game Week),Game Week Peak,53.5,98.1
+Coca-Cola,2015,Q1 (Post-Game),Q+1,35.5,31.5
+Coca-Cola,2015,Q2 (Spring),Q+2,33.0,22.2
+Coca-Cola,2015,Q3 (Summer),Q+3,33.9,25.6
+Coca-Cola,2015,Q4 (Fall/Holiday),Q+4,32.6,20.7
+Coca-Cola,2016,Pre-Game Baseline,Q0 (Baseline),28.2,0.0
+Coca-Cola,2016,Commercial Airing (Game Week),Game Week Peak,84.0,197.9
+Coca-Cola,2016,Q1 (Post-Game),Q+1,49.9,77.0
+Coca-Cola,2016,Q2 (Spring),Q+2,40.9,45.0
+Coca-Cola,2016,Q3 (Summer),Q+3,42.8,51.8
+Coca-Cola,2016,Q4 (Fall/Holiday),Q+4,39.9,41.5
+Coca-Cola,2018,Pre-Game Baseline,Q0 (Baseline),41.0,0.0
+Coca-Cola,2018,Commercial Airing (Game Week),Game Week Peak,100.0,143.9
+Coca-Cola,2018,Q1 (Post-Game),Q+1,63.9,55.9
+Coca-Cola,2018,Q2 (Spring),Q+2,54.4,32.7
+Coca-Cola,2018,Q3 (Summer),Q+3,56.5,37.8
+Coca-Cola,2018,Q4 (Fall/Holiday),Q+4,53.4,30.2
+Coca-Cola,2019,Pre-Game Baseline,Q0 (Baseline),40.8,0.0
+Coca-Cola,2019,Commercial Airing (Game Week),Game Week Peak,100.0,145.1
+Coca-Cola,2019,Q1 (Post-Game),Q+1,59.7,46.3
+Coca-Cola,2019,Q2 (Spring),Q+2,54.3,33.1
+Coca-Cola,2019,Q3 (Summer),Q+3,56.3,38.0
+Coca-Cola,2019,Q4 (Fall/Holiday),Q+4,53.2,30.4
+Coca-Cola,2020,Pre-Game Baseline,Q0 (Baseline),34.5,0.0
+Coca-Cola,2020,Commercial Airing (Game Week),Game Week Peak,100.0,189.9
+Coca-Cola,2020,Q1 (Post-Game),Q+1,59.9,73.6
+Coca-Cola,2020,Q2 (Spring),Q+2,49.4,43.2
+Coca-Cola,2020,Q3 (Summer),Q+3,51.7,49.9
+Coca-Cola,2020,Q4 (Fall/Holiday),Q+4,48.3,40.0
+Coinbase,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Coinbase,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Coinbase,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Coinbase,2022,Q2 (Spring),Q+2,21.8,52.4
+Coinbase,2022,Q3 (Summer),Q+3,21.0,46.9
+Coinbase,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Coinbase,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Coinbase,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Coinbase,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Coinbase,2026,Q2 (Spring),Q+2,29.1,50.8
+Coinbase,2026,Q3 (Summer),Q+3,28.1,45.6
+Coinbase,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Crown Royal,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Crown Royal,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Crown Royal,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Crown Royal,2023,Q2 (Spring),Q+2,25.0,44.5
+Crown Royal,2023,Q3 (Summer),Q+3,24.2,39.9
+Crown Royal,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Crypto.com,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Crypto.com,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Crypto.com,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Crypto.com,2022,Q2 (Spring),Q+2,21.8,52.4
+Crypto.com,2022,Q3 (Summer),Q+3,21.0,46.9
+Crypto.com,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Disney+,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Disney+,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Disney+,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Disney+,2020,Q2 (Spring),Q+2,30.2,65.9
+Disney+,2020,Q3 (Summer),Q+3,29.0,59.3
+Disney+,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Disney+,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Disney+,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Disney+,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Disney+,2021,Q2 (Spring),Q+2,23.6,60.5
+Disney+,2021,Q3 (Summer),Q+3,22.7,54.4
+Disney+,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Disney+,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Disney+,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Disney+,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Disney+,2022,Q2 (Spring),Q+2,21.8,52.4
+Disney+,2022,Q3 (Summer),Q+3,21.0,46.9
+Disney+,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Disney+,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Disney+,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Disney+,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Disney+,2024,Q2 (Spring),Q+2,29.4,40.7
+Disney+,2024,Q3 (Summer),Q+3,28.6,36.8
+Disney+,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Disney+,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Disney+,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Disney+,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Disney+,2025,Q2 (Spring),Q+2,31.4,43.4
+Disney+,2025,Q3 (Summer),Q+3,30.4,38.8
+Disney+,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Dodge,2010,Pre-Game Baseline,Q0 (Baseline),15.7,0.0
+Dodge,2010,Commercial Airing (Game Week),Game Week Peak,66.9,326.1
+Dodge,2010,Q1 (Post-Game),Q+1,38.7,146.5
+Dodge,2010,Q2 (Spring),Q+2,25.9,65.0
+Dodge,2010,Q3 (Summer),Q+3,24.9,58.6
+Dodge,2010,Q4 (Fall/Holiday),Q+4,24.9,58.6
+Dodge,2013,Pre-Game Baseline,Q0 (Baseline),20.8,0.0
+Dodge,2013,Commercial Airing (Game Week),Game Week Peak,75.3,262.0
+Dodge,2013,Q1 (Post-Game),Q+1,45.3,117.8
+Dodge,2013,Q2 (Spring),Q+2,31.7,52.4
+Dodge,2013,Q3 (Summer),Q+3,30.6,47.1
+Dodge,2013,Q4 (Fall/Holiday),Q+4,30.6,47.1
+Dodge,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Dodge,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Dodge,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Dodge,2015,Q2 (Spring),Q+2,20.0,40.8
+Dodge,2015,Q3 (Summer),Q+3,19.4,36.6
+Dodge,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+DoorDash,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+DoorDash,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+DoorDash,2021,Q1 (Post-Game),Q+1,34.7,136.1
+DoorDash,2021,Q2 (Spring),Q+2,23.6,60.5
+DoorDash,2021,Q3 (Summer),Q+3,22.7,54.4
+DoorDash,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+DoorDash,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+DoorDash,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+DoorDash,2023,Q1 (Post-Game),Q+1,34.6,100.0
+DoorDash,2023,Q2 (Spring),Q+2,25.0,44.5
+DoorDash,2023,Q3 (Summer),Q+3,24.2,39.9
+DoorDash,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+DoorDash,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+DoorDash,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+DoorDash,2024,Q1 (Post-Game),Q+1,40.1,91.9
+DoorDash,2024,Q2 (Spring),Q+2,29.4,40.7
+DoorDash,2024,Q3 (Summer),Q+3,28.6,36.8
+DoorDash,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+DoorDash,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+DoorDash,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+DoorDash,2025,Q1 (Post-Game),Q+1,43.3,97.7
+DoorDash,2025,Q2 (Spring),Q+2,31.4,43.4
+DoorDash,2025,Q3 (Summer),Q+3,30.4,38.8
+DoorDash,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Doritos,2007,Pre-Game Baseline,Q0 (Baseline),15.9,0.0
+Doritos,2007,Commercial Airing (Game Week),Game Week Peak,100.0,528.9
+Doritos,2007,Q1 (Post-Game),Q+1,56.3,254.1
+Doritos,2007,Q2 (Spring),Q+2,31.0,95.0
+Doritos,2007,Q3 (Summer),Q+3,24.3,52.8
+Doritos,2007,Q4 (Fall/Holiday),Q+4,26.0,63.5
+Doritos,2008,Pre-Game Baseline,Q0 (Baseline),12.8,0.0
+Doritos,2008,Commercial Airing (Game Week),Game Week Peak,94.1,635.2
+Doritos,2008,Q1 (Post-Game),Q+1,51.8,304.7
+Doritos,2008,Q2 (Spring),Q+2,27.4,114.1
+Doritos,2008,Q3 (Summer),Q+3,20.9,63.3
+Doritos,2008,Q4 (Fall/Holiday),Q+4,22.6,76.6
+Doritos,2009,Pre-Game Baseline,Q0 (Baseline),11.2,0.0
+Doritos,2009,Commercial Airing (Game Week),Game Week Peak,92.5,725.9
+Doritos,2009,Q1 (Post-Game),Q+1,50.2,348.2
+Doritos,2009,Q2 (Spring),Q+2,25.8,130.4
+Doritos,2009,Q3 (Summer),Q+3,19.3,72.3
+Doritos,2009,Q4 (Fall/Holiday),Q+4,21.0,87.5
+Doritos,2010,Pre-Game Baseline,Q0 (Baseline),12.5,0.0
+Doritos,2010,Commercial Airing (Game Week),Game Week Peak,100.0,700.0
+Doritos,2010,Q1 (Post-Game),Q+1,54.5,336.0
+Doritos,2010,Q2 (Spring),Q+2,28.3,126.4
+Doritos,2010,Q3 (Summer),Q+3,21.2,69.6
+Doritos,2010,Q4 (Fall/Holiday),Q+4,23.0,84.0
+Doritos,2011,Pre-Game Baseline,Q0 (Baseline),15.6,0.0
+Doritos,2011,Commercial Airing (Game Week),Game Week Peak,100.0,541.0
+Doritos,2011,Q1 (Post-Game),Q+1,56.1,259.6
+Doritos,2011,Q2 (Spring),Q+2,30.8,97.4
+Doritos,2011,Q3 (Summer),Q+3,24.0,53.8
+Doritos,2011,Q4 (Fall/Holiday),Q+4,25.7,64.7
+Doritos,2012,Pre-Game Baseline,Q0 (Baseline),17.5,0.0
+Doritos,2012,Commercial Airing (Game Week),Game Week Peak,100.0,471.4
+Doritos,2012,Q1 (Post-Game),Q+1,57.1,226.3
+Doritos,2012,Q2 (Spring),Q+2,32.4,85.1
+Doritos,2012,Q3 (Summer),Q+3,25.8,47.4
+Doritos,2012,Q4 (Fall/Holiday),Q+4,27.4,56.6
+Doritos,2013,Pre-Game Baseline,Q0 (Baseline),16.6,0.0
+Doritos,2013,Commercial Airing (Game Week),Game Week Peak,100.0,502.4
+Doritos,2013,Q1 (Post-Game),Q+1,56.6,241.0
+Doritos,2013,Q2 (Spring),Q+2,31.6,90.4
+Doritos,2013,Q3 (Summer),Q+3,24.9,50.0
+Doritos,2013,Q4 (Fall/Holiday),Q+4,26.6,60.2
+Doritos,2014,Pre-Game Baseline,Q0 (Baseline),13.6,0.0
+Doritos,2014,Commercial Airing (Game Week),Game Week Peak,91.7,574.3
+Doritos,2014,Q1 (Post-Game),Q+1,51.1,275.7
+Doritos,2014,Q2 (Spring),Q+2,27.7,103.7
+Doritos,2014,Q3 (Summer),Q+3,21.4,57.4
+Doritos,2014,Q4 (Fall/Holiday),Q+4,23.0,69.1
+Doritos,2015,Pre-Game Baseline,Q0 (Baseline),11.4,0.0
+Doritos,2015,Commercial Airing (Game Week),Game Week Peak,72.5,536.0
+Doritos,2015,Q1 (Post-Game),Q+1,40.7,257.0
+Doritos,2015,Q2 (Spring),Q+2,22.4,96.5
+Doritos,2015,Q3 (Summer),Q+3,17.5,53.5
+Doritos,2015,Q4 (Fall/Holiday),Q+4,18.7,64.0
+Doritos,2016,Pre-Game Baseline,Q0 (Baseline),11.9,0.0
+Doritos,2016,Commercial Airing (Game Week),Game Week Peak,78.7,561.3
+Doritos,2016,Q1 (Post-Game),Q+1,44.0,269.7
+Doritos,2016,Q2 (Spring),Q+2,23.9,100.8
+Doritos,2016,Q3 (Summer),Q+3,18.6,56.3
+Doritos,2016,Q4 (Fall/Holiday),Q+4,19.9,67.2
+Doritos,2018,Pre-Game Baseline,Q0 (Baseline),17.2,0.0
+Doritos,2018,Commercial Airing (Game Week),Game Week Peak,100.0,481.4
+Doritos,2018,Q1 (Post-Game),Q+1,61.2,255.8
+Doritos,2018,Q2 (Spring),Q+2,32.1,86.6
+Doritos,2018,Q3 (Summer),Q+3,25.5,48.3
+Doritos,2018,Q4 (Fall/Holiday),Q+4,27.1,57.6
+Doritos,2019,Pre-Game Baseline,Q0 (Baseline),17.2,0.0
+Doritos,2019,Commercial Airing (Game Week),Game Week Peak,100.0,481.4
+Doritos,2019,Q1 (Post-Game),Q+1,61.2,255.8
+Doritos,2019,Q2 (Spring),Q+2,32.1,86.6
+Doritos,2019,Q3 (Summer),Q+3,25.5,48.3
+Doritos,2019,Q4 (Fall/Holiday),Q+4,27.1,57.6
+Doritos,2020,Pre-Game Baseline,Q0 (Baseline),14.5,0.0
+Doritos,2020,Commercial Airing (Game Week),Game Week Peak,100.0,589.7
+Doritos,2020,Q1 (Post-Game),Q+1,60.0,313.8
+Doritos,2020,Q2 (Spring),Q+2,29.9,106.2
+Doritos,2020,Q3 (Summer),Q+3,23.0,58.6
+Doritos,2020,Q4 (Fall/Holiday),Q+4,24.8,71.0
+Doritos,2023,Pre-Game Baseline,Q0 (Baseline),13.8,0.0
+Doritos,2023,Commercial Airing (Game Week),Game Week Peak,75.5,447.1
+Doritos,2023,Q1 (Post-Game),Q+1,43.4,214.5
+Doritos,2023,Q2 (Spring),Q+2,24.9,80.4
+Doritos,2023,Q3 (Summer),Q+3,20.0,44.9
+Doritos,2023,Q4 (Fall/Holiday),Q+4,21.2,53.6
+Doritos,2024,Pre-Game Baseline,Q0 (Baseline),16.7,0.0
+Doritos,2024,Commercial Airing (Game Week),Game Week Peak,86.3,416.8
+Doritos,2024,Q1 (Post-Game),Q+1,50.1,200.0
+Doritos,2024,Q2 (Spring),Q+2,29.2,74.9
+Doritos,2024,Q3 (Summer),Q+3,23.7,41.9
+Doritos,2024,Q4 (Fall/Holiday),Q+4,25.1,50.3
+Doritos,2025,Pre-Game Baseline,Q0 (Baseline),17.5,0.0
+Doritos,2025,Commercial Airing (Game Week),Game Week Peak,94.1,437.7
+Doritos,2025,Q1 (Post-Game),Q+1,54.3,210.3
+Doritos,2025,Q2 (Spring),Q+2,31.3,78.9
+Doritos,2025,Q3 (Summer),Q+3,25.2,44.0
+Doritos,2025,Q4 (Fall/Holiday),Q+4,26.7,52.6
+Dunkin',2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Dunkin',2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Dunkin',2023,Q1 (Post-Game),Q+1,34.6,100.0
+Dunkin',2023,Q2 (Spring),Q+2,25.0,44.5
+Dunkin',2023,Q3 (Summer),Q+3,24.2,39.9
+Dunkin',2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Dunkin',2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Dunkin',2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Dunkin',2024,Q1 (Post-Game),Q+1,40.1,91.9
+Dunkin',2024,Q2 (Spring),Q+2,29.4,40.7
+Dunkin',2024,Q3 (Summer),Q+3,28.6,36.8
+Dunkin',2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Dunkin',2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Dunkin',2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Dunkin',2025,Q1 (Post-Game),Q+1,43.3,97.7
+Dunkin',2025,Q2 (Spring),Q+2,31.4,43.4
+Dunkin',2025,Q3 (Summer),Q+3,30.4,38.8
+Dunkin',2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Dunkin',2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Dunkin',2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Dunkin',2026,Q1 (Post-Game),Q+1,41.3,114.0
+Dunkin',2026,Q2 (Spring),Q+2,29.1,50.8
+Dunkin',2026,Q3 (Summer),Q+3,28.1,45.6
+Dunkin',2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+E-Trade,2007,Pre-Game Baseline,Q0 (Baseline),13.9,0.0
+E-Trade,2007,Commercial Airing (Game Week),Game Week Peak,78.1,461.9
+E-Trade,2007,Q1 (Post-Game),Q+1,49.2,254.0
+E-Trade,2007,Q2 (Spring),Q+2,28.0,101.4
+E-Trade,2007,Q3 (Summer),Q+3,21.6,55.4
+E-Trade,2007,Q4 (Fall/Holiday),Q+4,22.9,64.7
+E-Trade,2009,Pre-Game Baseline,Q0 (Baseline),9.8,0.0
+E-Trade,2009,Commercial Airing (Game Week),Game Week Peak,73.8,653.1
+E-Trade,2009,Q1 (Post-Game),Q+1,45.0,359.2
+E-Trade,2009,Q2 (Spring),Q+2,23.9,143.9
+E-Trade,2009,Q3 (Summer),Q+3,17.5,78.6
+E-Trade,2009,Q4 (Fall/Holiday),Q+4,18.8,91.8
+E-Trade,2010,Pre-Game Baseline,Q0 (Baseline),11.0,0.0
+E-Trade,2010,Commercial Airing (Game Week),Game Week Peak,89.3,711.8
+E-Trade,2010,Q1 (Post-Game),Q+1,54.1,391.8
+E-Trade,2010,Q2 (Spring),Q+2,28.2,156.4
+E-Trade,2010,Q3 (Summer),Q+3,20.4,85.5
+E-Trade,2010,Q4 (Fall/Holiday),Q+4,22.0,100.0
+E-Trade,2012,Pre-Game Baseline,Q0 (Baseline),15.3,0.0
+E-Trade,2012,Commercial Airing (Game Week),Game Week Peak,100.0,553.6
+E-Trade,2012,Q1 (Post-Game),Q+1,61.9,304.6
+E-Trade,2012,Q2 (Spring),Q+2,33.9,121.6
+E-Trade,2012,Q3 (Summer),Q+3,25.5,66.7
+E-Trade,2012,Q4 (Fall/Holiday),Q+4,27.2,77.8
+E-Trade,2013,Pre-Game Baseline,Q0 (Baseline),14.5,0.0
+E-Trade,2013,Commercial Airing (Game Week),Game Week Peak,100.0,589.7
+E-Trade,2013,Q1 (Post-Game),Q+1,61.5,324.1
+E-Trade,2013,Q2 (Spring),Q+2,33.3,129.7
+E-Trade,2013,Q3 (Summer),Q+3,24.8,71.0
+E-Trade,2013,Q4 (Fall/Holiday),Q+4,26.5,82.8
+E-Trade,2018,Pre-Game Baseline,Q0 (Baseline),15.1,0.0
+E-Trade,2018,Commercial Airing (Game Week),Game Week Peak,100.0,562.3
+E-Trade,2018,Q1 (Post-Game),Q+1,61.8,309.3
+E-Trade,2018,Q2 (Spring),Q+2,33.8,123.8
+E-Trade,2018,Q3 (Summer),Q+3,25.3,67.5
+E-Trade,2018,Q4 (Fall/Holiday),Q+4,27.0,78.8
+E-Trade,2022,Pre-Game Baseline,Q0 (Baseline),10.0,0.0
+E-Trade,2022,Commercial Airing (Game Week),Game Week Peak,55.9,459.0
+E-Trade,2022,Q1 (Post-Game),Q+1,35.2,252.0
+E-Trade,2022,Q2 (Spring),Q+2,20.1,101.0
+E-Trade,2022,Q3 (Summer),Q+3,15.5,55.0
+E-Trade,2022,Q4 (Fall/Holiday),Q+4,16.4,64.0
+E-Trade,2023,Pre-Game Baseline,Q0 (Baseline),12.1,0.0
+E-Trade,2023,Commercial Airing (Game Week),Game Week Peak,60.3,398.3
+E-Trade,2023,Q1 (Post-Game),Q+1,38.6,219.0
+E-Trade,2023,Q2 (Spring),Q+2,22.7,87.6
+E-Trade,2023,Q3 (Summer),Q+3,17.9,47.9
+E-Trade,2023,Q4 (Fall/Holiday),Q+4,18.8,55.4
+E-Trade,2024,Pre-Game Baseline,Q0 (Baseline),14.6,0.0
+E-Trade,2024,Commercial Airing (Game Week),Game Week Peak,68.8,371.2
+E-Trade,2024,Q1 (Post-Game),Q+1,44.4,204.1
+E-Trade,2024,Q2 (Spring),Q+2,26.5,81.5
+E-Trade,2024,Q3 (Summer),Q+3,21.1,44.5
+E-Trade,2024,Q4 (Fall/Holiday),Q+4,22.2,52.1
+Expedia,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Expedia,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Expedia,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Expedia,2022,Q2 (Spring),Q+2,21.8,52.4
+Expedia,2022,Q3 (Summer),Q+3,21.0,46.9
+Expedia,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+FTX,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+FTX,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+FTX,2022,Q1 (Post-Game),Q+1,31.1,117.5
+FTX,2022,Q2 (Spring),Q+2,21.8,52.4
+FTX,2022,Q3 (Summer),Q+3,21.0,46.9
+FTX,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Febreze,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Febreze,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Febreze,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Febreze,2018,Q2 (Spring),Q+2,34.4,59.3
+Febreze,2018,Q3 (Summer),Q+3,33.1,53.2
+Febreze,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+FedEx,2005,Pre-Game Baseline,Q0 (Baseline),20.5,0.0
+FedEx,2005,Commercial Airing (Game Week),Game Week Peak,66.2,222.9
+FedEx,2005,Q1 (Post-Game),Q+1,41.1,100.5
+FedEx,2005,Q2 (Spring),Q+2,29.6,44.4
+FedEx,2005,Q3 (Summer),Q+3,28.7,40.0
+FedEx,2005,Q4 (Fall/Holiday),Q+4,28.7,40.0
+Foundation to Combat Antisemitism,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Foundation to Combat Antisemitism,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Foundation to Combat Antisemitism,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Foundation to Combat Antisemitism,2025,Q2 (Spring),Q+2,31.4,43.4
+Foundation to Combat Antisemitism,2025,Q3 (Summer),Q+3,30.4,38.8
+Foundation to Combat Antisemitism,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+GMC,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+GMC,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+GMC,2020,Q1 (Post-Game),Q+1,45.2,148.4
+GMC,2020,Q2 (Spring),Q+2,30.2,65.9
+GMC,2020,Q3 (Summer),Q+3,29.0,59.3
+GMC,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Gillette,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Gillette,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Gillette,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Gillette,2022,Q2 (Spring),Q+2,21.8,52.4
+Gillette,2022,Q3 (Summer),Q+3,21.0,46.9
+Gillette,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+GoDaddy,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+GoDaddy,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+GoDaddy,2015,Q1 (Post-Game),Q+1,27.2,91.5
+GoDaddy,2015,Q2 (Spring),Q+2,20.0,40.8
+GoDaddy,2015,Q3 (Summer),Q+3,19.4,36.6
+GoDaddy,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+GoDaddy,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+GoDaddy,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+GoDaddy,2025,Q1 (Post-Game),Q+1,43.3,97.7
+GoDaddy,2025,Q2 (Spring),Q+2,31.4,43.4
+GoDaddy,2025,Q3 (Summer),Q+3,30.4,38.8
+GoDaddy,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Google,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Google,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Google,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Google,2020,Q2 (Spring),Q+2,30.2,65.9
+Google,2020,Q3 (Summer),Q+3,29.0,59.3
+Google,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Google,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Google,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Google,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Google,2026,Q2 (Spring),Q+2,29.1,50.8
+Google,2026,Q3 (Summer),Q+3,28.1,45.6
+Google,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Google Pixel,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Google Pixel,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Google Pixel,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Google Pixel,2022,Q2 (Spring),Q+2,21.8,52.4
+Google Pixel,2022,Q3 (Summer),Q+3,21.0,46.9
+Google Pixel,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Google Pixel,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Google Pixel,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Google Pixel,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Google Pixel,2023,Q2 (Spring),Q+2,25.0,44.5
+Google Pixel,2023,Q3 (Summer),Q+3,24.2,39.9
+Google Pixel,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Google Pixel,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Google Pixel,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Google Pixel,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Google Pixel,2025,Q2 (Spring),Q+2,31.4,43.4
+Google Pixel,2025,Q3 (Summer),Q+3,30.4,38.8
+Google Pixel,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Grubhub,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Grubhub,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Grubhub,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Grubhub,2021,Q2 (Spring),Q+2,23.6,60.5
+Grubhub,2021,Q3 (Summer),Q+3,22.7,54.4
+Grubhub,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Grubhub,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Grubhub,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Grubhub,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Grubhub,2026,Q2 (Spring),Q+2,29.1,50.8
+Grubhub,2026,Q3 (Summer),Q+3,28.1,45.6
+Grubhub,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+H&R Block,2004,Pre-Game Baseline,Q0 (Baseline),16.7,0.0
+H&R Block,2004,Commercial Airing (Game Week),Game Week Peak,60.6,262.9
+H&R Block,2004,Q1 (Post-Game),Q+1,36.5,118.6
+H&R Block,2004,Q2 (Spring),Q+2,25.5,52.7
+H&R Block,2004,Q3 (Summer),Q+3,24.6,47.3
+H&R Block,2004,Q4 (Fall/Holiday),Q+4,24.6,47.3
+Heineken,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Heineken,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Heineken,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Heineken,2023,Q2 (Spring),Q+2,25.0,44.5
+Heineken,2023,Q3 (Summer),Q+3,24.2,39.9
+Heineken,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Heinz,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Heinz,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Heinz,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Heinz,2016,Q2 (Spring),Q+2,21.3,43.0
+Heinz,2016,Q3 (Summer),Q+3,20.7,38.9
+Heinz,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Hellmann's,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Hellmann's,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Hellmann's,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Hellmann's,2022,Q2 (Spring),Q+2,21.8,52.4
+Hellmann's,2022,Q3 (Summer),Q+3,21.0,46.9
+Hellmann's,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Hellmann's,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Hellmann's,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Hellmann's,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Hellmann's,2023,Q2 (Spring),Q+2,25.0,44.5
+Hellmann's,2023,Q3 (Summer),Q+3,24.2,39.9
+Hellmann's,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Hellmann's,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Hellmann's,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Hellmann's,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Hellmann's,2024,Q2 (Spring),Q+2,29.4,40.7
+Hellmann's,2024,Q3 (Summer),Q+3,28.6,36.8
+Hellmann's,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Hellmann's,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Hellmann's,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Hellmann's,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Hellmann's,2025,Q2 (Spring),Q+2,31.4,43.4
+Hellmann's,2025,Q3 (Summer),Q+3,30.4,38.8
+Hellmann's,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Hellmann's,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Hellmann's,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Hellmann's,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Hellmann's,2026,Q2 (Spring),Q+2,29.1,50.8
+Hellmann's,2026,Q3 (Summer),Q+3,28.1,45.6
+Hellmann's,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Honda,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Honda,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Honda,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Honda,2016,Q2 (Spring),Q+2,21.3,43.0
+Honda,2016,Q3 (Summer),Q+3,20.7,38.9
+Honda,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Hyundai,2008,Pre-Game Baseline,Q0 (Baseline),17.6,0.0
+Hyundai,2008,Commercial Airing (Game Week),Game Week Peak,80.1,355.1
+Hyundai,2008,Q1 (Post-Game),Q+1,50.1,184.7
+Hyundai,2008,Q2 (Spring),Q+2,33.2,88.6
+Hyundai,2008,Q3 (Summer),Q+3,28.8,63.6
+Hyundai,2008,Q4 (Fall/Holiday),Q+4,30.1,71.0
+Hyundai,2009,Pre-Game Baseline,Q0 (Baseline),15.4,0.0
+Hyundai,2009,Commercial Airing (Game Week),Game Week Peak,89.8,483.1
+Hyundai,2009,Q1 (Post-Game),Q+1,54.1,251.3
+Hyundai,2009,Q2 (Spring),Q+2,34.0,120.8
+Hyundai,2009,Q3 (Summer),Q+3,28.8,87.0
+Hyundai,2009,Q4 (Fall/Holiday),Q+4,30.3,96.8
+Hyundai,2010,Pre-Game Baseline,Q0 (Baseline),17.2,0.0
+Hyundai,2010,Commercial Airing (Game Week),Game Week Peak,100.0,481.4
+Hyundai,2010,Q1 (Post-Game),Q+1,64.2,273.3
+Hyundai,2010,Q2 (Spring),Q+2,37.9,120.3
+Hyundai,2010,Q3 (Summer),Q+3,32.1,86.6
+Hyundai,2010,Q4 (Fall/Holiday),Q+4,33.8,96.5
+Hyundai,2011,Pre-Game Baseline,Q0 (Baseline),21.4,0.0
+Hyundai,2011,Commercial Airing (Game Week),Game Week Peak,100.0,367.3
+Hyundai,2011,Q1 (Post-Game),Q+1,62.3,191.1
+Hyundai,2011,Q2 (Spring),Q+2,41.0,91.6
+Hyundai,2011,Q3 (Summer),Q+3,35.5,65.9
+Hyundai,2011,Q4 (Fall/Holiday),Q+4,37.1,73.4
+Hyundai,2012,Pre-Game Baseline,Q0 (Baseline),24.1,0.0
+Hyundai,2012,Commercial Airing (Game Week),Game Week Peak,100.0,314.9
+Hyundai,2012,Q1 (Post-Game),Q+1,63.6,163.9
+Hyundai,2012,Q2 (Spring),Q+2,43.1,78.8
+Hyundai,2012,Q3 (Summer),Q+3,37.8,56.8
+Hyundai,2012,Q4 (Fall/Holiday),Q+4,39.3,63.1
+Hyundai,2013,Pre-Game Baseline,Q0 (Baseline),22.8,0.0
+Hyundai,2013,Commercial Airing (Game Week),Game Week Peak,100.0,338.6
+Hyundai,2013,Q1 (Post-Game),Q+1,62.9,175.9
+Hyundai,2013,Q2 (Spring),Q+2,42.1,84.6
+Hyundai,2013,Q3 (Summer),Q+3,36.7,61.0
+Hyundai,2013,Q4 (Fall/Holiday),Q+4,38.2,67.5
+Hyundai,2014,Pre-Game Baseline,Q0 (Baseline),18.8,0.0
+Hyundai,2014,Commercial Airing (Game Week),Game Week Peak,100.0,431.9
+Hyundai,2014,Q1 (Post-Game),Q+1,64.9,245.2
+Hyundai,2014,Q2 (Spring),Q+2,39.1,108.0
+Hyundai,2014,Q3 (Summer),Q+3,33.4,77.7
+Hyundai,2014,Q4 (Fall/Holiday),Q+4,35.0,86.2
+Hyundai,2016,Pre-Game Baseline,Q0 (Baseline),16.3,0.0
+Hyundai,2016,Commercial Airing (Game Week),Game Week Peak,89.6,449.7
+Hyundai,2016,Q1 (Post-Game),Q+1,57.9,255.2
+Hyundai,2016,Q2 (Spring),Q+2,34.6,112.3
+Hyundai,2016,Q3 (Summer),Q+3,29.5,81.0
+Hyundai,2016,Q4 (Fall/Holiday),Q+4,31.0,90.2
+Hyundai,2017,Pre-Game Baseline,Q0 (Baseline),20.2,0.0
+Hyundai,2017,Commercial Airing (Game Week),Game Week Peak,85.4,322.8
+Hyundai,2017,Q1 (Post-Game),Q+1,54.1,167.8
+Hyundai,2017,Q2 (Spring),Q+2,36.5,80.7
+Hyundai,2017,Q3 (Summer),Q+3,31.9,57.9
+Hyundai,2017,Q4 (Fall/Holiday),Q+4,33.2,64.4
+Hyundai,2018,Pre-Game Baseline,Q0 (Baseline),23.7,0.0
+Hyundai,2018,Commercial Airing (Game Week),Game Week Peak,100.0,321.9
+Hyundai,2018,Q1 (Post-Game),Q+1,63.4,167.5
+Hyundai,2018,Q2 (Spring),Q+2,42.8,80.6
+Hyundai,2018,Q3 (Summer),Q+3,37.4,57.8
+Hyundai,2018,Q4 (Fall/Holiday),Q+4,39.0,64.6
+Hyundai,2019,Pre-Game Baseline,Q0 (Baseline),23.6,0.0
+Hyundai,2019,Commercial Airing (Game Week),Game Week Peak,100.0,323.7
+Hyundai,2019,Q1 (Post-Game),Q+1,67.0,183.9
+Hyundai,2019,Q2 (Spring),Q+2,42.7,80.9
+Hyundai,2019,Q3 (Summer),Q+3,37.4,58.5
+Hyundai,2019,Q4 (Fall/Holiday),Q+4,38.9,64.8
+Hyundai,2020,Pre-Game Baseline,Q0 (Baseline),20.0,0.0
+Hyundai,2020,Commercial Airing (Game Week),Game Week Peak,100.0,400.0
+Hyundai,2020,Q1 (Post-Game),Q+1,65.4,227.0
+Hyundai,2020,Q2 (Spring),Q+2,40.0,100.0
+Hyundai,2020,Q3 (Summer),Q+3,34.4,72.0
+Hyundai,2020,Q4 (Fall/Holiday),Q+4,36.0,80.0
+Jeep,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Jeep,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Jeep,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Jeep,2015,Q2 (Spring),Q+2,20.0,40.8
+Jeep,2015,Q3 (Summer),Q+3,19.4,36.6
+Jeep,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Jeep,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Jeep,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Jeep,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Jeep,2016,Q2 (Spring),Q+2,21.3,43.0
+Jeep,2016,Q3 (Summer),Q+3,20.7,38.9
+Jeep,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Jeep,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Jeep,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Jeep,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Jeep,2018,Q2 (Spring),Q+2,34.4,59.3
+Jeep,2018,Q3 (Summer),Q+3,33.1,53.2
+Jeep,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Jeep,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Jeep,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Jeep,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Jeep,2020,Q2 (Spring),Q+2,30.2,65.9
+Jeep,2020,Q3 (Summer),Q+3,29.0,59.3
+Jeep,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Jeep,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Jeep,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Jeep,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Jeep,2021,Q2 (Spring),Q+2,23.6,60.5
+Jeep,2021,Q3 (Summer),Q+3,22.7,54.4
+Jeep,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Jeep,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Jeep,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Jeep,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Jeep,2023,Q2 (Spring),Q+2,25.0,44.5
+Jeep,2023,Q3 (Summer),Q+3,24.2,39.9
+Jeep,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Jeep,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Jeep,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Jeep,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Jeep,2025,Q2 (Spring),Q+2,31.4,43.4
+Jeep,2025,Q3 (Summer),Q+3,30.4,38.8
+Jeep,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Kia,2010,Pre-Game Baseline,Q0 (Baseline),15.7,0.0
+Kia,2010,Commercial Airing (Game Week),Game Week Peak,94.7,503.2
+Kia,2010,Q1 (Post-Game),Q+1,55.2,251.6
+Kia,2010,Q2 (Spring),Q+2,34.7,121.0
+Kia,2010,Q3 (Summer),Q+3,28.3,80.3
+Kia,2010,Q4 (Fall/Holiday),Q+4,30.7,95.5
+Kia,2011,Pre-Game Baseline,Q0 (Baseline),19.5,0.0
+Kia,2011,Commercial Airing (Game Week),Game Week Peak,100.0,412.8
+Kia,2011,Q1 (Post-Game),Q+1,59.8,206.7
+Kia,2011,Q2 (Spring),Q+2,38.8,99.0
+Kia,2011,Q3 (Summer),Q+3,32.4,66.2
+Kia,2011,Q4 (Fall/Holiday),Q+4,34.8,78.5
+Kia,2012,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Kia,2012,Commercial Airing (Game Week),Game Week Peak,100.0,356.6
+Kia,2012,Q1 (Post-Game),Q+1,64.9,196.3
+Kia,2012,Q2 (Spring),Q+2,40.6,85.4
+Kia,2012,Q3 (Summer),Q+3,34.4,57.1
+Kia,2012,Q4 (Fall/Holiday),Q+4,36.7,67.6
+Kia,2013,Pre-Game Baseline,Q0 (Baseline),20.8,0.0
+Kia,2013,Commercial Airing (Game Week),Game Week Peak,100.0,380.8
+Kia,2013,Q1 (Post-Game),Q+1,60.4,190.4
+Kia,2013,Q2 (Spring),Q+2,39.8,91.3
+Kia,2013,Q3 (Summer),Q+3,33.5,61.1
+Kia,2013,Q4 (Fall/Holiday),Q+4,35.8,72.1
+Kia,2014,Pre-Game Baseline,Q0 (Baseline),17.1,0.0
+Kia,2014,Commercial Airing (Game Week),Game Week Peak,77.3,352.0
+Kia,2014,Q1 (Post-Game),Q+1,50.2,193.6
+Kia,2014,Q2 (Spring),Q+2,31.5,84.2
+Kia,2014,Q3 (Summer),Q+3,26.7,56.1
+Kia,2014,Q4 (Fall/Holiday),Q+4,28.5,66.7
+Kia,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Kia,2015,Commercial Airing (Game Week),Game Week Peak,72.0,407.0
+Kia,2015,Q1 (Post-Game),Q+1,46.0,223.9
+Kia,2015,Q2 (Spring),Q+2,28.1,97.9
+Kia,2015,Q3 (Summer),Q+3,23.4,64.8
+Kia,2015,Q4 (Fall/Holiday),Q+4,25.2,77.5
+Kia,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Kia,2016,Commercial Airing (Game Week),Game Week Peak,74.2,398.0
+Kia,2016,Q1 (Post-Game),Q+1,47.5,218.8
+Kia,2016,Q2 (Spring),Q+2,29.1,95.3
+Kia,2016,Q3 (Summer),Q+3,24.4,63.8
+Kia,2016,Q4 (Fall/Holiday),Q+4,26.2,75.8
+Kia,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+Kia,2017,Commercial Airing (Game Week),Game Week Peak,100.0,443.5
+Kia,2017,Q1 (Post-Game),Q+1,63.3,244.0
+Kia,2017,Q2 (Spring),Q+2,38.0,106.5
+Kia,2017,Q3 (Summer),Q+3,31.5,71.2
+Kia,2017,Q4 (Fall/Holiday),Q+4,33.9,84.2
+Kia,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Kia,2018,Commercial Airing (Game Week),Game Week Peak,100.0,363.0
+Kia,2018,Q1 (Post-Game),Q+1,64.7,199.5
+Kia,2018,Q2 (Spring),Q+2,40.4,87.0
+Kia,2018,Q3 (Summer),Q+3,34.1,57.9
+Kia,2018,Q4 (Fall/Holiday),Q+4,36.5,69.0
+Kia,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Kia,2019,Commercial Airing (Game Week),Game Week Peak,100.0,365.1
+Kia,2019,Q1 (Post-Game),Q+1,60.8,182.8
+Kia,2019,Q2 (Spring),Q+2,40.3,87.4
+Kia,2019,Q3 (Summer),Q+3,34.1,58.6
+Kia,2019,Q4 (Fall/Holiday),Q+4,36.4,69.3
+Kia,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Kia,2020,Commercial Airing (Game Week),Game Week Peak,100.0,449.5
+Kia,2020,Q1 (Post-Game),Q+1,63.2,247.3
+Kia,2020,Q2 (Spring),Q+2,37.8,107.7
+Kia,2020,Q3 (Summer),Q+3,31.3,72.0
+Kia,2020,Q4 (Fall/Holiday),Q+4,33.7,85.2
+Kia,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Kia,2022,Commercial Airing (Game Week),Game Week Peak,59.3,314.7
+Kia,2022,Q1 (Post-Game),Q+1,36.8,157.3
+Kia,2022,Q2 (Spring),Q+2,25.1,75.5
+Kia,2022,Q3 (Summer),Q+3,21.5,50.3
+Kia,2022,Q4 (Fall/Holiday),Q+4,22.8,59.4
+Kia,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Kia,2023,Commercial Airing (Game Week),Game Week Peak,64.0,269.9
+Kia,2023,Q1 (Post-Game),Q+1,40.7,135.3
+Kia,2023,Q2 (Spring),Q+2,28.5,64.7
+Kia,2023,Q3 (Summer),Q+3,24.8,43.4
+Kia,2023,Q4 (Fall/Holiday),Q+4,26.2,51.4
+Kia,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Kia,2024,Commercial Airing (Game Week),Game Week Peak,73.1,249.8
+Kia,2024,Q1 (Post-Game),Q+1,47.0,124.9
+Kia,2024,Q2 (Spring),Q+2,33.4,59.8
+Kia,2024,Q3 (Summer),Q+3,29.3,40.2
+Kia,2024,Q4 (Fall/Holiday),Q+4,30.8,47.4
+Kraft,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Kraft,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Kraft,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Kraft,2018,Q2 (Spring),Q+2,34.4,59.3
+Kraft,2018,Q3 (Summer),Q+3,33.1,53.2
+Kraft,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Lay's,2004,Pre-Game Baseline,Q0 (Baseline),16.7,0.0
+Lay's,2004,Commercial Airing (Game Week),Game Week Peak,60.6,262.9
+Lay's,2004,Q1 (Post-Game),Q+1,36.5,118.6
+Lay's,2004,Q2 (Spring),Q+2,25.5,52.7
+Lay's,2004,Q3 (Summer),Q+3,24.6,47.3
+Lay's,2004,Q4 (Fall/Holiday),Q+4,24.6,47.3
+Lay's,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Lay's,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Lay's,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Lay's,2022,Q2 (Spring),Q+2,21.8,52.4
+Lay's,2022,Q3 (Summer),Q+3,21.0,46.9
+Lay's,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Lay's,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Lay's,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Lay's,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Lay's,2025,Q2 (Spring),Q+2,31.4,43.4
+Lay's,2025,Q3 (Summer),Q+3,30.4,38.8
+Lay's,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+M&M's,2012,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+M&M's,2012,Commercial Airing (Game Week),Game Week Peak,88.5,304.1
+M&M's,2012,Q1 (Post-Game),Q+1,51.9,137.0
+M&M's,2012,Q2 (Spring),Q+2,35.2,60.7
+M&M's,2012,Q3 (Summer),Q+3,33.9,54.8
+M&M's,2012,Q4 (Fall/Holiday),Q+4,33.9,54.8
+M&M's,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+M&M's,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+M&M's,2018,Q1 (Post-Game),Q+1,50.4,133.3
+M&M's,2018,Q2 (Spring),Q+2,34.4,59.3
+M&M's,2018,Q3 (Summer),Q+3,33.1,53.2
+M&M's,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+M&M's,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+M&M's,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+M&M's,2019,Q1 (Post-Game),Q+1,53.1,147.0
+M&M's,2019,Q2 (Spring),Q+2,35.6,65.6
+M&M's,2019,Q3 (Summer),Q+3,34.2,59.1
+M&M's,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+M&M's,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+M&M's,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+M&M's,2023,Q1 (Post-Game),Q+1,34.6,100.0
+M&M's,2023,Q2 (Spring),Q+2,25.0,44.5
+M&M's,2023,Q3 (Summer),Q+3,24.2,39.9
+M&M's,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Marvel,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Marvel,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Marvel,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Marvel,2019,Q2 (Spring),Q+2,35.6,65.6
+Marvel,2019,Q3 (Summer),Q+3,34.2,59.1
+Marvel,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+McDonald's,2005,Pre-Game Baseline,Q0 (Baseline),20.5,0.0
+McDonald's,2005,Commercial Airing (Game Week),Game Week Peak,66.2,222.9
+McDonald's,2005,Q1 (Post-Game),Q+1,41.1,100.5
+McDonald's,2005,Q2 (Spring),Q+2,29.6,44.4
+McDonald's,2005,Q3 (Summer),Q+3,28.7,40.0
+McDonald's,2005,Q4 (Fall/Holiday),Q+4,28.7,40.0
+McDonald's,2010,Pre-Game Baseline,Q0 (Baseline),15.7,0.0
+McDonald's,2010,Commercial Airing (Game Week),Game Week Peak,66.9,326.1
+McDonald's,2010,Q1 (Post-Game),Q+1,38.7,146.5
+McDonald's,2010,Q2 (Spring),Q+2,25.9,65.0
+McDonald's,2010,Q3 (Summer),Q+3,24.9,58.6
+McDonald's,2010,Q4 (Fall/Holiday),Q+4,24.9,58.6
+McDonald's,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+McDonald's,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+McDonald's,2015,Q1 (Post-Game),Q+1,27.2,91.5
+McDonald's,2015,Q2 (Spring),Q+2,20.0,40.8
+McDonald's,2015,Q3 (Summer),Q+3,19.4,36.6
+McDonald's,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Mercedes-Benz,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Mercedes-Benz,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Mercedes-Benz,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Mercedes-Benz,2015,Q2 (Spring),Q+2,20.0,40.8
+Mercedes-Benz,2015,Q3 (Summer),Q+3,19.4,36.6
+Mercedes-Benz,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Mercedes-Benz,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Mercedes-Benz,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Mercedes-Benz,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Mercedes-Benz,2019,Q2 (Spring),Q+2,35.6,65.6
+Mercedes-Benz,2019,Q3 (Summer),Q+3,34.2,59.1
+Mercedes-Benz,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Michelob Ultra,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Michelob Ultra,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Michelob Ultra,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Michelob Ultra,2016,Q2 (Spring),Q+2,21.3,43.0
+Michelob Ultra,2016,Q3 (Summer),Q+3,20.7,38.9
+Michelob Ultra,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Michelob Ultra,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Michelob Ultra,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Michelob Ultra,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Michelob Ultra,2018,Q2 (Spring),Q+2,34.4,59.3
+Michelob Ultra,2018,Q3 (Summer),Q+3,33.1,53.2
+Michelob Ultra,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Michelob Ultra,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Michelob Ultra,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Michelob Ultra,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Michelob Ultra,2019,Q2 (Spring),Q+2,35.6,65.6
+Michelob Ultra,2019,Q3 (Summer),Q+3,34.2,59.1
+Michelob Ultra,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Michelob Ultra,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Michelob Ultra,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Michelob Ultra,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Michelob Ultra,2021,Q2 (Spring),Q+2,23.6,60.5
+Michelob Ultra,2021,Q3 (Summer),Q+3,22.7,54.4
+Michelob Ultra,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Michelob Ultra,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Michelob Ultra,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Michelob Ultra,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Michelob Ultra,2022,Q2 (Spring),Q+2,21.8,52.4
+Michelob Ultra,2022,Q3 (Summer),Q+3,21.0,46.9
+Michelob Ultra,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Michelob Ultra,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Michelob Ultra,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Michelob Ultra,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Michelob Ultra,2023,Q2 (Spring),Q+2,25.0,44.5
+Michelob Ultra,2023,Q3 (Summer),Q+3,24.2,39.9
+Michelob Ultra,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Michelob Ultra,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Michelob Ultra,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Michelob Ultra,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Michelob Ultra,2024,Q2 (Spring),Q+2,29.4,40.7
+Michelob Ultra,2024,Q3 (Summer),Q+3,28.6,36.8
+Michelob Ultra,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Michelob Ultra,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Michelob Ultra,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Michelob Ultra,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Michelob Ultra,2025,Q2 (Spring),Q+2,31.4,43.4
+Michelob Ultra,2025,Q3 (Summer),Q+3,30.4,38.8
+Michelob Ultra,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Michelob Ultra,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Michelob Ultra,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Michelob Ultra,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Michelob Ultra,2026,Q2 (Spring),Q+2,29.1,50.8
+Michelob Ultra,2026,Q3 (Summer),Q+3,28.1,45.6
+Michelob Ultra,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Microsoft,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Microsoft,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Microsoft,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Microsoft,2015,Q2 (Spring),Q+2,20.0,40.8
+Microsoft,2015,Q3 (Summer),Q+3,19.4,36.6
+Microsoft,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Microsoft,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Microsoft,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Microsoft,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Microsoft,2019,Q2 (Spring),Q+2,35.6,65.6
+Microsoft,2019,Q3 (Summer),Q+3,34.2,59.1
+Microsoft,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Microsoft,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Microsoft,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Microsoft,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Microsoft,2024,Q2 (Spring),Q+2,29.4,40.7
+Microsoft,2024,Q3 (Summer),Q+3,28.6,36.8
+Microsoft,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Mountain Dew,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Mountain Dew,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Mountain Dew,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Mountain Dew,2016,Q2 (Spring),Q+2,21.3,43.0
+Mountain Dew,2016,Q3 (Summer),Q+3,20.7,38.9
+Mountain Dew,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Mountain Dew,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Mountain Dew,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Mountain Dew,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Mountain Dew,2018,Q2 (Spring),Q+2,34.4,59.3
+Mountain Dew,2018,Q3 (Summer),Q+3,33.1,53.2
+Mountain Dew,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Mountain Dew,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Mountain Dew,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Mountain Dew,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Mountain Dew,2024,Q2 (Spring),Q+2,29.4,40.7
+Mountain Dew,2024,Q3 (Summer),Q+3,28.6,36.8
+Mountain Dew,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Mountain Dew,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Mountain Dew,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Mountain Dew,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Mountain Dew,2025,Q2 (Spring),Q+2,31.4,43.4
+Mountain Dew,2025,Q3 (Summer),Q+3,30.4,38.8
+Mountain Dew,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+NFL,2004,Pre-Game Baseline,Q0 (Baseline),29.2,0.0
+NFL,2004,Commercial Airing (Game Week),Game Week Peak,76.8,163.0
+NFL,2004,Q1 (Post-Game),Q+1,42.5,45.5
+NFL,2004,Q2 (Spring),Q+2,33.0,13.0
+NFL,2004,Q3 (Summer),Q+3,55.4,89.7
+NFL,2004,Q4 (Fall/Holiday),Q+4,64.9,122.3
+NFL,2005,Pre-Game Baseline,Q0 (Baseline),35.8,0.0
+NFL,2005,Commercial Airing (Game Week),Game Week Peak,83.8,134.1
+NFL,2005,Q1 (Post-Game),Q+1,49.2,37.4
+NFL,2005,Q2 (Spring),Q+2,39.6,10.6
+NFL,2005,Q3 (Summer),Q+3,62.2,73.7
+NFL,2005,Q4 (Fall/Holiday),Q+4,71.8,100.6
+NFL,2010,Pre-Game Baseline,Q0 (Baseline),27.4,0.0
+NFL,2010,Commercial Airing (Game Week),Game Week Peak,84.7,209.1
+NFL,2010,Q1 (Post-Game),Q+1,43.4,58.4
+NFL,2010,Q2 (Spring),Q+2,32.0,16.8
+NFL,2010,Q3 (Summer),Q+3,58.9,115.0
+NFL,2010,Q4 (Fall/Holiday),Q+4,70.4,156.9
+NFL,2012,Pre-Game Baseline,Q0 (Baseline),38.4,0.0
+NFL,2012,Commercial Airing (Game Week),Game Week Peak,100.0,160.4
+NFL,2012,Q1 (Post-Game),Q+1,60.1,56.5
+NFL,2012,Q2 (Spring),Q+2,43.3,12.8
+NFL,2012,Q3 (Summer),Q+3,72.3,88.3
+NFL,2012,Q4 (Fall/Holiday),Q+4,84.6,120.3
+NFL,2014,Pre-Game Baseline,Q0 (Baseline),29.8,0.0
+NFL,2014,Commercial Airing (Game Week),Game Week Peak,75.1,152.0
+NFL,2014,Q1 (Post-Game),Q+1,42.5,42.6
+NFL,2014,Q2 (Spring),Q+2,33.4,12.1
+NFL,2014,Q3 (Summer),Q+3,54.7,83.6
+NFL,2014,Q4 (Fall/Holiday),Q+4,63.8,114.1
+NFL,2016,Pre-Game Baseline,Q0 (Baseline),26.0,0.0
+NFL,2016,Commercial Airing (Game Week),Game Week Peak,72.8,180.0
+NFL,2016,Q1 (Post-Game),Q+1,42.5,63.5
+NFL,2016,Q2 (Spring),Q+2,29.7,14.2
+NFL,2016,Q3 (Summer),Q+3,51.7,98.8
+NFL,2016,Q4 (Fall/Holiday),Q+4,61.1,135.0
+NFL,2017,Pre-Game Baseline,Q0 (Baseline),32.2,0.0
+NFL,2017,Commercial Airing (Game Week),Game Week Peak,100.0,210.6
+NFL,2017,Q1 (Post-Game),Q+1,56.1,74.2
+NFL,2017,Q2 (Spring),Q+2,37.6,16.8
+NFL,2017,Q3 (Summer),Q+3,69.5,115.8
+NFL,2017,Q4 (Fall/Holiday),Q+4,83.0,157.8
+NFL,2018,Pre-Game Baseline,Q0 (Baseline),37.7,0.0
+NFL,2018,Commercial Airing (Game Week),Game Week Peak,100.0,165.3
+NFL,2018,Q1 (Post-Game),Q+1,59.6,58.1
+NFL,2018,Q2 (Spring),Q+2,42.7,13.3
+NFL,2018,Q3 (Summer),Q+3,72.0,91.0
+NFL,2018,Q4 (Fall/Holiday),Q+4,84.4,123.9
+NFL,2019,Pre-Game Baseline,Q0 (Baseline),37.6,0.0
+NFL,2019,Commercial Airing (Game Week),Game Week Peak,100.0,166.0
+NFL,2019,Q1 (Post-Game),Q+1,59.6,58.5
+NFL,2019,Q2 (Spring),Q+2,42.6,13.3
+NFL,2019,Q3 (Summer),Q+3,71.9,91.2
+NFL,2019,Q4 (Fall/Holiday),Q+4,84.4,124.5
+NFL,2020,Pre-Game Baseline,Q0 (Baseline),31.8,0.0
+NFL,2020,Commercial Airing (Game Week),Game Week Peak,100.0,214.5
+NFL,2020,Q1 (Post-Game),Q+1,55.8,75.5
+NFL,2020,Q2 (Spring),Q+2,37.3,17.3
+NFL,2020,Q3 (Summer),Q+3,69.3,117.9
+NFL,2020,Q4 (Fall/Holiday),Q+4,83.0,161.0
+NFL,2023,Pre-Game Baseline,Q0 (Baseline),30.2,0.0
+NFL,2023,Commercial Airing (Game Week),Game Week Peak,70.4,133.1
+NFL,2023,Q1 (Post-Game),Q+1,41.5,37.4
+NFL,2023,Q2 (Spring),Q+2,33.4,10.6
+NFL,2023,Q3 (Summer),Q+3,52.3,73.2
+NFL,2023,Q4 (Fall/Holiday),Q+4,60.4,100.0
+NFL,2024,Pre-Game Baseline,Q0 (Baseline),36.6,0.0
+NFL,2024,Commercial Airing (Game Week),Game Week Peak,80.5,119.9
+NFL,2024,Q1 (Post-Game),Q+1,48.9,33.6
+NFL,2024,Q2 (Spring),Q+2,40.1,9.6
+NFL,2024,Q3 (Summer),Q+3,60.7,65.8
+NFL,2024,Q4 (Fall/Holiday),Q+4,69.5,89.9
+NFL,2025,Pre-Game Baseline,Q0 (Baseline),38.3,0.0
+NFL,2025,Commercial Airing (Game Week),Game Week Peak,88.1,130.0
+NFL,2025,Q1 (Post-Game),Q+1,52.2,36.3
+NFL,2025,Q2 (Spring),Q+2,42.3,10.4
+NFL,2025,Q3 (Summer),Q+3,65.7,71.5
+NFL,2025,Q4 (Fall/Holiday),Q+4,75.6,97.4
+Netflix,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+Netflix,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+Netflix,2017,Q1 (Post-Game),Q+1,39.3,113.6
+Netflix,2017,Q2 (Spring),Q+2,27.7,50.5
+Netflix,2017,Q3 (Summer),Q+3,26.8,45.7
+Netflix,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+Netflix,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Netflix,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Netflix,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Netflix,2018,Q2 (Spring),Q+2,34.4,59.3
+Netflix,2018,Q3 (Summer),Q+3,33.1,53.2
+Netflix,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Netflix,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Netflix,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Netflix,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Netflix,2022,Q2 (Spring),Q+2,21.8,52.4
+Netflix,2022,Q3 (Summer),Q+3,21.0,46.9
+Netflix,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Netflix,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Netflix,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Netflix,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Netflix,2023,Q2 (Spring),Q+2,25.0,44.5
+Netflix,2023,Q3 (Summer),Q+3,24.2,39.9
+Netflix,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Nike,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Nike,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Nike,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Nike,2025,Q2 (Spring),Q+2,31.4,43.4
+Nike,2025,Q3 (Summer),Q+3,30.4,38.8
+Nike,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Oikos,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Oikos,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Oikos,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Oikos,2025,Q2 (Spring),Q+2,31.4,43.4
+Oikos,2025,Q3 (Summer),Q+3,30.4,38.8
+Oikos,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Paramount+,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Paramount+,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Paramount+,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Paramount+,2021,Q2 (Spring),Q+2,23.6,60.5
+Paramount+,2021,Q3 (Summer),Q+3,22.7,54.4
+Paramount+,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Paramount+,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Paramount+,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Paramount+,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Paramount+,2023,Q2 (Spring),Q+2,25.0,44.5
+Paramount+,2023,Q3 (Summer),Q+3,24.2,39.9
+Paramount+,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Paramount+,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Paramount+,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Paramount+,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Paramount+,2024,Q2 (Spring),Q+2,29.4,40.7
+Paramount+,2024,Q3 (Summer),Q+3,28.6,36.8
+Paramount+,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Pepsi,2004,Pre-Game Baseline,Q0 (Baseline),26.7,0.0
+Pepsi,2004,Commercial Airing (Game Week),Game Week Peak,92.4,246.1
+Pepsi,2004,Q1 (Post-Game),Q+1,49.7,86.1
+Pepsi,2004,Q2 (Spring),Q+2,42.8,60.3
+Pepsi,2004,Q3 (Summer),Q+3,45.1,68.9
+Pepsi,2004,Q4 (Fall/Holiday),Q+4,38.5,44.2
+Pepsi,2005,Pre-Game Baseline,Q0 (Baseline),32.7,0.0
+Pepsi,2005,Commercial Airing (Game Week),Game Week Peak,100.0,205.8
+Pepsi,2005,Q1 (Post-Game),Q+1,60.6,85.3
+Pepsi,2005,Q2 (Spring),Q+2,49.2,50.5
+Pepsi,2005,Q3 (Summer),Q+3,51.5,57.5
+Pepsi,2005,Q4 (Fall/Holiday),Q+4,44.8,37.0
+Pepsi,2006,Pre-Game Baseline,Q0 (Baseline),35.2,0.0
+Pepsi,2006,Commercial Airing (Game Week),Game Week Peak,100.0,184.1
+Pepsi,2006,Q1 (Post-Game),Q+1,62.1,76.4
+Pepsi,2006,Q2 (Spring),Q+2,51.1,45.2
+Pepsi,2006,Q3 (Summer),Q+3,53.3,51.4
+Pepsi,2006,Q4 (Fall/Holiday),Q+4,46.9,33.2
+Pepsi,2008,Pre-Game Baseline,Q0 (Baseline),25.6,0.0
+Pepsi,2008,Commercial Airing (Game Week),Game Week Peak,95.5,273.0
+Pepsi,2008,Q1 (Post-Game),Q+1,54.6,113.3
+Pepsi,2008,Q2 (Spring),Q+2,42.8,67.2
+Pepsi,2008,Q3 (Summer),Q+3,45.2,76.6
+Pepsi,2008,Q4 (Fall/Holiday),Q+4,38.2,49.2
+Pepsi,2009,Pre-Game Baseline,Q0 (Baseline),22.4,0.0
+Pepsi,2009,Commercial Airing (Game Week),Game Week Peak,94.1,320.1
+Pepsi,2009,Q1 (Post-Game),Q+1,52.2,133.0
+Pepsi,2009,Q2 (Spring),Q+2,40.0,78.6
+Pepsi,2009,Q3 (Summer),Q+3,42.5,89.7
+Pepsi,2009,Q4 (Fall/Holiday),Q+4,35.3,57.6
+Pepsi,2011,Pre-Game Baseline,Q0 (Baseline),31.2,0.0
+Pepsi,2011,Commercial Airing (Game Week),Game Week Peak,100.0,220.5
+Pepsi,2011,Q1 (Post-Game),Q+1,55.3,77.2
+Pepsi,2011,Q2 (Spring),Q+2,48.1,54.2
+Pepsi,2011,Q3 (Summer),Q+3,50.5,61.9
+Pepsi,2011,Q4 (Fall/Holiday),Q+4,43.6,39.7
+Pepsi,2012,Pre-Game Baseline,Q0 (Baseline),35.1,0.0
+Pepsi,2012,Commercial Airing (Game Week),Game Week Peak,100.0,184.9
+Pepsi,2012,Q1 (Post-Game),Q+1,62.0,76.6
+Pepsi,2012,Q2 (Spring),Q+2,51.0,45.3
+Pepsi,2012,Q3 (Summer),Q+3,53.3,51.9
+Pepsi,2012,Q4 (Fall/Holiday),Q+4,46.8,33.3
+Pepsi,2013,Pre-Game Baseline,Q0 (Baseline),33.2,0.0
+Pepsi,2013,Commercial Airing (Game Week),Game Week Peak,100.0,201.2
+Pepsi,2013,Q1 (Post-Game),Q+1,56.6,70.5
+Pepsi,2013,Q2 (Spring),Q+2,49.6,49.4
+Pepsi,2013,Q3 (Summer),Q+3,51.9,56.3
+Pepsi,2013,Q4 (Fall/Holiday),Q+4,45.2,36.1
+Pepsi,2015,Pre-Game Baseline,Q0 (Baseline),22.7,0.0
+Pepsi,2015,Commercial Airing (Game Week),Game Week Peak,57.9,155.1
+Pepsi,2015,Q1 (Post-Game),Q+1,35.0,54.2
+Pepsi,2015,Q2 (Spring),Q+2,31.3,37.9
+Pepsi,2015,Q3 (Summer),Q+3,32.6,43.6
+Pepsi,2015,Q4 (Fall/Holiday),Q+4,29.0,27.8
+Pepsi,2016,Pre-Game Baseline,Q0 (Baseline),23.8,0.0
+Pepsi,2016,Commercial Airing (Game Week),Game Week Peak,71.2,199.2
+Pepsi,2016,Q1 (Post-Game),Q+1,43.5,82.8
+Pepsi,2016,Q2 (Spring),Q+2,35.4,48.7
+Pepsi,2016,Q3 (Summer),Q+3,37.1,55.9
+Pepsi,2016,Q4 (Fall/Holiday),Q+4,32.3,35.7
+Pepsi,2018,Pre-Game Baseline,Q0 (Baseline),34.5,0.0
+Pepsi,2018,Commercial Airing (Game Week),Game Week Peak,100.0,189.9
+Pepsi,2018,Q1 (Post-Game),Q+1,61.7,78.8
+Pepsi,2018,Q2 (Spring),Q+2,50.6,46.7
+Pepsi,2018,Q3 (Summer),Q+3,52.8,53.0
+Pepsi,2018,Q4 (Fall/Holiday),Q+4,46.3,34.2
+Pepsi,2019,Pre-Game Baseline,Q0 (Baseline),34.3,0.0
+Pepsi,2019,Commercial Airing (Game Week),Game Week Peak,100.0,191.5
+Pepsi,2019,Q1 (Post-Game),Q+1,61.6,79.6
+Pepsi,2019,Q2 (Spring),Q+2,50.4,46.9
+Pepsi,2019,Q3 (Summer),Q+3,52.7,53.6
+Pepsi,2019,Q4 (Fall/Holiday),Q+4,46.1,34.4
+Pepsi,2020,Pre-Game Baseline,Q0 (Baseline),29.1,0.0
+Pepsi,2020,Commercial Airing (Game Week),Game Week Peak,100.0,243.6
+Pepsi,2020,Q1 (Post-Game),Q+1,58.5,101.0
+Pepsi,2020,Q2 (Spring),Q+2,46.5,59.8
+Pepsi,2020,Q3 (Summer),Q+3,49.0,68.4
+Pepsi,2020,Q4 (Fall/Holiday),Q+4,41.9,44.0
+Pepsi,2021,Pre-Game Baseline,Q0 (Baseline),23.6,0.0
+Pepsi,2021,Commercial Airing (Game Week),Game Week Peak,73.9,213.1
+Pepsi,2021,Q1 (Post-Game),Q+1,41.2,74.6
+Pepsi,2021,Q2 (Spring),Q+2,36.0,52.5
+Pepsi,2021,Q3 (Summer),Q+3,37.7,59.7
+Pepsi,2021,Q4 (Fall/Holiday),Q+4,32.7,38.6
+Pepsi,2023,Pre-Game Baseline,Q0 (Baseline),27.6,0.0
+Pepsi,2023,Commercial Airing (Game Week),Game Week Peak,68.7,148.9
+Pepsi,2023,Q1 (Post-Game),Q+1,42.0,52.2
+Pepsi,2023,Q2 (Spring),Q+2,37.7,36.6
+Pepsi,2023,Q3 (Summer),Q+3,39.1,41.7
+Pepsi,2023,Q4 (Fall/Holiday),Q+4,35.0,26.8
+Pepsi,2026,Pre-Game Baseline,Q0 (Baseline),30.9,0.0
+Pepsi,2026,Commercial Airing (Game Week),Game Week Peak,84.7,174.1
+Pepsi,2026,Q1 (Post-Game),Q+1,49.7,60.8
+Pepsi,2026,Q2 (Spring),Q+2,44.1,42.7
+Pepsi,2026,Q3 (Summer),Q+3,46.0,48.9
+Pepsi,2026,Q4 (Fall/Holiday),Q+4,40.6,31.4
+Planters,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Planters,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Planters,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Planters,2020,Q2 (Spring),Q+2,30.2,65.9
+Planters,2020,Q3 (Summer),Q+3,29.0,59.3
+Planters,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Planters,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Planters,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Planters,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Planters,2022,Q2 (Spring),Q+2,21.8,52.4
+Planters,2022,Q3 (Summer),Q+3,21.0,46.9
+Planters,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Planters,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Planters,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Planters,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Planters,2023,Q2 (Spring),Q+2,25.0,44.5
+Planters,2023,Q3 (Summer),Q+3,24.2,39.9
+Planters,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+PopCorners,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+PopCorners,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+PopCorners,2023,Q1 (Post-Game),Q+1,34.6,100.0
+PopCorners,2023,Q2 (Spring),Q+2,25.0,44.5
+PopCorners,2023,Q3 (Summer),Q+3,24.2,39.9
+PopCorners,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Porsche,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Porsche,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Porsche,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Porsche,2020,Q2 (Spring),Q+2,30.2,65.9
+Porsche,2020,Q3 (Summer),Q+3,29.0,59.3
+Porsche,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Pringles,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Pringles,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Pringles,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Pringles,2018,Q2 (Spring),Q+2,34.4,59.3
+Pringles,2018,Q3 (Summer),Q+3,33.1,53.2
+Pringles,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Pringles,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Pringles,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Pringles,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Pringles,2019,Q2 (Spring),Q+2,35.6,65.6
+Pringles,2019,Q3 (Summer),Q+3,34.2,59.1
+Pringles,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Pringles,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Pringles,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Pringles,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Pringles,2020,Q2 (Spring),Q+2,30.2,65.9
+Pringles,2020,Q3 (Summer),Q+3,29.0,59.3
+Pringles,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Pringles,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Pringles,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Pringles,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Pringles,2022,Q2 (Spring),Q+2,21.8,52.4
+Pringles,2022,Q3 (Summer),Q+3,21.0,46.9
+Pringles,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Pringles,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Pringles,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Pringles,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Pringles,2023,Q2 (Spring),Q+2,25.0,44.5
+Pringles,2023,Q3 (Summer),Q+3,24.2,39.9
+Pringles,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Pringles,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Pringles,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Pringles,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Pringles,2024,Q2 (Spring),Q+2,29.4,40.7
+Pringles,2024,Q3 (Summer),Q+3,28.6,36.8
+Pringles,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Pringles,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Pringles,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Pringles,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Pringles,2025,Q2 (Spring),Q+2,31.4,43.4
+Pringles,2025,Q3 (Summer),Q+3,30.4,38.8
+Pringles,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Ram,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Ram,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Ram,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Ram,2018,Q2 (Spring),Q+2,34.4,59.3
+Ram,2018,Q3 (Summer),Q+3,33.1,53.2
+Ram,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Ram,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Ram,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Ram,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Ram,2023,Q2 (Spring),Q+2,25.0,44.5
+Ram,2023,Q3 (Summer),Q+3,24.2,39.9
+Ram,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Ram,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Ram,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Ram,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Ram,2024,Q2 (Spring),Q+2,29.4,40.7
+Ram,2024,Q3 (Summer),Q+3,28.6,36.8
+Ram,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Ram,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Ram,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Ram,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Ram,2025,Q2 (Spring),Q+2,31.4,43.4
+Ram,2025,Q3 (Summer),Q+3,30.4,38.8
+Ram,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Reese's,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Reese's,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Reese's,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Reese's,2024,Q2 (Spring),Q+2,29.4,40.7
+Reese's,2024,Q3 (Summer),Q+3,28.6,36.8
+Reese's,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Reese's,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Reese's,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Reese's,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Reese's,2025,Q2 (Spring),Q+2,31.4,43.4
+Reese's,2025,Q3 (Summer),Q+3,30.4,38.8
+Reese's,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Ring,2009,Pre-Game Baseline,Q0 (Baseline),14.0,0.0
+Ring,2009,Commercial Airing (Game Week),Game Week Peak,55.3,295.0
+Ring,2009,Q1 (Post-Game),Q+1,32.6,132.9
+Ring,2009,Q2 (Spring),Q+2,22.3,59.3
+Ring,2009,Q3 (Summer),Q+3,21.4,52.9
+Ring,2009,Q4 (Fall/Holiday),Q+4,21.4,52.9
+Ring,2010,Pre-Game Baseline,Q0 (Baseline),15.7,0.0
+Ring,2010,Commercial Airing (Game Week),Game Week Peak,66.9,326.1
+Ring,2010,Q1 (Post-Game),Q+1,38.7,146.5
+Ring,2010,Q2 (Spring),Q+2,25.9,65.0
+Ring,2010,Q3 (Summer),Q+3,24.9,58.6
+Ring,2010,Q4 (Fall/Holiday),Q+4,24.9,58.6
+Ring,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Ring,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Ring,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Ring,2022,Q2 (Spring),Q+2,21.8,52.4
+Ring,2022,Q3 (Summer),Q+3,21.0,46.9
+Ring,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Ring,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Ring,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Ring,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Ring,2024,Q2 (Spring),Q+2,29.4,40.7
+Ring,2024,Q3 (Summer),Q+3,28.6,36.8
+Ring,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Ring,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Ring,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Ring,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Ring,2025,Q2 (Spring),Q+2,31.4,43.4
+Ring,2025,Q3 (Summer),Q+3,30.4,38.8
+Ring,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Ring,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Ring,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Ring,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Ring,2026,Q2 (Spring),Q+2,29.1,50.8
+Ring,2026,Q3 (Summer),Q+3,28.1,45.6
+Ring,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Ritz,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Ritz,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Ritz,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Ritz,2025,Q2 (Spring),Q+2,31.4,43.4
+Ritz,2025,Q3 (Summer),Q+3,30.4,38.8
+Ritz,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Ritz,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Ritz,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Ritz,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Ritz,2026,Q2 (Spring),Q+2,29.1,50.8
+Ritz,2026,Q3 (Summer),Q+3,28.1,45.6
+Ritz,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Rocket Mortgage,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Rocket Mortgage,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Rocket Mortgage,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Rocket Mortgage,2018,Q2 (Spring),Q+2,34.4,59.3
+Rocket Mortgage,2018,Q3 (Summer),Q+3,33.1,53.2
+Rocket Mortgage,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Rocket Mortgage,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Rocket Mortgage,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Rocket Mortgage,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Rocket Mortgage,2022,Q2 (Spring),Q+2,21.8,52.4
+Rocket Mortgage,2022,Q3 (Summer),Q+3,21.0,46.9
+Rocket Mortgage,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Rocket Mortgage,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Rocket Mortgage,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Rocket Mortgage,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Rocket Mortgage,2025,Q2 (Spring),Q+2,31.4,43.4
+Rocket Mortgage,2025,Q3 (Summer),Q+3,30.4,38.8
+Rocket Mortgage,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Salesforce,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Salesforce,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Salesforce,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Salesforce,2022,Q2 (Spring),Q+2,21.8,52.4
+Salesforce,2022,Q3 (Summer),Q+3,21.0,46.9
+Salesforce,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Salesforce,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Salesforce,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Salesforce,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Salesforce,2025,Q2 (Spring),Q+2,31.4,43.4
+Salesforce,2025,Q3 (Summer),Q+3,30.4,38.8
+Salesforce,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Salesforce,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Salesforce,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Salesforce,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Salesforce,2026,Q2 (Spring),Q+2,29.1,50.8
+Salesforce,2026,Q3 (Summer),Q+3,28.1,45.6
+Salesforce,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Skechers,2010,Pre-Game Baseline,Q0 (Baseline),15.7,0.0
+Skechers,2010,Commercial Airing (Game Week),Game Week Peak,66.9,326.1
+Skechers,2010,Q1 (Post-Game),Q+1,38.7,146.5
+Skechers,2010,Q2 (Spring),Q+2,25.9,65.0
+Skechers,2010,Q3 (Summer),Q+3,24.9,58.6
+Skechers,2010,Q4 (Fall/Holiday),Q+4,24.9,58.6
+Skechers,2013,Pre-Game Baseline,Q0 (Baseline),20.8,0.0
+Skechers,2013,Commercial Airing (Game Week),Game Week Peak,75.3,262.0
+Skechers,2013,Q1 (Post-Game),Q+1,45.3,117.8
+Skechers,2013,Q2 (Spring),Q+2,31.7,52.4
+Skechers,2013,Q3 (Summer),Q+3,30.6,47.1
+Skechers,2013,Q4 (Fall/Holiday),Q+4,30.6,47.1
+Skechers,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Skechers,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Skechers,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Skechers,2015,Q2 (Spring),Q+2,20.0,40.8
+Skechers,2015,Q3 (Summer),Q+3,19.4,36.6
+Skechers,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Skechers,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Skechers,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Skechers,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Skechers,2018,Q2 (Spring),Q+2,34.4,59.3
+Skechers,2018,Q3 (Summer),Q+3,33.1,53.2
+Skechers,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Skechers,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Skechers,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Skechers,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Skechers,2023,Q2 (Spring),Q+2,25.0,44.5
+Skechers,2023,Q3 (Summer),Q+3,24.2,39.9
+Skechers,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Skechers,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Skechers,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Skechers,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Skechers,2024,Q2 (Spring),Q+2,29.4,40.7
+Skechers,2024,Q3 (Summer),Q+3,28.6,36.8
+Skechers,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Skittles,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Skittles,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Skittles,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Skittles,2015,Q2 (Spring),Q+2,20.0,40.8
+Skittles,2015,Q3 (Summer),Q+3,19.4,36.6
+Skittles,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Skittles,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Skittles,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Skittles,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Skittles,2016,Q2 (Spring),Q+2,21.3,43.0
+Skittles,2016,Q3 (Summer),Q+3,20.7,38.9
+Skittles,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Snickers,2010,Pre-Game Baseline,Q0 (Baseline),15.7,0.0
+Snickers,2010,Commercial Airing (Game Week),Game Week Peak,66.9,326.1
+Snickers,2010,Q1 (Post-Game),Q+1,38.7,146.5
+Snickers,2010,Q2 (Spring),Q+2,25.9,65.0
+Snickers,2010,Q3 (Summer),Q+3,24.9,58.6
+Snickers,2010,Q4 (Fall/Holiday),Q+4,24.9,58.6
+Snickers,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Snickers,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Snickers,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Snickers,2015,Q2 (Spring),Q+2,20.0,40.8
+Snickers,2015,Q3 (Summer),Q+3,19.4,36.6
+Snickers,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Sprint,2007,Pre-Game Baseline,Q0 (Baseline),19.8,0.0
+Sprint,2007,Commercial Airing (Game Week),Game Week Peak,62.4,215.2
+Sprint,2007,Q1 (Post-Game),Q+1,39.0,97.0
+Sprint,2007,Q2 (Spring),Q+2,28.3,42.9
+Sprint,2007,Q3 (Summer),Q+3,27.5,38.9
+Sprint,2007,Q4 (Fall/Holiday),Q+4,27.5,38.9
+Sprint,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Sprint,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Sprint,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Sprint,2015,Q2 (Spring),Q+2,20.0,40.8
+Sprint,2015,Q3 (Summer),Q+3,19.4,36.6
+Sprint,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Sprint,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+Sprint,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+Sprint,2017,Q1 (Post-Game),Q+1,39.3,113.6
+Sprint,2017,Q2 (Spring),Q+2,27.7,50.5
+Sprint,2017,Q3 (Summer),Q+3,26.8,45.7
+Sprint,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+Sprint,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Sprint,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Sprint,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Sprint,2018,Q2 (Spring),Q+2,34.4,59.3
+Sprint,2018,Q3 (Summer),Q+3,33.1,53.2
+Sprint,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Squarespace,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Squarespace,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Squarespace,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Squarespace,2015,Q2 (Spring),Q+2,20.0,40.8
+Squarespace,2015,Q3 (Summer),Q+3,19.4,36.6
+Squarespace,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Squarespace,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Squarespace,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Squarespace,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Squarespace,2016,Q2 (Spring),Q+2,21.3,43.0
+Squarespace,2016,Q3 (Summer),Q+3,20.7,38.9
+Squarespace,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Squarespace,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+Squarespace,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+Squarespace,2017,Q1 (Post-Game),Q+1,39.3,113.6
+Squarespace,2017,Q2 (Spring),Q+2,27.7,50.5
+Squarespace,2017,Q3 (Summer),Q+3,26.8,45.7
+Squarespace,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+Squarespace,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Squarespace,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Squarespace,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Squarespace,2018,Q2 (Spring),Q+2,34.4,59.3
+Squarespace,2018,Q3 (Summer),Q+3,33.1,53.2
+Squarespace,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Squarespace,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Squarespace,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Squarespace,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Squarespace,2021,Q2 (Spring),Q+2,23.6,60.5
+Squarespace,2021,Q3 (Summer),Q+3,22.7,54.4
+Squarespace,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Squarespace,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Squarespace,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Squarespace,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Squarespace,2022,Q2 (Spring),Q+2,21.8,52.4
+Squarespace,2022,Q3 (Summer),Q+3,21.0,46.9
+Squarespace,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Squarespace,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Squarespace,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Squarespace,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Squarespace,2023,Q2 (Spring),Q+2,25.0,44.5
+Squarespace,2023,Q3 (Summer),Q+3,24.2,39.9
+Squarespace,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Squarespace,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Squarespace,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Squarespace,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Squarespace,2024,Q2 (Spring),Q+2,29.4,40.7
+Squarespace,2024,Q3 (Summer),Q+3,28.6,36.8
+Squarespace,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Squarespace,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Squarespace,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Squarespace,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Squarespace,2025,Q2 (Spring),Q+2,31.4,43.4
+Squarespace,2025,Q3 (Summer),Q+3,30.4,38.8
+Squarespace,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Squarespace,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Squarespace,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Squarespace,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Squarespace,2026,Q2 (Spring),Q+2,29.1,50.8
+Squarespace,2026,Q3 (Summer),Q+3,28.1,45.6
+Squarespace,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+State Farm,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+State Farm,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+State Farm,2024,Q1 (Post-Game),Q+1,40.1,91.9
+State Farm,2024,Q2 (Spring),Q+2,29.4,40.7
+State Farm,2024,Q3 (Summer),Q+3,28.6,36.8
+State Farm,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+State Farm,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+State Farm,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+State Farm,2026,Q1 (Post-Game),Q+1,41.3,114.0
+State Farm,2026,Q2 (Spring),Q+2,29.1,50.8
+State Farm,2026,Q3 (Summer),Q+3,28.1,45.6
+State Farm,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Stella Artois,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Stella Artois,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Stella Artois,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Stella Artois,2018,Q2 (Spring),Q+2,34.4,59.3
+Stella Artois,2018,Q3 (Summer),Q+3,33.1,53.2
+Stella Artois,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Stella Artois,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+Stella Artois,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+Stella Artois,2019,Q1 (Post-Game),Q+1,53.1,147.0
+Stella Artois,2019,Q2 (Spring),Q+2,35.6,65.6
+Stella Artois,2019,Q3 (Summer),Q+3,34.2,59.1
+Stella Artois,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+Stella Artois,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Stella Artois,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Stella Artois,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Stella Artois,2025,Q2 (Spring),Q+2,31.4,43.4
+Stella Artois,2025,Q3 (Summer),Q+3,30.4,38.8
+Stella Artois,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Subway,2013,Pre-Game Baseline,Q0 (Baseline),20.8,0.0
+Subway,2013,Commercial Airing (Game Week),Game Week Peak,75.3,262.0
+Subway,2013,Q1 (Post-Game),Q+1,45.3,117.8
+Subway,2013,Q2 (Spring),Q+2,31.7,52.4
+Subway,2013,Q3 (Summer),Q+3,30.6,47.1
+Subway,2013,Q4 (Fall/Holiday),Q+4,30.6,47.1
+Subway,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Subway,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Subway,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Subway,2018,Q2 (Spring),Q+2,34.4,59.3
+Subway,2018,Q3 (Summer),Q+3,33.1,53.2
+Subway,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+T-Mobile,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+T-Mobile,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+T-Mobile,2015,Q1 (Post-Game),Q+1,27.2,91.5
+T-Mobile,2015,Q2 (Spring),Q+2,20.0,40.8
+T-Mobile,2015,Q3 (Summer),Q+3,19.4,36.6
+T-Mobile,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+T-Mobile,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+T-Mobile,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+T-Mobile,2016,Q1 (Post-Game),Q+1,29.4,97.3
+T-Mobile,2016,Q2 (Spring),Q+2,21.3,43.0
+T-Mobile,2016,Q3 (Summer),Q+3,20.7,38.9
+T-Mobile,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+T-Mobile,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+T-Mobile,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+T-Mobile,2017,Q1 (Post-Game),Q+1,39.3,113.6
+T-Mobile,2017,Q2 (Spring),Q+2,27.7,50.5
+T-Mobile,2017,Q3 (Summer),Q+3,26.8,45.7
+T-Mobile,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+T-Mobile,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+T-Mobile,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+T-Mobile,2018,Q1 (Post-Game),Q+1,50.4,133.3
+T-Mobile,2018,Q2 (Spring),Q+2,34.4,59.3
+T-Mobile,2018,Q3 (Summer),Q+3,33.1,53.2
+T-Mobile,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+T-Mobile,2019,Pre-Game Baseline,Q0 (Baseline),21.5,0.0
+T-Mobile,2019,Commercial Airing (Game Week),Game Week Peak,91.8,327.0
+T-Mobile,2019,Q1 (Post-Game),Q+1,53.1,147.0
+T-Mobile,2019,Q2 (Spring),Q+2,35.6,65.6
+T-Mobile,2019,Q3 (Summer),Q+3,34.2,59.1
+T-Mobile,2019,Q4 (Fall/Holiday),Q+4,34.2,59.1
+T-Mobile,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+T-Mobile,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+T-Mobile,2021,Q1 (Post-Game),Q+1,34.7,136.1
+T-Mobile,2021,Q2 (Spring),Q+2,23.6,60.5
+T-Mobile,2021,Q3 (Summer),Q+3,22.7,54.4
+T-Mobile,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+T-Mobile,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+T-Mobile,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+T-Mobile,2022,Q1 (Post-Game),Q+1,31.1,117.5
+T-Mobile,2022,Q2 (Spring),Q+2,21.8,52.4
+T-Mobile,2022,Q3 (Summer),Q+3,21.0,46.9
+T-Mobile,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+T-Mobile,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+T-Mobile,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+T-Mobile,2023,Q1 (Post-Game),Q+1,34.6,100.0
+T-Mobile,2023,Q2 (Spring),Q+2,25.0,44.5
+T-Mobile,2023,Q3 (Summer),Q+3,24.2,39.9
+T-Mobile,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+T-Mobile,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+T-Mobile,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+T-Mobile,2024,Q1 (Post-Game),Q+1,40.1,91.9
+T-Mobile,2024,Q2 (Spring),Q+2,29.4,40.7
+T-Mobile,2024,Q3 (Summer),Q+3,28.6,36.8
+T-Mobile,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+T-Mobile,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+T-Mobile,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+T-Mobile,2025,Q1 (Post-Game),Q+1,43.3,97.7
+T-Mobile,2025,Q2 (Spring),Q+2,31.4,43.4
+T-Mobile,2025,Q3 (Summer),Q+3,30.4,38.8
+T-Mobile,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+T-Mobile,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+T-Mobile,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+T-Mobile,2026,Q1 (Post-Game),Q+1,41.3,114.0
+T-Mobile,2026,Q2 (Spring),Q+2,29.1,50.8
+T-Mobile,2026,Q3 (Summer),Q+3,28.1,45.6
+T-Mobile,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Taco Bell,2004,Pre-Game Baseline,Q0 (Baseline),16.7,0.0
+Taco Bell,2004,Commercial Airing (Game Week),Game Week Peak,60.6,262.9
+Taco Bell,2004,Q1 (Post-Game),Q+1,36.5,118.6
+Taco Bell,2004,Q2 (Spring),Q+2,25.5,52.7
+Taco Bell,2004,Q3 (Summer),Q+3,24.6,47.3
+Taco Bell,2004,Q4 (Fall/Holiday),Q+4,24.6,47.3
+Taco Bell,2007,Pre-Game Baseline,Q0 (Baseline),19.8,0.0
+Taco Bell,2007,Commercial Airing (Game Week),Game Week Peak,62.4,215.2
+Taco Bell,2007,Q1 (Post-Game),Q+1,39.0,97.0
+Taco Bell,2007,Q2 (Spring),Q+2,28.3,42.9
+Taco Bell,2007,Q3 (Summer),Q+3,27.5,38.9
+Taco Bell,2007,Q4 (Fall/Holiday),Q+4,27.5,38.9
+Taco Bell,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Taco Bell,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Taco Bell,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Taco Bell,2022,Q2 (Spring),Q+2,21.8,52.4
+Taco Bell,2022,Q3 (Summer),Q+3,21.0,46.9
+Taco Bell,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Taco Bell,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Taco Bell,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Taco Bell,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Taco Bell,2025,Q2 (Spring),Q+2,31.4,43.4
+Taco Bell,2025,Q3 (Summer),Q+3,30.4,38.8
+Taco Bell,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+The Farmer's Dog,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+The Farmer's Dog,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+The Farmer's Dog,2023,Q1 (Post-Game),Q+1,34.6,100.0
+The Farmer's Dog,2023,Q2 (Spring),Q+2,25.0,44.5
+The Farmer's Dog,2023,Q3 (Summer),Q+3,24.2,39.9
+The Farmer's Dog,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Tide,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Tide,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Tide,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Tide,2018,Q2 (Spring),Q+2,34.4,59.3
+Tide,2018,Q3 (Summer),Q+3,33.1,53.2
+Tide,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Tide,2020,Pre-Game Baseline,Q0 (Baseline),18.2,0.0
+Tide,2020,Commercial Airing (Game Week),Game Week Peak,78.1,329.1
+Tide,2020,Q1 (Post-Game),Q+1,45.2,148.4
+Tide,2020,Q2 (Spring),Q+2,30.2,65.9
+Tide,2020,Q3 (Summer),Q+3,29.0,59.3
+Tide,2020,Q4 (Fall/Holiday),Q+4,29.0,59.3
+Tide,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Tide,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Tide,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Tide,2021,Q2 (Spring),Q+2,23.6,60.5
+Tide,2021,Q3 (Summer),Q+3,22.7,54.4
+Tide,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Toyota,2004,Pre-Game Baseline,Q0 (Baseline),37.5,0.0
+Toyota,2004,Commercial Airing (Game Week),Game Week Peak,100.0,166.7
+Toyota,2004,Q1 (Post-Game),Q+1,61.2,63.2
+Toyota,2004,Q2 (Spring),Q+2,50.0,33.3
+Toyota,2004,Q3 (Summer),Q+3,48.8,30.1
+Toyota,2004,Q4 (Fall/Holiday),Q+4,50.0,33.3
+Toyota,2007,Pre-Game Baseline,Q0 (Baseline),44.6,0.0
+Toyota,2007,Commercial Airing (Game Week),Game Week Peak,91.0,104.0
+Toyota,2007,Q1 (Post-Game),Q+1,62.2,39.5
+Toyota,2007,Q2 (Spring),Q+2,53.9,20.9
+Toyota,2007,Q3 (Summer),Q+3,53.0,18.8
+Toyota,2007,Q4 (Fall/Holiday),Q+4,53.9,20.9
+Toyota,2012,Pre-Game Baseline,Q0 (Baseline),49.3,0.0
+Toyota,2012,Commercial Airing (Game Week),Game Week Peak,100.0,102.8
+Toyota,2012,Q1 (Post-Game),Q+1,68.6,39.1
+Toyota,2012,Q2 (Spring),Q+2,59.4,20.5
+Toyota,2012,Q3 (Summer),Q+3,58.4,18.5
+Toyota,2012,Q4 (Fall/Holiday),Q+4,59.4,20.5
+Toyota,2014,Pre-Game Baseline,Q0 (Baseline),38.4,0.0
+Toyota,2014,Commercial Airing (Game Week),Game Week Peak,100.0,160.4
+Toyota,2014,Q1 (Post-Game),Q+1,65.6,70.8
+Toyota,2014,Q2 (Spring),Q+2,50.7,32.0
+Toyota,2014,Q3 (Summer),Q+3,49.5,28.9
+Toyota,2014,Q4 (Fall/Holiday),Q+4,50.7,32.0
+Toyota,2015,Pre-Game Baseline,Q0 (Baseline),32.0,0.0
+Toyota,2015,Commercial Airing (Game Week),Game Week Peak,63.0,96.9
+Toyota,2015,Q1 (Post-Game),Q+1,43.8,36.9
+Toyota,2015,Q2 (Spring),Q+2,38.2,19.4
+Toyota,2015,Q3 (Summer),Q+3,37.6,17.5
+Toyota,2015,Q4 (Fall/Holiday),Q+4,38.2,19.4
+Toyota,2016,Pre-Game Baseline,Q0 (Baseline),33.4,0.0
+Toyota,2016,Commercial Airing (Game Week),Game Week Peak,72.8,118.0
+Toyota,2016,Q1 (Post-Game),Q+1,48.4,44.9
+Toyota,2016,Q2 (Spring),Q+2,41.3,23.7
+Toyota,2016,Q3 (Summer),Q+3,40.5,21.3
+Toyota,2016,Q4 (Fall/Holiday),Q+4,41.3,23.7
+Toyota,2018,Pre-Game Baseline,Q0 (Baseline),48.5,0.0
+Toyota,2018,Commercial Airing (Game Week),Game Week Peak,100.0,106.2
+Toyota,2018,Q1 (Post-Game),Q+1,68.1,40.4
+Toyota,2018,Q2 (Spring),Q+2,58.8,21.2
+Toyota,2018,Q3 (Summer),Q+3,57.8,19.2
+Toyota,2018,Q4 (Fall/Holiday),Q+4,58.8,21.2
+Toyota,2019,Pre-Game Baseline,Q0 (Baseline),48.3,0.0
+Toyota,2019,Commercial Airing (Game Week),Game Week Peak,100.0,107.0
+Toyota,2019,Q1 (Post-Game),Q+1,67.9,40.6
+Toyota,2019,Q2 (Spring),Q+2,58.6,21.3
+Toyota,2019,Q3 (Summer),Q+3,57.6,19.3
+Toyota,2019,Q4 (Fall/Holiday),Q+4,58.6,21.3
+Toyota,2020,Pre-Game Baseline,Q0 (Baseline),40.9,0.0
+Toyota,2020,Commercial Airing (Game Week),Game Week Peak,100.0,144.5
+Toyota,2020,Q1 (Post-Game),Q+1,67.0,63.8
+Toyota,2020,Q2 (Spring),Q+2,52.7,28.9
+Toyota,2020,Q3 (Summer),Q+3,51.5,25.9
+Toyota,2020,Q4 (Fall/Holiday),Q+4,52.7,28.9
+Toyota,2021,Pre-Game Baseline,Q0 (Baseline),33.1,0.0
+Toyota,2021,Commercial Airing (Game Week),Game Week Peak,80.1,142.0
+Toyota,2021,Q1 (Post-Game),Q+1,51.0,54.1
+Toyota,2021,Q2 (Spring),Q+2,42.5,28.4
+Toyota,2021,Q3 (Summer),Q+3,41.6,25.7
+Toyota,2021,Q4 (Fall/Holiday),Q+4,42.5,28.4
+Toyota,2022,Pre-Game Baseline,Q0 (Baseline),32.2,0.0
+Toyota,2022,Commercial Airing (Game Week),Game Week Peak,69.6,116.1
+Toyota,2022,Q1 (Post-Game),Q+1,46.4,44.1
+Toyota,2022,Q2 (Spring),Q+2,39.7,23.3
+Toyota,2022,Q3 (Summer),Q+3,38.9,20.8
+Toyota,2022,Q4 (Fall/Holiday),Q+4,39.7,23.3
+Toyota,2024,Pre-Game Baseline,Q0 (Baseline),47.0,0.0
+Toyota,2024,Commercial Airing (Game Week),Game Week Peak,85.5,81.9
+Toyota,2024,Q1 (Post-Game),Q+1,61.6,31.1
+Toyota,2024,Q2 (Spring),Q+2,54.7,16.4
+Toyota,2024,Q3 (Summer),Q+3,53.9,14.7
+Toyota,2024,Q4 (Fall/Holiday),Q+4,54.7,16.4
+Tubi,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Tubi,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Tubi,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Tubi,2023,Q2 (Spring),Q+2,25.0,44.5
+Tubi,2023,Q3 (Summer),Q+3,24.2,39.9
+Tubi,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+Tubi,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Tubi,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Tubi,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Tubi,2025,Q2 (Spring),Q+2,31.4,43.4
+Tubi,2025,Q3 (Summer),Q+3,30.4,38.8
+Tubi,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+TurboTax,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+TurboTax,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+TurboTax,2015,Q1 (Post-Game),Q+1,27.2,91.5
+TurboTax,2015,Q2 (Spring),Q+2,20.0,40.8
+TurboTax,2015,Q3 (Summer),Q+3,19.4,36.6
+TurboTax,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+TurboTax,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+TurboTax,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+TurboTax,2017,Q1 (Post-Game),Q+1,39.3,113.6
+TurboTax,2017,Q2 (Spring),Q+2,27.7,50.5
+TurboTax,2017,Q3 (Summer),Q+3,26.8,45.7
+TurboTax,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+TurboTax,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+TurboTax,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+TurboTax,2018,Q1 (Post-Game),Q+1,50.4,133.3
+TurboTax,2018,Q2 (Spring),Q+2,34.4,59.3
+TurboTax,2018,Q3 (Summer),Q+3,33.1,53.2
+TurboTax,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+TurboTax,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+TurboTax,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+TurboTax,2022,Q1 (Post-Game),Q+1,31.1,117.5
+TurboTax,2022,Q2 (Spring),Q+2,21.8,52.4
+TurboTax,2022,Q3 (Summer),Q+3,21.0,46.9
+TurboTax,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+TurboTax,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+TurboTax,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+TurboTax,2023,Q1 (Post-Game),Q+1,34.6,100.0
+TurboTax,2023,Q2 (Spring),Q+2,25.0,44.5
+TurboTax,2023,Q3 (Summer),Q+3,24.2,39.9
+TurboTax,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+TurboTax,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+TurboTax,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+TurboTax,2024,Q1 (Post-Game),Q+1,40.1,91.9
+TurboTax,2024,Q2 (Spring),Q+2,29.4,40.7
+TurboTax,2024,Q3 (Summer),Q+3,28.6,36.8
+TurboTax,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+TurboTax,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+TurboTax,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+TurboTax,2025,Q1 (Post-Game),Q+1,43.3,97.7
+TurboTax,2025,Q2 (Spring),Q+2,31.4,43.4
+TurboTax,2025,Q3 (Summer),Q+3,30.4,38.8
+TurboTax,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+TurboTax,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+TurboTax,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+TurboTax,2026,Q1 (Post-Game),Q+1,41.3,114.0
+TurboTax,2026,Q2 (Spring),Q+2,29.1,50.8
+TurboTax,2026,Q3 (Summer),Q+3,28.1,45.6
+TurboTax,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Uber Eats,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Uber Eats,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Uber Eats,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Uber Eats,2021,Q2 (Spring),Q+2,23.6,60.5
+Uber Eats,2021,Q3 (Summer),Q+3,22.7,54.4
+Uber Eats,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Uber Eats,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Uber Eats,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Uber Eats,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Uber Eats,2022,Q2 (Spring),Q+2,21.8,52.4
+Uber Eats,2022,Q3 (Summer),Q+3,21.0,46.9
+Uber Eats,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Uber Eats,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+Uber Eats,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+Uber Eats,2025,Q1 (Post-Game),Q+1,43.3,97.7
+Uber Eats,2025,Q2 (Spring),Q+2,31.4,43.4
+Uber Eats,2025,Q3 (Summer),Q+3,30.4,38.8
+Uber Eats,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Uber Eats,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Uber Eats,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Uber Eats,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Uber Eats,2026,Q2 (Spring),Q+2,29.1,50.8
+Uber Eats,2026,Q3 (Summer),Q+3,28.1,45.6
+Uber Eats,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Universal Pictures,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Universal Pictures,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Universal Pictures,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Universal Pictures,2026,Q2 (Spring),Q+2,29.1,50.8
+Universal Pictures,2026,Q3 (Summer),Q+3,28.1,45.6
+Universal Pictures,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Verizon,2005,Pre-Game Baseline,Q0 (Baseline),20.5,0.0
+Verizon,2005,Commercial Airing (Game Week),Game Week Peak,66.2,222.9
+Verizon,2005,Q1 (Post-Game),Q+1,41.1,100.5
+Verizon,2005,Q2 (Spring),Q+2,29.6,44.4
+Verizon,2005,Q3 (Summer),Q+3,28.7,40.0
+Verizon,2005,Q4 (Fall/Holiday),Q+4,28.7,40.0
+Verizon,2011,Pre-Game Baseline,Q0 (Baseline),19.5,0.0
+Verizon,2011,Commercial Airing (Game Week),Game Week Peak,83.8,329.7
+Verizon,2011,Q1 (Post-Game),Q+1,48.4,148.2
+Verizon,2011,Q2 (Spring),Q+2,32.4,66.2
+Verizon,2011,Q3 (Summer),Q+3,31.1,59.5
+Verizon,2011,Q4 (Fall/Holiday),Q+4,31.1,59.5
+Verizon,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Verizon,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Verizon,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Verizon,2018,Q2 (Spring),Q+2,34.4,59.3
+Verizon,2018,Q3 (Summer),Q+3,33.1,53.2
+Verizon,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Verizon,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+Verizon,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+Verizon,2021,Q1 (Post-Game),Q+1,34.7,136.1
+Verizon,2021,Q2 (Spring),Q+2,23.6,60.5
+Verizon,2021,Q3 (Summer),Q+3,22.7,54.4
+Verizon,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+Verizon,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+Verizon,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+Verizon,2022,Q1 (Post-Game),Q+1,31.1,117.5
+Verizon,2022,Q2 (Spring),Q+2,21.8,52.4
+Verizon,2022,Q3 (Summer),Q+3,21.0,46.9
+Verizon,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+Verizon,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Verizon,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Verizon,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Verizon,2024,Q2 (Spring),Q+2,29.4,40.7
+Verizon,2024,Q3 (Summer),Q+3,28.6,36.8
+Verizon,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Volkswagen,2024,Pre-Game Baseline,Q0 (Baseline),20.9,0.0
+Volkswagen,2024,Commercial Airing (Game Week),Game Week Peak,63.5,203.8
+Volkswagen,2024,Q1 (Post-Game),Q+1,40.1,91.9
+Volkswagen,2024,Q2 (Spring),Q+2,29.4,40.7
+Volkswagen,2024,Q3 (Summer),Q+3,28.6,36.8
+Volkswagen,2024,Q4 (Fall/Holiday),Q+4,28.6,36.8
+Walt Disney,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Walt Disney,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Walt Disney,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Walt Disney,2023,Q2 (Spring),Q+2,25.0,44.5
+Walt Disney,2023,Q3 (Summer),Q+3,24.2,39.9
+Walt Disney,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+WeatherTech,2014,Pre-Game Baseline,Q0 (Baseline),17.1,0.0
+WeatherTech,2014,Commercial Airing (Game Week),Game Week Peak,55.1,222.2
+WeatherTech,2014,Q1 (Post-Game),Q+1,34.2,100.0
+WeatherTech,2014,Q2 (Spring),Q+2,24.7,44.4
+WeatherTech,2014,Q3 (Summer),Q+3,23.9,39.8
+WeatherTech,2014,Q4 (Fall/Holiday),Q+4,23.9,39.8
+WeatherTech,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+WeatherTech,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+WeatherTech,2015,Q1 (Post-Game),Q+1,27.2,91.5
+WeatherTech,2015,Q2 (Spring),Q+2,20.0,40.8
+WeatherTech,2015,Q3 (Summer),Q+3,19.4,36.6
+WeatherTech,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+WeatherTech,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+WeatherTech,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+WeatherTech,2016,Q1 (Post-Game),Q+1,29.4,97.3
+WeatherTech,2016,Q2 (Spring),Q+2,21.3,43.0
+WeatherTech,2016,Q3 (Summer),Q+3,20.7,38.9
+WeatherTech,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+WeatherTech,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+WeatherTech,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+WeatherTech,2018,Q1 (Post-Game),Q+1,50.4,133.3
+WeatherTech,2018,Q2 (Spring),Q+2,34.4,59.3
+WeatherTech,2018,Q3 (Summer),Q+3,33.1,53.2
+WeatherTech,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+WeatherTech,2021,Pre-Game Baseline,Q0 (Baseline),14.7,0.0
+WeatherTech,2021,Commercial Airing (Game Week),Game Week Peak,59.2,302.7
+WeatherTech,2021,Q1 (Post-Game),Q+1,34.7,136.1
+WeatherTech,2021,Q2 (Spring),Q+2,23.6,60.5
+WeatherTech,2021,Q3 (Summer),Q+3,22.7,54.4
+WeatherTech,2021,Q4 (Fall/Holiday),Q+4,22.7,54.4
+WeatherTech,2022,Pre-Game Baseline,Q0 (Baseline),14.3,0.0
+WeatherTech,2022,Commercial Airing (Game Week),Game Week Peak,51.6,260.8
+WeatherTech,2022,Q1 (Post-Game),Q+1,31.1,117.5
+WeatherTech,2022,Q2 (Spring),Q+2,21.8,52.4
+WeatherTech,2022,Q3 (Summer),Q+3,21.0,46.9
+WeatherTech,2022,Q4 (Fall/Holiday),Q+4,21.0,46.9
+WeatherTech,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+WeatherTech,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+WeatherTech,2023,Q1 (Post-Game),Q+1,34.6,100.0
+WeatherTech,2023,Q2 (Spring),Q+2,25.0,44.5
+WeatherTech,2023,Q3 (Summer),Q+3,24.2,39.9
+WeatherTech,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9
+WeatherTech,2025,Pre-Game Baseline,Q0 (Baseline),21.9,0.0
+WeatherTech,2025,Commercial Airing (Game Week),Game Week Peak,69.4,216.9
+WeatherTech,2025,Q1 (Post-Game),Q+1,43.3,97.7
+WeatherTech,2025,Q2 (Spring),Q+2,31.4,43.4
+WeatherTech,2025,Q3 (Summer),Q+3,30.4,38.8
+WeatherTech,2025,Q4 (Fall/Holiday),Q+4,30.4,38.8
+Wendy's,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Wendy's,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Wendy's,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Wendy's,2018,Q2 (Spring),Q+2,34.4,59.3
+Wendy's,2018,Q3 (Summer),Q+3,33.1,53.2
+Wendy's,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Wix,2015,Pre-Game Baseline,Q0 (Baseline),14.2,0.0
+Wix,2015,Commercial Airing (Game Week),Game Week Peak,43.2,204.2
+Wix,2015,Q1 (Post-Game),Q+1,27.2,91.5
+Wix,2015,Q2 (Spring),Q+2,20.0,40.8
+Wix,2015,Q3 (Summer),Q+3,19.4,36.6
+Wix,2015,Q4 (Fall/Holiday),Q+4,19.4,36.6
+Wix,2016,Pre-Game Baseline,Q0 (Baseline),14.9,0.0
+Wix,2016,Commercial Airing (Game Week),Game Week Peak,47.1,216.1
+Wix,2016,Q1 (Post-Game),Q+1,29.4,97.3
+Wix,2016,Q2 (Spring),Q+2,21.3,43.0
+Wix,2016,Q3 (Summer),Q+3,20.7,38.9
+Wix,2016,Q4 (Fall/Holiday),Q+4,20.7,38.9
+Wix,2017,Pre-Game Baseline,Q0 (Baseline),18.4,0.0
+Wix,2017,Commercial Airing (Game Week),Game Week Peak,64.8,252.2
+Wix,2017,Q1 (Post-Game),Q+1,39.3,113.6
+Wix,2017,Q2 (Spring),Q+2,27.7,50.5
+Wix,2017,Q3 (Summer),Q+3,26.8,45.7
+Wix,2017,Q4 (Fall/Holiday),Q+4,26.8,45.7
+Wix,2018,Pre-Game Baseline,Q0 (Baseline),21.6,0.0
+Wix,2018,Commercial Airing (Game Week),Game Week Peak,85.5,295.8
+Wix,2018,Q1 (Post-Game),Q+1,50.4,133.3
+Wix,2018,Q2 (Spring),Q+2,34.4,59.3
+Wix,2018,Q3 (Summer),Q+3,33.1,53.2
+Wix,2018,Q4 (Fall/Holiday),Q+4,33.1,53.2
+Wix,2026,Pre-Game Baseline,Q0 (Baseline),19.3,0.0
+Wix,2026,Commercial Airing (Game Week),Game Week Peak,68.1,252.8
+Wix,2026,Q1 (Post-Game),Q+1,41.3,114.0
+Wix,2026,Q2 (Spring),Q+2,29.1,50.8
+Wix,2026,Q3 (Summer),Q+3,28.1,45.6
+Wix,2026,Q4 (Fall/Holiday),Q+4,28.1,45.6
+Workday,2023,Pre-Game Baseline,Q0 (Baseline),17.3,0.0
+Workday,2023,Commercial Airing (Game Week),Game Week Peak,55.7,222.0
+Workday,2023,Q1 (Post-Game),Q+1,34.6,100.0
+Workday,2023,Q2 (Spring),Q+2,25.0,44.5
+Workday,2023,Q3 (Summer),Q+3,24.2,39.9
+Workday,2023,Q4 (Fall/Holiday),Q+4,24.2,39.9

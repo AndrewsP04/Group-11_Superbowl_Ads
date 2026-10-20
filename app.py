@@ -4,11 +4,20 @@ Touchdowns and Tactics: Decoding Super Bowl Ads
 Interactive Prototype for Presentation II (Due Oct 20, 2026)
 """
 
+import io
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+
+try:
+    from sklearn.linear_model import Ridge
+    from sklearn.metrics import mean_absolute_error, mean_squared_error
+    import shap
+    _ML_AVAILABLE = True
+except ImportError:
+    _ML_AVAILABLE = False
 
 st.set_page_config(
     page_title="Super Bowl Ads Intelligence",
@@ -33,10 +42,127 @@ div[data-testid="metric-container"] {
     border-radius: 6px; padding: 0.8rem 1rem;
     color: #cdd6f4; font-size: 0.9rem; margin-top: 0.8rem;
 }
+.badge-measured {
+    display: inline-block; background: #1e3a5f; color: #89b4fa;
+    border: 1px solid #89b4fa; border-radius: 4px;
+    font-size: 0.72rem; font-weight: 700; padding: 1px 7px;
+    letter-spacing: 0.5px; vertical-align: middle; margin-left: 6px;
+}
+.badge-modeled {
+    display: inline-block; background: #3b1f5e; color: #cba6f7;
+    border: 1px solid #cba6f7; border-radius: 4px;
+    font-size: 0.72rem; font-weight: 700; padding: 1px 7px;
+    letter-spacing: 0.5px; vertical-align: middle; margin-left: 6px;
+}
+/* Responsive: stack columns on narrow viewports */
+@media (max-width: 768px) {
+    [data-testid="column"] { min-width: 100% !important; }
+    [data-testid="stSidebar"] { width: 100% !important; }
+}
 </style>
 """,
     unsafe_allow_html=True,
 )
+
+
+# ── AI Model: train once at startup and cache ──────────────────────────────────
+@st.cache_resource
+def build_ai_models():
+    """Train Ridge models on all 567 spots and return models + CV results + feature names."""
+    if not _ML_AVAILABLE:
+        return None
+    try:
+        df_ai = pd.read_csv("superbowl_ads_with_linear_ratings_flow.csv")
+        _TRAITS = ["funny", "show_product_quickly", "patriotic", "celebrity",
+                   "danger", "animals", "use_sex"]
+        for t in _TRAITS:
+            df_ai[t] = df_ai[t].map(
+                {"True": 1.0, "False": 0.0, True: 1.0, False: 0.0}
+            ).fillna(0.0)
+
+        def _vertical(brand):
+            b = str(brand).lower()
+            if any(x in b for x in ["bud", "pepsi", "coca", "beer", "dew"]): return "Beverage"
+            if any(x in b for x in ["toyota", "hyundai", "kia", "audi", "chevy",
+                                     "nissan", "bmw", "volkswagen", "ford"]): return "Automotive"
+            if any(x in b for x in ["amazon", "google", "etrade", "tech"]): return "ConsumerTech"
+            return "SnacksFood"
+
+        df_ai["_vert"] = df_ai["brand"].apply(_vertical)
+        for q in ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]:
+            df_ai["q_" + q.replace(" ", "_")] = (df_ai["broadcast_quarter"] == q).astype(float)
+        for v in ["Beverage", "Automotive", "ConsumerTech", "SnacksFood"]:
+            df_ai["v_" + v] = (df_ai["_vert"] == v).astype(float)
+        df_ai["is_60s"] = (df_ai["est_30s_ad_cost_usd"] > 5_500_000).astype(float)
+
+        feat_names = (_TRAITS +
+                      ["q_Game_Q1", "q_Game_Q2", "q_Game_Q3", "q_Game_Q4"] +
+                      ["v_Beverage", "v_Automotive", "v_ConsumerTech", "v_SnacksFood"] +
+                      ["is_60s"])
+        X = df_ai[feat_names].values
+        y_ad = df_ai["ad_meter_score"].values
+        y_sales = df_ai["post_ad_4wk_sales_volume_lift_pct"].values
+
+        model_ad = Ridge(alpha=1.0)
+        model_ad.fit(X, y_ad)
+        model_sales = Ridge(alpha=1.0)
+        model_sales.fit(X, y_sales)
+
+        # Forward-chaining CV
+        fold_defs = [
+            (df_ai["year"] <= 2012, (df_ai["year"] > 2012) & (df_ai["year"] <= 2016), "2013–2016"),
+            (df_ai["year"] <= 2016, (df_ai["year"] > 2016) & (df_ai["year"] <= 2020), "2017–2020"),
+            (df_ai["year"] <= 2020, (df_ai["year"] > 2020) & (df_ai["year"] <= 2026), "2021–2026"),
+        ]
+        cv_rows = []
+        for i, (tr, te, label) in enumerate(fold_defs):
+            m = Ridge(alpha=1.0)
+            m.fit(X[tr], y_ad[tr])
+            preds = m.predict(X[te])
+            mae = mean_absolute_error(y_ad[te], preds)
+            rmse = float(np.sqrt(mean_squared_error(y_ad[te], preds)))
+            n_train = int(tr.sum())
+            n_test = int(te.sum())
+            cv_rows.append({
+                "Fold": f"Fold {i+1}",
+                "Train Years": f"2000–{df_ai.loc[tr, 'year'].max()}",
+                "Test Years": label,
+                "Train n": n_train,
+                "Test n": n_test,
+                "MAE (Ad Meter)": round(mae, 3),
+                "RMSE": round(rmse, 3),
+            })
+        cv_df = pd.DataFrame(cv_rows)
+
+        # SHAP explainer
+        explainer_ad = shap.LinearExplainer(model_ad, X, nsamples=567)
+        explainer_sales = shap.LinearExplainer(model_sales, X, nsamples=567)
+
+        # Monotonicity check (humor & celebrity should have positive coefficients)
+        coef_ad = dict(zip(feat_names, model_ad.coef_))
+        mono_results = {}
+        for pos_feat in ["funny", "celebrity", "animals"]:
+            mono_results[pos_feat] = "✅ Pass" if coef_ad.get(pos_feat, 0) >= 0 else "⚠️ Invert"
+        for neg_feat in ["use_sex", "patriotic"]:
+            mono_results[neg_feat] = "✅ Neutral" if abs(coef_ad.get(neg_feat, 0)) < 1.5 else "⚠️ Large"
+
+        return {
+            "model_ad": model_ad,
+            "model_sales": model_sales,
+            "explainer_ad": explainer_ad,
+            "explainer_sales": explainer_sales,
+            "feat_names": feat_names,
+            "cv_df": cv_df,
+            "mono": mono_results,
+            "coef_ad": coef_ad,
+            "base_ad": float(model_ad.predict(np.zeros((1, len(feat_names))))[0]),
+            "base_sales": float(model_sales.predict(np.zeros((1, len(feat_names))))[0]),
+        }
+    except Exception as exc:
+        return {"error": str(exc)}
+
+
+AI_BUNDLE = build_ai_models()
 
 
 # ── Data Loading & Consolidation ──────────────────────────────────────────────
@@ -316,10 +442,27 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 # ── Tab 1: T1 Trait Engagement ────────────────────────────────────────────────
 with tab1:
   st.markdown("### T1 · Which creative traits drive the most engagement?")
+
+  # MEASURED vs MODELED disclosure
+  st.markdown(
+      "<div style='font-size:0.85rem;color:#a6adc8;line-height:1.7;'>"
+      "<span class='badge-measured'>MEASURED</span> <b>YouTube Engagement Rate</b> "
+      "— directly observed from YouTube API (likes + comments ÷ views). "
+      "<span class='badge-measured'>MEASURED</span> <b>Wikipedia Spike</b> "
+      "— observed brand-page views on game day vs. pre-game baseline.&nbsp;&nbsp;"
+      "<span class='badge-modeled'>MODELED</span> <b>Google Trends Search Lift</b> "
+      "— estimated via normalized Google search index change during commercial broadcast vs. pre-game baseline window "
+      "(not directly observed query counts).</div>",
+      unsafe_allow_html=True,
+  )
+
+  # Cohort size context
+  cohort_n = len(filtered)
+  cohort_brands = filtered["brand"].nunique()
   st.caption(
-      "YouTube engagement is (likes + comments) ÷ views. Google Trends measures"
-      " search lift during the ad broadcast versus the pre-game baseline; Wikipedia"
-      " measures brand-article page views around game day versus its normal level."
+      f"Current filter: {cohort_n:,} ads · {cohort_brands} brands · {yr_min}–{yr_max}. "
+      "Default cohort (7 benchmark brands, 2000–2026) has 207 ads — results with fewer than 5 ads "
+      "per trait should be interpreted with caution."
   )
 
   rows_q1 = []
@@ -345,19 +488,32 @@ with tab1:
   if not q1_df.empty:
     c1, c2 = st.columns(2)
     with c1:
+      st.markdown(
+          "<span style='font-size:0.82rem;color:#89b4fa;font-weight:600;'>"
+          "MEASURED &nbsp;·&nbsp; YouTube Engagement Rate (%) ← (likes + comments) ÷ views</span>",
+          unsafe_allow_html=True,
+      )
+      # Low-sample warning per trait
+      low_n_traits = q1_df[q1_df["Ads (n)"] < 5]["Trait"].tolist()
+      if low_n_traits:
+          st.caption(f"⚠️ Low sample (< 5 ads) for: {', '.join(low_n_traits)} — interpret with caution.")
+      sorted_q1 = q1_df.sort_values("Avg Engagement Rate (%)")
       fig1 = px.bar(
-          q1_df.sort_values("Avg Engagement Rate (%)"),
+          sorted_q1,
           x="Avg Engagement Rate (%)",
           y="Trait",
           orientation="h",
-          text=q1_df.sort_values("Avg Engagement Rate (%)")[
-              "Avg Engagement Rate (%)"
-          ].round(2),
+          text=sorted_q1["Avg Engagement Rate (%)"].round(2),
           color="Avg Engagement Rate (%)",
           color_continuous_scale="Blues",
           template="plotly_dark",
+          custom_data=["Ads (n)"],
       )
-      fig1.update_traces(texttemplate="%{text:.2f}%", textposition="outside")
+      fig1.update_traces(
+          texttemplate="%{text:.2f}%",
+          textposition="outside",
+          hovertemplate="<b>%{y}</b><br>Engagement Rate: %{x:.2f}%<br>Ads in cohort: %{customdata[0]}<extra></extra>",
+      )
       fig1.update_layout(
           coloraxis_showscale=False,
           height=360,
@@ -369,11 +525,26 @@ with tab1:
 
     with c2:
       has_gt_tab1 = "Avg Google Trends Lift (%)" in q1_df.columns and q1_df["Avg Google Trends Lift (%)"].notna().any()
+      mode_label = (
+          "MODELED · Google Trends Search Lift (%)"
+          if has_gt_tab1
+          else "MEASURED · Wikipedia Spike (× normal)"
+      )
       search_mode = st.radio(
           "Search Attention Metric",
           ["Google Trends Search Lift (%)", "Wikipedia Spike (× normal)"] if has_gt_tab1 else ["Wikipedia Spike (× normal)"],
           horizontal=True,
           label_visibility="collapsed",
+      )
+      badge_class = "badge-modeled" if "Google Trends" in search_mode else "badge-measured"
+      badge_label = "MODELED" if "Google Trends" in search_mode else "MEASURED"
+      st.markdown(
+          f"<span class='{badge_class}'>{badge_label}</span> "
+          "<span style='font-size:0.82rem;color:#a6adc8;'>"
+          + ("Google Trends index change during broadcast vs. pre-game baseline" if "Google Trends" in search_mode
+             else "Observed Wikipedia page views on game day vs. normal baseline")
+          + "</span>",
+          unsafe_allow_html=True,
       )
       if "Google Trends" in search_mode and has_gt_tab1:
         plot_df = q1_df.dropna(subset=["Avg Google Trends Lift (%)"]).sort_values("Avg Google Trends Lift (%)")
@@ -754,22 +925,28 @@ with tab5:
 with tab6:
   st.markdown("### 🤖 AI Integration: Optimization & Airtime Allocation")
 
-  # Client-Facing Status Banner
+  # Status Banner
+  banner_color = "#a6e3a1" if AI_BUNDLE and "error" not in AI_BUNDLE else "#f38ba8"
+  banner_label = "✅ MODEL TRAINED & ACTIVE" if AI_BUNDLE and "error" not in AI_BUNDLE else "⚠️ ML DEPENDENCIES NOT FOUND"
   st.markdown(
-      """
+      f"""
       <div style="background: linear-gradient(90deg, #2e2e4e 0%, #1e1e2e 100%);
-                  border-left: 5px solid #f9e2af; border-radius: 8px; padding: 1.1rem 1.3rem; margin-bottom: 1.4rem;">
+                  border-left: 5px solid {banner_color}; border-radius: 8px;
+                  padding: 1.1rem 1.3rem; margin-bottom: 1.4rem;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight:800; color:#f9e2af; font-size:1.05rem; letter-spacing:0.5px;">
-                  ⚡ AI INTEGRATION IN PROGRESS
+              <span style="font-weight:800; color:{banner_color}; font-size:1.05rem; letter-spacing:0.5px;">
+                  {banner_label}
               </span>
-              <span style="background:#45457a; color:#cdd6f4; font-size:0.75rem; padding:3px 10px; border-radius:12px; font-weight:600;">
-                  Phase 3 · Prescriptive ML Sandbox
+              <span style="background:#45457a; color:#cdd6f4; font-size:0.75rem;
+                           padding:3px 10px; border-radius:12px; font-weight:600;">
+                  Ridge Regression · 567 Spots · Forward-Chaining CV
               </span>
           </div>
           <p style="color:#cdd6f4; margin:0.6rem 0 0 0; font-size:0.92rem; line-height:1.5;">
-              Transforming descriptive historical data into a <b>Prescriptive Decision Sandbox</b> for Creative Strategy Directors and Media Planners.
-              By forecasting commercial performance and retail impact prior to broadcast, our AI eliminates subjective friction and de-risks multimillion-dollar airtime investments.
+              Trained on <b>567 audited Super Bowl commercial spots (2000–2026)</b> using
+              Ridge regression with SHAP explainability. Forward-chaining cross-validation
+              partitioned strictly by broadcast year guarantees zero temporal leakage.
+              This prototype replaces heuristic formulas with real trained inference.
           </p>
       </div>
       """,
@@ -783,74 +960,282 @@ with tab6:
     st.markdown(
         """
         The predictive engine ingests three multi-dimensional feature vectors:
-        - **🎨 Creative Mix:** `Humor`, `Celebrity`, `Product-Forward Pacing`, `Animals`, `Action/Danger`, `Patriotic`, and `Sex Appeal`.
-        - **⏱️ Production Specs:** Spot Runtime (`:30s`, `:60s`, `>60s`) and Industry Category (`Beverage`, `Automotive`, `Consumer Tech`, `Snack/CPG`).
-        - **📡 Broadcast Telecast Context:** Targeted Airtime Quarter (`Game Q1`, `Game Q2`, `Game Q3`, `Game Q4`) and Point-Spread Blowout Risk (`0–35 pts`).
+        - **🎨 Creative Mix (7 traits):** `Humor`, `Celebrity`, `Product-Forward Pacing`,
+          `Animals`, `Action/Danger`, `Patriotic`, `Sex Appeal`.
+        - **⏱️ Production Specs:** Spot Runtime (`:30s`, `:60s`, `>60s`) and
+          Industry Vertical (`Beverage`, `Automotive`, `Consumer Tech`, `Snacks/Food`).
+        - **📡 Broadcast Context:** Airtime Quarter (`Game Q1–Q4`).
         """
     )
-
     st.markdown("#### 2. Target Outputs (AI Forecasts)")
     st.markdown(
         """
-        What the model delivers directly to decision-makers:
-        - **⭐ Expected USA Today Ad Meter Score:** Quantitative popularity forecast (`1.0–10.0 scale`).
-        - **📈 Predicted 4-Week Retail Sales Volume Lift (%):** Real-world revenue and demand surge estimation.
-        - **🎯 Optimal Airtime Quarter Recommendation:** Algorithmic recommendation balancing living-room reach (`Game Q2`) against blowout decay (`Game Q4`).
-        - **🔍 Human-Readable Decision Rules:** Transparent, white-box Depth-3 tree logic showing the specific conditions driving the forecast.
+        - **⭐ USA Today Ad Meter Score** (`1.0–10.0 scale`).
+        - **📈 4-Week Retail Sales Volume Lift (%)**.
+        - **🎯 Optimal Airtime Quarter** recommendation.
+        - **🔍 SHAP Waterfall Chart** — feature attribution for each prediction.
         """
     )
 
   with c_ai2:
-    st.markdown("#### 3. Enterprise Data Validation Protocol")
-    st.markdown(
-        """
-        Built on econometric and machine learning best practices:
-        - **📚 Rigorous Training Base:** Trained on **567 audited commercial spots** from 2000–2026 (`superbowl_ads_with_linear_ratings_flow.csv`).
-        - **🛡️ 5-Fold GroupKFold Cross-Validation:** Partitioned strictly by **Broadcast Year** to guarantee zero temporal leakage and evaluate performance on unseen Super Bowls.
-        - **🔬 Tree-SHAP Feature Attributions:** Audited using Shapley values to ensure full model explainability, verify monotonic constraints, and prevent black-box bias.
-        """
-    )
+    st.markdown("#### 3. Validation Protocol")
+    if AI_BUNDLE and "cv_df" in AI_BUNDLE:
+      st.markdown(
+          "**Forward-Chaining Cross-Validation** — partitioned strictly by Broadcast Year:"
+      )
+      cv_display = AI_BUNDLE["cv_df"].copy()
+      st.dataframe(
+          cv_display.style.highlight_min(
+              subset=["MAE (Ad Meter)"],
+              color="#1e3a5f",
+          ),
+          hide_index=True,
+          use_container_width=True,
+      )
+      st.markdown("#### 4. Monotonicity Sanity Checks")
+      mono = AI_BUNDLE.get("mono", {})
+      mono_cols = st.columns(len(mono))
+      for col_idx, (feat, status) in enumerate(mono.items()):
+          mono_cols[col_idx].metric(
+              feat.replace("_", " ").title(),
+              status,
+              delta="Coefficient: " + f"{AI_BUNDLE['coef_ad'].get(feat, 0):+.3f}",
+          )
+    else:
+      st.info("Install scikit-learn and shap to enable model validation display.")
 
     st.markdown(
-        """
-        <div class="insight" style="margin-top: 1rem;">
-        💡 <b>Client Advantage:</b> Replaces subjective creative debates with empirical forecasting.
-        Advertisers can simulate different creative cuts, adjust celebrity flighting, and select the highest-ROI airtime quarter before finalizing a $7M+ media buy.
-        </div>
-        """,
+        '<div class="insight" style="margin-top: 1rem;">'
+        '💡 <b>Client Advantage:</b> Replaces subjective creative debates with empirical forecasting. '
+        'Advertisers can simulate creative cuts and select the highest-ROI airtime quarter '
+        'before finalizing a $7M+ media buy.</div>',
         unsafe_allow_html=True,
     )
 
-    st.markdown(
-      '<div style="background: rgba(205, 214, 244, 0.04); border-left: 3px solid #f9e2af; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #a6adc8; margin-top: 1.2rem;">'
-      '⚠️ <b>AI Training Scope & Simulation Disclaimer:</b> While the interactive prototype visualizes the 10 core benchmark brands, the underlying predictive AI engine is trained on the full 567-commercial, 95-brand expanded dataset (2000–2026) '
-      'to maximize categorical and telecast variance. Model forecasts, predicted USA Today Ad Meter scores, retail sales volume lifts, and airtime recommendations represent simulated exploratory estimates '
-      'designed for pre-broadcast scenario planning, not guaranteed commercial return.</div>',
-      unsafe_allow_html=True,
-  )
-
-  # Interactive Client Sandbox Preview Simulator
+  # ── AI Inference Sandbox ────────────────────────────────────────────────────
   st.markdown("---")
-  st.markdown("#### 🧪 Interactive Sandbox Preview (Client Simulation)")
-  st.caption("Explore how creative attributes and broadcast timing interface with the upcoming prescriptive model:")
+  st.markdown("#### 🧪 Interactive AI Sandbox — Real Model Inference")
+  st.caption(
+      "Inputs feed directly into the trained Ridge model (567 spots, 2000–2026). "
+      "SHAP waterfall explains each prediction's feature contributions."
+  )
 
   sim_c1, sim_c2, sim_c3 = st.columns(3)
   with sim_c1:
-    sim_cat = st.selectbox("Brand Industry Vertical", ["Beverage / FMCG", "Automotive", "Consumer Tech", "Snacks / Food"], key="sim_cat")
-    sim_dur = st.selectbox("Planned Spot Runtime", [":30s Standard", ":60s Feature Anthem", ">60s Extended Cut"], key="sim_dur")
+    sim_cat = st.selectbox(
+        "Brand Industry Vertical",
+        ["Beverage / FMCG", "Automotive", "Consumer Tech", "Snacks / Food"],
+        key="sim_cat",
+    )
+    sim_dur = st.selectbox(
+        "Planned Spot Runtime",
+        [":30s Standard", ":60s Feature Anthem", ">60s Extended Cut"],
+        key="sim_dur",
+    )
   with sim_c2:
-    sim_qtr = st.selectbox("Target Broadcast Timing", ["Game Q1 (Opening Drive)", "Game Q2 (Peak Living Room)", "Game Q3 (Halftime Return)", "Game Q4 (Closing Game)"], key="sim_qtr")
-    sim_spread = st.slider("Game Point Spread (Blowout Risk)", 0, 30, 7, format="%d pts", key="sim_spread")
+    sim_qtr = st.selectbox(
+        "Target Broadcast Timing",
+        ["Game Q1 (Opening Drive)", "Game Q2 (Peak Living Room)",
+         "Game Q3 (Halftime Return)", "Game Q4 (Closing Game)"],
+        key="sim_qtr",
+    )
+    sim_spread = st.slider(
+        "Game Point Spread (Blowout Risk)", 0, 30, 7,
+        format="%d pts", key="sim_spread",
+    )
   with sim_c3:
-    sim_traits = st.multiselect("Planned Creative Attributes", ["Humor", "Celebrity", "Product-Forward", "Animals", "Danger/Action"], default=["Humor", "Celebrity"], key="sim_traits")
+    sim_traits = st.multiselect(
+        "Planned Creative Attributes",
+        ["Humor", "Celebrity", "Product-Forward", "Animals", "Danger/Action",
+         "Patriotic", "Sex Appeal"],
+        default=["Humor", "Celebrity"],
+        key="sim_traits",
+    )
 
-  # Dynamic client preview calculation
-  base_ad_meter = 6.1 + (0.95 if "Humor" in sim_traits else 0.0) + (0.75 if "Celebrity" in sim_traits else 0.0) + (0.45 if "Animals" in sim_traits else 0.0) + (0.3 if "Product-Forward" in sim_traits else 0.0) - (0.35 if "Game Q4" in sim_qtr and sim_spread > 12 else 0.0)
-  base_sales = 4.8 + (2.6 if "Humor" in sim_traits else 0.6) + (2.1 if "Product-Forward" in sim_traits else 0.0) + (1.4 if "Game Q2" in sim_qtr else 0.0) - (1.1 if "Game Q4" in sim_qtr and sim_spread > 14 else 0.0)
-  opt_rec = "Game Q2" if sim_spread > 10 else ("Game Q4" if ("Humor" in sim_traits and sim_spread <= 7) else "Game Q1")
+  # Build feature vector from user inputs
+  def _build_input_vector(sim_traits, sim_cat, sim_dur, sim_qtr):
+      feat_map = {
+          "funny": "Humor" in sim_traits,
+          "show_product_quickly": "Product-Forward" in sim_traits,
+          "patriotic": "Patriotic" in sim_traits,
+          "celebrity": "Celebrity" in sim_traits,
+          "danger": "Danger/Action" in sim_traits,
+          "animals": "Animals" in sim_traits,
+          "use_sex": "Sex Appeal" in sim_traits,
+          "q_Game_Q1": "Q1" in sim_qtr,
+          "q_Game_Q2": "Q2" in sim_qtr,
+          "q_Game_Q3": "Q3" in sim_qtr,
+          "q_Game_Q4": "Q4" in sim_qtr,
+          "v_Beverage": "Beverage" in sim_cat,
+          "v_Automotive": "Automotive" in sim_cat,
+          "v_ConsumerTech": "Consumer Tech" in sim_cat,
+          "v_SnacksFood": "Snacks" in sim_cat,
+          "is_60s": ":60s" in sim_dur or ">60s" in sim_dur,
+      }
+      feat_names = [
+          "funny", "show_product_quickly", "patriotic", "celebrity",
+          "danger", "animals", "use_sex",
+          "q_Game_Q1", "q_Game_Q2", "q_Game_Q3", "q_Game_Q4",
+          "v_Beverage", "v_Automotive", "v_ConsumerTech", "v_SnacksFood",
+          "is_60s",
+      ]
+      vec = np.array([[float(feat_map[f]) for f in feat_names]])
+      return vec, feat_names
 
-  m1, m2, m3 = st.columns(3)
-  m1.metric("Predicted Ad Meter Score", f"{min(9.7, base_ad_meter):.2f} / 10.0", delta="+Top Tier" if base_ad_meter > 7.4 else "Mid-Tier")
-  m2.metric("Predicted 4-Wk Retail Sales Lift", f"+{max(1.0, base_sales):.1f}%", delta="High Demand Lift" if base_sales > 7.0 else "Baseline Demand")
-  m3.metric("AI Airtime Recommendation", opt_rec, delta="Low Decay Risk" if sim_spread <= 10 else "Blowout Hedge")
+  if AI_BUNDLE and "model_ad" in AI_BUNDLE:
+      x_input, feat_names = _build_input_vector(sim_traits, sim_cat, sim_dur, sim_qtr)
+
+      pred_ad = float(AI_BUNDLE["model_ad"].predict(x_input)[0])
+      pred_sales = float(AI_BUNDLE["model_sales"].predict(x_input)[0])
+      pred_ad = max(1.0, min(10.0, pred_ad))
+      pred_sales = max(0.0, pred_sales)
+
+      # Airtime recommendation logic
+      if sim_spread > 14 and "Q4" in sim_qtr:
+          opt_rec = "⚠️ Consider Game Q2 — Blowout Risk"
+      elif "Q2" in sim_qtr:
+          opt_rec = "✅ Game Q2 — Peak Viewership"
+      elif "Q1" in sim_qtr:
+          opt_rec = "✅ Game Q1 — Strong Opening"
+      else:
+          opt_rec = "Game Q3 / Q4"
+
+      m1, m2, m3 = st.columns(3)
+      m1.metric(
+          "🎯 Predicted Ad Meter Score",
+          f"{pred_ad:.2f} / 10.0",
+          delta="Top Tier (model)" if pred_ad >= 7.0 else "Mid-Tier (model)",
+      )
+      m2.metric(
+          "📈 Predicted 4-Wk Sales Lift",
+          f"+{pred_sales:.1f}%",
+          delta="Model output — not guaranteed",
+      )
+      m3.metric(
+          "📡 Airtime Recommendation",
+          opt_rec,
+          delta=f"Spread: {sim_spread} pts",
+      )
+
+      # SHAP waterfall
+      st.markdown("##### 🔬 SHAP Feature Attribution — Why this prediction?")
+      st.caption(
+          "Each bar shows how much that creative/airtime feature pushed the Ad Meter"
+          " score above or below the dataset baseline. Positive = helps, Negative = hurts."
+      )
+      try:
+          shap_vals_ad = AI_BUNDLE["explainer_ad"].shap_values(x_input)[0]
+          base_val = AI_BUNDLE["explainer_ad"].expected_value
+
+          friendly_names = [
+              "Humor", "Product-Forward", "Patriotic", "Celebrity",
+              "Danger/Action", "Animals", "Sex Appeal",
+              "Game Q1", "Game Q2", "Game Q3", "Game Q4",
+              "Beverage", "Automotive", "Consumer Tech", "Snacks/Food",
+              ":60s Runtime",
+          ]
+          nonzero = [(sv, fn, xv) for sv, fn, xv in
+                     zip(shap_vals_ad, friendly_names, x_input[0]) if xv != 0]
+          nonzero.sort(key=lambda t: t[0])
+
+          if nonzero:
+              fig_shap = go.Figure(go.Bar(
+                  x=[t[0] for t in nonzero],
+                  y=[t[1] for t in nonzero],
+                  orientation="h",
+                  marker_color=["#f38ba8" if t[0] < 0 else "#a6e3a1" for t in nonzero],
+                  text=[f"{t[0]:+.3f}" for t in nonzero],
+                  textposition="outside",
+              ))
+              fig_shap.add_vline(
+                  x=0, line_dash="dash", line_color="#89b4fa", line_width=1
+              )
+              fig_shap.update_layout(
+                  template="plotly_dark",
+                  height=max(220, len(nonzero) * 38),
+                  margin=dict(l=20, r=60, t=30, b=20),
+                  xaxis_title=f"SHAP value (Ad Meter impact) — baseline = {base_val:.2f}",
+                  yaxis_title="",
+                  title=dict(
+                      text=f"Predicted Ad Meter: <b>{pred_ad:.2f}</b>",
+                      font=dict(color="#cdd6f4", size=14),
+                  ),
+              )
+              st.plotly_chart(fig_shap, use_container_width=True)
+          else:
+              st.info("Select at least one creative trait to see SHAP attribution.")
+      except Exception as shap_err:
+          st.warning(f"SHAP computation failed: {shap_err}")
+
+  else:
+      st.warning(
+          "AI model unavailable. Run `pip install scikit-learn shap` and restart the app."
+      )
+
+  # ── PDF Export Button ───────────────────────────────────────────────────────
+  st.markdown("---")
+  st.markdown("#### 📄 Executive Report Export")
+
+  if AI_BUNDLE and "model_ad" in AI_BUNDLE:
+      x_export, _ = _build_input_vector(sim_traits, sim_cat, sim_dur, sim_qtr)
+      pred_ad_e = float(np.clip(AI_BUNDLE["model_ad"].predict(x_export)[0], 1.0, 10.0))
+      pred_sales_e = float(max(0.0, AI_BUNDLE["model_sales"].predict(x_export)[0]))
+
+      report_lines = [
+          "SUPER BOWL ADS DECISION ENGINE — EXECUTIVE BRIEF",
+          "Group 11 · Touchdowns & Tactics · Pitch II",
+          "",
+          f"Industry Vertical : {sim_cat}",
+          f"Spot Runtime      : {sim_dur}",
+          f"Target Quarter    : {sim_qtr}",
+          f"Point Spread      : {sim_spread} pts",
+          f"Creative Attributes: {', '.join(sim_traits) if sim_traits else 'None selected'}",
+          "",
+          f"Predicted Ad Meter Score  : {pred_ad_e:.2f} / 10.0",
+          f"Predicted 4-Wk Sales Lift : +{pred_sales_e:.1f}%",
+          "",
+          "VALIDATION SUMMARY (Forward-Chaining CV)",
+      ]
+      for _, row in AI_BUNDLE["cv_df"].iterrows():
+          report_lines.append(
+              f"  {row['Fold']} ({row['Test Years']}) — "
+              f"MAE: {row['MAE (Ad Meter)']:.3f}, RMSE: {row['RMSE']:.3f}"
+          )
+      report_lines += [
+          "",
+          "MONOTONICITY CHECKS",
+      ]
+      for feat, status in AI_BUNDLE.get("mono", {}).items():
+          coef = AI_BUNDLE["coef_ad"].get(feat, 0)
+          report_lines.append(f"  {feat}: {status} (coef={coef:+.3f})")
+      report_lines += [
+          "",
+          "DISCLAIMER: Predictions are prototype estimates from Ridge regression trained",
+          "on 567 historical spots. Not a guarantee of commercial performance.",
+      ]
+
+      report_txt = "\n".join(report_lines)
+      buf = io.BytesIO(report_txt.encode("utf-8"))
+      st.download_button(
+          label="⬇️ Download Executive Brief (.txt)",
+          data=buf,
+          file_name="Group11_SuperBowl_Executive_Brief.txt",
+          mime="text/plain",
+      )
+      st.caption(
+          "Downloads a plain-text executive brief with your current sandbox inputs,"
+          " model predictions, CV results, and monotonicity audit."
+      )
+  else:
+      st.info("Executive export requires the AI model to be loaded.")
+
+  st.markdown(
+      '<div style="background: rgba(205, 214, 244, 0.04); border-left: 3px solid #f9e2af; '
+      'border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #a6adc8; margin-top: 1.2rem;">'
+      '⚠️ <b>AI Training Scope & Simulation Disclaimer:</b> The predictive engine is trained on the '
+      'full 567-commercial, 95-brand dataset (2000–2026). Predicted Ad Meter scores and retail sales '
+      'volume lifts are prototype estimates for pre-broadcast scenario planning, '
+      'not guaranteed commercial return.</div>',
+      unsafe_allow_html=True,
+  )
 

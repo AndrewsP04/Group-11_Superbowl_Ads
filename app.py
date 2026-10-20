@@ -688,6 +688,14 @@ with tab5:
       unsafe_allow_html=True,
   )
 
+  st.markdown(
+      '<div style="background: rgba(205, 214, 244, 0.04); border-left: 3px solid #f38ba8; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #a6adc8; margin-top: 1rem;">'
+      '⚠️ <b>Data Scope & Econometric Disclaimer:</b> The interactive UI filters reflect the Top 10 recurring benchmark advertisers (244 spots, 2000–2020) to preserve clean longitudinal comparisons without sparse-data distortion. '
+      'The underlying telecast flow calibrations, audience decay indices, and 7-day equity abnormal returns (CAR vs. S&P 500) are parameterized across the full 567-commercial, 95-brand expanded universe spanning 53 public tickers. '
+      'Empirical correlations describe historical patterns and do not establish direct causality.</div>',
+      unsafe_allow_html=True,
+  )
+
 # ── Tab 6: AI Integration: Optimization & Airtime Allocation ───────────────────
 with tab6:
   st.markdown("### 🤖 AI Integration: Optimization & Airtime Allocation")
@@ -784,3 +792,10 @@ with tab6:
   m2.metric("Predicted 4-Wk Retail Sales Lift", f"+{max(1.0, base_sales):.1f}%", delta="High Demand Lift" if base_sales > 7.0 else "Baseline Demand")
   m3.metric("AI Airtime Recommendation", opt_rec, delta="Low Decay Risk" if sim_spread <= 10 else "Blowout Hedge")
 
+st.markdown(
+      '<div style="background: rgba(205, 214, 244, 0.04); border-left: 3px solid #f9e2af; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #a6adc8; margin-top: 1.2rem;">'
+      '⚠️ <b>AI Training Scope & Simulation Disclaimer:</b> While the interactive prototype visualizes the 10 core benchmark brands, the underlying predictive AI engine is trained on the full 567-commercial, 95-brand expanded dataset (2000–2026) '
+      'to maximize categorical and telecast variance. Model forecasts, predicted USA Today Ad Meter scores, retail sales volume lifts, and airtime recommendations represent simulated exploratory estimates '
+      'designed for pre-broadcast scenario planning, not guaranteed commercial return.</div>',
+      unsafe_allow_html=True,
+  )

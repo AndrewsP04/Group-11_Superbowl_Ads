@@ -443,10 +443,10 @@ with tab2:
   st.plotly_chart(fig_trend, width="stretch")
 
   st.markdown(
-      '<div class="insight">💡 <b>Saturation Dynamics:</b> Celebrity presence'
-      " surged from 15% in 2000 to ~88% by 2020, becoming standard execution."
-      " Sex appeal declined from 62% in 2005 to 0% by 2020, while Humor"
-      " remained steady between 50% and 100%.</div>",
+      '<div class="insight">💡 <b>How to read this:</b> Each point shows the percentage'
+      " of Super Bowl ads in that year that used the trait. The lines move up and down,"
+      " showing that creative choices changed over time. Compare the lines to see which"
+      " traits became more or less common. The shaded area marks your selected year range.</div>",
       unsafe_allow_html=True,
   )
 

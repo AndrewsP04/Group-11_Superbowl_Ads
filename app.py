@@ -767,6 +767,14 @@ with tab6:
         unsafe_allow_html=True,
     )
 
+    st.markdown(
+      '<div style="background: rgba(205, 214, 244, 0.04); border-left: 3px solid #f9e2af; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #a6adc8; margin-top: 1.2rem;">'
+      '⚠️ <b>AI Training Scope & Simulation Disclaimer:</b> While the interactive prototype visualizes the 10 core benchmark brands, the underlying predictive AI engine is trained on the full 567-commercial, 95-brand expanded dataset (2000–2026) '
+      'to maximize categorical and telecast variance. Model forecasts, predicted USA Today Ad Meter scores, retail sales volume lifts, and airtime recommendations represent simulated exploratory estimates '
+      'designed for pre-broadcast scenario planning, not guaranteed commercial return.</div>',
+      unsafe_allow_html=True,
+  )
+
   # Interactive Client Sandbox Preview Simulator
   st.markdown("---")
   st.markdown("#### 🧪 Interactive Sandbox Preview (Client Simulation)")
@@ -792,10 +800,3 @@ with tab6:
   m2.metric("Predicted 4-Wk Retail Sales Lift", f"+{max(1.0, base_sales):.1f}%", delta="High Demand Lift" if base_sales > 7.0 else "Baseline Demand")
   m3.metric("AI Airtime Recommendation", opt_rec, delta="Low Decay Risk" if sim_spread <= 10 else "Blowout Hedge")
 
-st.markdown(
-      '<div style="background: rgba(205, 214, 244, 0.04); border-left: 3px solid #f9e2af; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #a6adc8; margin-top: 1.2rem;">'
-      '⚠️ <b>AI Training Scope & Simulation Disclaimer:</b> While the interactive prototype visualizes the 10 core benchmark brands, the underlying predictive AI engine is trained on the full 567-commercial, 95-brand expanded dataset (2000–2026) '
-      'to maximize categorical and telecast variance. Model forecasts, predicted USA Today Ad Meter scores, retail sales volume lifts, and airtime recommendations represent simulated exploratory estimates '
-      'designed for pre-broadcast scenario planning, not guaranteed commercial return.</div>',
-      unsafe_allow_html=True,
-  )

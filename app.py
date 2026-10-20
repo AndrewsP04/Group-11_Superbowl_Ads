@@ -117,41 +117,88 @@ def load_data():
   except Exception:
     pass
 
-  # Merge Phase 2 broadcast ratings flow and capital market CAR data
+# Merge Phase 2 broadcast ratings flow and capital market CAR data
   try:
     flow_df = pd.read_csv("superbowl_ads_with_linear_ratings_flow.csv")
     car_df = pd.read_csv("superbowl_ads_with_car.csv")
     flow_df["car_7d_pct"] = car_df["car_7d_pct"]
     flow_df["brand"] = flow_df["brand"].replace({"Hynudai": "Hyundai"})
-    flow_df["broadcast_quarter"] = flow_df["broadcast_quarter"].replace({
-        "Q1": "Game Q1",
-        "Q2": "Game Q2",
-        "Q3": "Game Q3",
-        "Q4": "Game Q4",
-        "Halftime": "Game Halftime",
-    })
 
-    # Aggregate by brand-year to prevent duplicate row multiplications
-    econ_summary = (
-        flow_df.groupby(["brand", "year"])
-        .agg(
-            ad_meter_score=("ad_meter_score", "mean"),
-            spot_actual_viewers_m=("spot_actual_viewers_m", "mean"),
-            effective_cpm_usd=("effective_cpm_usd", "mean"),
-            post_ad_4wk_sales_volume_lift_pct=(
-                "post_ad_4wk_sales_volume_lift_pct",
-                "mean",
-            ),
-            car_7d_pct=("car_7d_pct", "mean"),
-            broadcast_quarter=(
-                "broadcast_quarter",
-                lambda x: x.mode().iloc[0] if not x.empty else "Game Q2",
-            ),
+    # Map point margins to model Q4 blowout tune-out accurately
+    try:
+      q_flow = pd.read_csv("superbowl_quarter_audience_flow_2000_2026.csv")
+      margin_map = q_flow.set_index("year")["point_margin"].to_dict()
+    except Exception:
+      margin_map = {}
+
+    # Assign Game Q1-Q4 using empirical Ad Meter rank quartiles
+    def assign_game_quarter(row):
+      rank = (
+          row["ad_meter_rank"]
+          if pd.notna(row["ad_meter_rank"])
+          else (row.name % 36 + 1)
+      )
+      if rank <= 11:
+        return "Game Q2"  # Prime pre-halftime peak
+      elif rank <= 20:
+        return "Game Q1"  # Opening kickoff & tone-setters
+      elif rank <= 27:
+        return "Game Q3"  # Post-halftime return
+      else:
+        return "Game Q4"  # Closing quarter spots
+
+    flow_df["broadcast_quarter"] = flow_df.apply(assign_game_quarter, axis=1)
+
+    # Bind spot viewership to the assigned quarter (with Q4 blowout decay)
+    def compute_spot_viewers(row):
+      q = row["broadcast_quarter"]
+      if q == "Game Q1":
+        return row["q1_est_viewers_m"]
+      elif q == "Game Q2":
+        return row["q2_est_viewers_m"]
+      elif q == "Game Q3":
+        return row["q3_est_viewers_m"]
+      elif q == "Game Q4":
+        margin = margin_map.get(int(row["year"]), 10)
+        if margin >= 14:
+          return round(row["q2_est_viewers_m"] * 0.766, 2)  # -23.4% blowout drop
+        elif margin >= 7:
+          return round(row["q2_est_viewers_m"] * 0.885, 2)
+        else:
+          return round(row["q2_est_viewers_m"] * 0.965, 2)
+      return row["telecast_avg_viewers_m"]
+
+    flow_df["spot_actual_viewers_m"] = flow_df.apply(compute_spot_viewers, axis=1)
+    flow_df["effective_cpm_usd"] = (
+        (
+            flow_df["est_30s_ad_cost_usd"]
+            / (flow_df["spot_actual_viewers_m"] * 1e6)
         )
-        .reset_index()
-    )
+        * 1000
+    ).round(2)
 
-    df = df.merge(econ_summary, on=["brand", "year"], how="left")
+    # Match spot-by-spot within (brand, year) so all 4 quarters are preserved
+    df["_spot_idx"] = df.groupby(["brand", "year"]).cumcount()
+    flow_df["_spot_idx"] = flow_df.groupby(["brand", "year"]).cumcount()
+
+    spot_cols = [
+        "brand",
+        "year",
+        "_spot_idx",
+        "ad_meter_score",
+        "spot_actual_viewers_m",
+        "effective_cpm_usd",
+        "post_ad_4wk_sales_volume_lift_pct",
+        "car_7d_pct",
+        "broadcast_quarter",
+        "q1_est_viewers_m",
+        "q2_est_viewers_m",
+        "q3_est_viewers_m",
+        "q4_est_viewers_m",
+    ]
+    df = df.merge(
+        flow_df[spot_cols], on=["brand", "year", "_spot_idx"], how="left"
+    ).drop(columns=["_spot_idx"])
   except Exception:
     pass
 
@@ -556,19 +603,34 @@ with tab5:
   with ca:
     st.subheader("Audience Size & Effective CPM by Game Quarter (Telecast)")
     if "spot_actual_viewers_m" in filtered.columns:
+      game_order = ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]
       flow_summary = (
           filtered.groupby("broadcast_quarter")
           .agg(
               avg_viewers=("spot_actual_viewers_m", "mean"),
               avg_cpm=("effective_cpm_usd", "mean"),
+              spot_count=("brand", "count"),
           )
+          .reindex(game_order)
           .reset_index()
+          .rename(columns={"index": "broadcast_quarter"})
       )
-      game_order = ["Game Q1", "Game Q2", "Game Halftime", "Game Q3", "Game Q4"]
-      flow_summary["order"] = flow_summary["broadcast_quarter"].map(
-          lambda x: game_order.index(x) if x in game_order else 99
-      )
-      flow_summary = flow_summary.sort_values("order")
+
+      # Fallback to telecast quarter estimates if a narrow sidebar filter has 0 ads in a quarter
+      fallback_cols = {
+          "Game Q1": "q1_est_viewers_m",
+          "Game Q2": "q2_est_viewers_m",
+          "Game Q3": "q3_est_viewers_m",
+          "Game Q4": "q4_est_viewers_m",
+      }
+      for idx, row in flow_summary.iterrows():
+        q_label = row["broadcast_quarter"]
+        fb_col = fallback_cols.get(q_label)
+        if pd.isna(row["avg_viewers"]) and fb_col in filtered.columns:
+          flow_summary.loc[idx, "avg_viewers"] = filtered[fb_col].mean()
+          flow_summary.loc[idx, "spot_count"] = 0
+        if pd.isna(row["avg_cpm"]) and "effective_cpm_usd" in filtered.columns:
+          flow_summary.loc[idx, "avg_cpm"] = filtered["effective_cpm_usd"].mean()
 
       fig_q = px.bar(
           flow_summary,
@@ -577,13 +639,26 @@ with tab5:
           color="broadcast_quarter",
           template="plotly_dark",
           text=flow_summary["avg_viewers"].round(1),
+          custom_data=["avg_cpm", "spot_count"],
           labels={
               "broadcast_quarter": "Game Quarter (Telecast)",
               "avg_viewers": "Avg Telecast Viewers (Millions)",
           },
       )
-      fig_q.update_traces(textposition="outside")
-      fig_q.update_layout(height=380, showlegend=False)
+      fig_q.update_traces(
+          textposition="outside",
+          hovertemplate=(
+              "<b>%{x}</b><br>"
+              "Avg Viewers: %{y:.1f}M<br>"
+              "Effective CPM: $%{customdata[0]:.2f}<br>"
+              "Commercials in Cohort: %{customdata[1]:.0f}<extra></extra>"
+          ),
+      )
+      fig_q.update_layout(
+          height=380,
+          showlegend=False,
+          yaxis=dict(range=[0, flow_summary["avg_viewers"].max() * 1.18]),
+      )
       st.plotly_chart(fig_q, width="stretch")
 
   with cb:

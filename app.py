@@ -317,8 +317,9 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 with tab1:
   st.markdown("### T1 · Which creative traits drive the most engagement?")
   st.caption(
-      "Compares digital engagement volume against second-screen search intent"
-      " across active traits."
+      "YouTube engagement is (likes + comments) ÷ views. Google Trends measures"
+      " search lift during the ad broadcast versus the pre-game baseline; Wikipedia"
+      " measures brand-article page views around game day versus its normal level."
   )
 
   rows_q1 = []
@@ -327,6 +328,9 @@ with tab1:
     rows_q1.append({
         "Trait": TRAIT_LABELS[trait],
         "Ads (n)": len(on),
+        "Ads with engagement data (n)": on["yt_engagement_rate"].notna().sum(),
+        "Ads with Google Trends data (n)": on["gt_lift_pct"].notna().sum() if "gt_lift_pct" in on.columns else 0,
+        "Ads with Wikipedia data (n)": on["wiki_spike"].notna().sum(),
         "Avg Engagement Rate (%)": on["yt_engagement_rate"].mean() * 100,
         "Avg Google Trends Lift (%)": on["gt_lift_pct"].mean() if "gt_lift_pct" in on.columns else np.nan,
         "Google Trends Spike (×)": on["gt_spike"].mean() if "gt_spike" in on.columns else np.nan,
@@ -393,7 +397,7 @@ with tab1:
             coloraxis_showscale=False,
             height=360,
             margin=dict(l=10, r=90, t=10, b=10),
-            xaxis_title="Google Trends Search Lift (%) during Commercial [Hover for Financial Q1–Q4 Decay]",
+            xaxis_title="Google Trends lift during ad broadcast (%)",
             yaxis_title="",
         )
         st.plotly_chart(fig2, width="stretch")
@@ -422,7 +426,11 @@ with tab1:
         )
         st.plotly_chart(fig2, width="stretch")
 
-    with st.expander("📋 View Trait Statistics Table"):
+    st.caption(
+        "Financial Q1–Q4 are four successive three-month periods after the Super Bowl,"
+    )
+
+    with st.expander("📋 View Trait Statistics & Post-Game Search Trends"):
       show_tbl = q1_df.copy()
       show_tbl["Avg Engagement Rate (%)"] = show_tbl[
           "Avg Engagement Rate (%)"
@@ -441,20 +449,65 @@ with tab1:
       st.dataframe(show_tbl.set_index("Trait")[cols_to_display], width="stretch")
 
     st.markdown(
-        '<div class="insight">💡 <b>How to read this:</b> Engagement rate'
-        " measures YouTube viewer dialogue (likes + comments ÷ views)."
-        " Google Trends measures immediate second-screen search surges (+140% to +590%)"
-        " during the commercial broadcast, with hover metrics and the trait table tracking"
-        " sustained search equity across the following 4 Financial Quarters (Financial Q1–Q4)."
-        " Wikipedia spike captures desktop encyclopedic research.</div>",
+        '<div class="insight">💡 <b>How to read this:</b> Google Trends lift compares'
+        " searches during the commercial broadcast with the pre-game baseline. Wikipedia"
+        " spike compares peak brand-page views around game day with its normal level."
+        " They describe different kinds of search activity and use different scales.</div>",
         unsafe_allow_html=True,
     )
+
+    st.markdown("#### 💡 Opportunity to test")
+    opportunity_goal = st.selectbox(
+        "Choose the campaign goal",
+        ["YouTube engagement", "Google Trends search lift", "Wikipedia search activity"],
+        key="opportunity_goal",
+    )
+    opportunity_metrics = {
+        "YouTube engagement": (
+            "Avg Engagement Rate (%)", "Ads with engagement data (n)", "percent"
+        ),
+        "Google Trends search lift": (
+            "Avg Google Trends Lift (%)", "Ads with Google Trends data (n)", "lift"
+        ),
+        "Wikipedia search activity": (
+            "Avg Wikipedia Spike (× normal)", "Ads with Wikipedia data (n)", "spike"
+        ),
+    }
+    opportunity_value_col, opportunity_count_col, opportunity_format = opportunity_metrics[opportunity_goal]
+    opportunity_rows = q1_df.dropna(subset=[opportunity_value_col])
+    if opportunity_rows.empty:
+        st.info(f"No {opportunity_goal.lower()} data is available for these filters.")
+    else:
+        opportunity = opportunity_rows.loc[
+            opportunity_rows[opportunity_value_col].idxmax()
+        ]
+        value = opportunity[opportunity_value_col]
+        if opportunity_format == "percent":
+            value_label = f"{value:.2f}% average"
+        elif opportunity_format == "lift":
+            value_label = f"+{value:.1f}% average lift"
+        else:
+            value_label = f"{value:.1f}× normal"
+        st.metric(
+            f"Top trait for {opportunity_goal.lower()}",
+            opportunity["Trait"],
+            f"{value_label} · {int(opportunity[opportunity_count_col])} ads",
+        )
+        st.caption(
+            "This result updates with the current filters. It summarizes past ads"
+            " and is an idea to test, not a prediction or proof of cause and effect."
+        )
 
 # ── Tab 2: T2 Trait Trends ────────────────────────────────────────────────────
 with tab2:
   st.markdown("### T2 · How have creative strategies changed from 2000–2020?")
+  st.caption(
+      "Shows the share of ads from the selected brands using each trait, across all"
+      " available years. The shaded area marks the selected year window."
+  )
+  selected_brand_history = df[df["brand"].isin(sel_brands)]
   trend_data = []
-  for yr, grp in df.groupby("year"):
+  for yr, grp in selected_brand_history.groupby("year"):
     for t in sel_traits:
       trend_data.append({
           "Year": yr,
@@ -491,9 +544,9 @@ with tab2:
 
   st.markdown(
       '<div class="insight">💡 <b>How to read this:</b> Each point shows the percentage'
-      " of Super Bowl ads in that year that used the trait. The lines move up and down,"
-      " showing that creative choices changed over time. Compare the lines to see which"
-      " traits became more or less common. The shaded area marks your selected year range.</div>",
+      " of ads from the selected brands in that year that used the trait. Compare the lines"
+      " to see which creative choices became more or less common over time. The shaded area"
+      " marks your selected year range.</div>",
       unsafe_allow_html=True,
   )
 
@@ -595,8 +648,9 @@ with tab5:
       "### Phase 2 · Linear Telecast Audience Flow & Shareholder Event Study"
   )
   st.caption(
-      "Self-generated opportunity features addressing linear ratings decay,"
-      " Effective CPM, and stock market abnormal returns (CAR)."
+      "Game Q1–Q4 refer to sections of the live broadcast. Financial Q1–Q4 in the"
+      " Google Trends analysis are successive three-month periods after the Super Bowl."
+      " Viewer estimates and stock returns describe different outcomes."
   )
 
   ca, cb = st.columns(2)

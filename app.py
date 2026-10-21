@@ -168,11 +168,35 @@ AI_BUNDLE = build_ai_models()
 # ── Data Loading & Consolidation ──────────────────────────────────────────────
 @st.cache_data
 def load_data():
+  data_join_audit = []
   # Base combined master (YouTube views, likes, comments, duration, Instagram)
   master_df = pd.read_csv("superbowl_ads_combined_master.csv")
-  master_df["brand"] = master_df["brand"].replace({"Hynudai": "Hyundai"})
-  master_df["year"] = master_df["year"].astype(int)
+  def normalize_brand(values):
+    cleaned = values.astype("string").str.strip()
+    aliases = {
+        "hynudai": "Hyundai",
+        "hyundai": "Hyundai",
+        "coca cola": "Coca-Cola",
+        "coca-cola": "Coca-Cola",
+        "mcdonalds": "McDonald's",
+        "mcdonald's": "McDonald's",
+    }
+    return cleaned.map(lambda value: aliases.get(str(value).casefold(), value) if pd.notna(value) else value)
 
+  master_rows_before_dedup = len(master_df)
+  duplicate_rows = int(master_df.duplicated().sum())
+  brand_before_normalization = master_df["brand"].astype("string").str.strip()
+  master_df["brand"] = normalize_brand(master_df["brand"])
+  normalized_brand_rows = int(
+      (brand_before_normalization.fillna("") != master_df["brand"].fillna("")).sum()
+  )
+  master_df = master_df.drop_duplicates().copy()
+  master_df["year"] = pd.to_numeric(master_df["year"], errors="coerce")
+  master_df = master_df.dropna(subset=["year"]).copy()
+  master_df["year"] = master_df["year"].astype(int)
+  master_df["_youtube_key"] = (
+      master_df["youtube_url"].astype("string").str.strip().str.rstrip("/").str.lower()
+  )
   traits = [
       "funny",
       "show_product_quickly",
@@ -198,31 +222,55 @@ def load_data():
   master_df["yt_comment_count"] = pd.to_numeric(
       master_df["yt_comment_count"], errors="coerce"
   )
-  master_df["yt_engagement_rate"] = np.where(
-      master_df["yt_view_count"] > 0,
-      (
-          master_df["yt_like_count"].fillna(0)
-          + master_df["yt_comment_count"].fillna(0)
-      )
-      / master_df["yt_view_count"],
-      np.nan,
+  engagement_complete = (
+      master_df[["yt_view_count", "yt_like_count", "yt_comment_count"]]
+      .notna()
+      .all(axis=1)
+      & master_df["yt_view_count"].gt(0)
   )
+  master_df["yt_engagement_rate"] = np.nan
+  master_df.loc[engagement_complete, "yt_engagement_rate"] = (
+      master_df.loc[engagement_complete, "yt_like_count"]
+      + master_df.loc[engagement_complete, "yt_comment_count"]
+  ) / master_df.loc[engagement_complete, "yt_view_count"]
+  data_join_audit.extend([
+      {"Check": "Master ads loaded", "Result": master_rows_before_dedup},
+      {"Check": "Exact duplicate master rows", "Result": duplicate_rows},
+      {"Check": "Duplicate video IDs", "Result": int(master_df["video_id"].dropna().duplicated(keep=False).sum())},
+      {"Check": "Brand labels normalized", "Result": normalized_brand_rows},
+      {"Check": "Ads missing views", "Result": int(master_df["yt_view_count"].isna().sum())},
+      {"Check": "Ads missing likes", "Result": int(master_df["yt_like_count"].isna().sum())},
+      {"Check": "Ads missing comments", "Result": int(master_df["yt_comment_count"].isna().sum())},
+      {"Check": "Ads with complete engagement inputs", "Result": int(engagement_complete.sum())},
+      {"Check": "Ads with incomplete engagement inputs", "Result": int((~engagement_complete).sum())},
+  ])
 
   # Wikipedia game-day search spikes
   spikes = pd.read_csv("data/wiki_spikes.csv")
-  spikes["brand"] = spikes["brand"].replace({"Hynudai": "Hyundai"})
+  spikes["brand"] = normalize_brand(spikes["brand"])
+  spikes["year"] = pd.to_numeric(spikes["year"], errors="coerce")
   spike_avg = (
       spikes.groupby(["brand", "year"])["spike_ratio"]
       .mean()
       .reset_index()
       .rename(columns={"spike_ratio": "wiki_spike"})
   )
-  df = master_df.merge(spike_avg, on=["brand", "year"], how="left")
+  rows_before_wiki = len(master_df)
+  df = master_df.merge(
+      spike_avg, on=["brand", "year"], how="left", validate="many_to_one", indicator="_wiki_match"
+  )
+  data_join_audit.extend([
+      {"Check": "Wikipedia source brand-years without master ads", "Result": int((~pd.MultiIndex.from_frame(spike_avg[["brand", "year"]]).isin(pd.MultiIndex.from_frame(master_df[["brand", "year"]].drop_duplicates()))).sum())},
+      {"Check": "Master ads matched to Wikipedia", "Result": int(df["_wiki_match"].eq("both").sum())},
+      {"Check": "Wikipedia join row count preserved", "Result": len(df) == rows_before_wiki},
+  ])
+  df = df.drop(columns="_wiki_match")
 
   # Google Trends commercial search spikes and 4-quarter longitudinal tracking
   try:
     gt_df = pd.read_csv("data/google_trends_spikes.csv")
-    gt_df["brand"] = gt_df["brand"].replace({"Hynudai": "Hyundai"})
+    gt_df["brand"] = normalize_brand(gt_df["brand"])
+    gt_df["year"] = pd.to_numeric(gt_df["year"], errors="coerce")
     gt_summary = (
         gt_df.groupby(["brand", "year"])
         .agg(
@@ -239,16 +287,51 @@ def load_data():
         )
         .reset_index()
     )
-    df = df.merge(gt_summary, on=["brand", "year"], how="left")
-  except Exception:
-    pass
+    rows_before_trends = len(df)
+    df = df.merge(
+        gt_summary, on=["brand", "year"], how="left", validate="many_to_one", indicator="_trends_match"
+    )
+    data_join_audit.extend([
+        {"Check": "Google Trends brand-years without master ads", "Result": int((~pd.MultiIndex.from_frame(gt_summary[["brand", "year"]]).isin(pd.MultiIndex.from_frame(master_df[["brand", "year"]].drop_duplicates()))).sum())},
+        {"Check": "Master ads matched to Google Trends", "Result": int(df["_trends_match"].eq("both").sum())},
+        {"Check": "Google Trends join row count preserved", "Result": len(df) == rows_before_trends},
+    ])
+    df = df.drop(columns="_trends_match")
+  except Exception as exc:
+    data_join_audit.append({"Check": "Google Trends load/join error", "Result": str(exc)})
 
 # Merge Phase 2 broadcast ratings flow and capital market CAR data
   try:
     flow_df = pd.read_csv("superbowl_ads_with_linear_ratings_flow.csv")
     car_df = pd.read_csv("superbowl_ads_with_car.csv")
-    flow_df["car_7d_pct"] = car_df["car_7d_pct"]
-    flow_df["brand"] = flow_df["brand"].replace({"Hynudai": "Hyundai"})
+    flow_df["brand"] = normalize_brand(flow_df["brand"])
+    flow_df["_youtube_key"] = (
+        flow_df["youtube_url"].astype("string").str.strip().str.rstrip("/").str.lower()
+    )
+    car_df["_youtube_key"] = (
+        car_df["youtube_url"].astype("string").str.strip().str.rstrip("/").str.lower()
+    )
+    car_rows_before = len(car_df)
+    car_df = car_df.dropna(subset=["_youtube_key"])
+    if car_df["_youtube_key"].duplicated().any():
+      raise ValueError("Stock return source has duplicate YouTube ad URLs.")
+    flow_missing_url = flow_df[flow_df["_youtube_key"].isna()].copy()
+    flow_with_url = flow_df.dropna(subset=["_youtube_key"]).copy()
+    flow_with_url = flow_with_url.merge(
+        car_df[["_youtube_key", "car_7d_pct"]],
+        on="_youtube_key",
+        how="left",
+        validate="one_to_one",
+    )
+    flow_missing_url["car_7d_pct"] = np.nan
+    flow_df = pd.concat([flow_with_url, flow_missing_url], ignore_index=True)
+    # Runtime diagnostics expose source coverage and key quality in the UI.
+    data_join_audit.extend([
+        {"Check": "Master rows missing YouTube URL", "Result": int(master_df["_youtube_key"].isna().sum())},
+        {"Check": "Flow rows missing YouTube URL", "Result": int(flow_df["_youtube_key"].isna().sum())},
+        {"Check": "Stock source URL rows", "Result": car_rows_before},
+        {"Check": "Flow rows with matched stock return", "Result": int(flow_df["car_7d_pct"].notna().sum())},
+    ])
 
     # Map point margins to model Q4 blowout tune-out accurately
     try:
@@ -304,13 +387,10 @@ def load_data():
     ).round(2)
 
     # Match spot-by-spot within (brand, year) so all 4 quarters are preserved
-    df["_spot_idx"] = df.groupby(["brand", "year"]).cumcount()
-    flow_df["_spot_idx"] = flow_df.groupby(["brand", "year"]).cumcount()
-
     spot_cols = [
+        "_youtube_key",
         "brand",
         "year",
-        "_spot_idx",
         "ad_meter_score",
         "spot_actual_viewers_m",
         "effective_cpm_usd",
@@ -322,16 +402,52 @@ def load_data():
         "q3_est_viewers_m",
         "q4_est_viewers_m",
     ]
-    df = df.merge(
-        flow_df[spot_cols], on=["brand", "year", "_spot_idx"], how="left"
-    ).drop(columns=["_spot_idx"])
-  except Exception:
-    pass
+    flow_for_join = flow_df[spot_cols].dropna(subset=["_youtube_key"])
+    if flow_for_join["_youtube_key"].duplicated().any():
+      raise ValueError("Broadcast source has duplicate YouTube ad URLs.")
+    rows_before_flow_join = len(df)
+    df_missing_url = df[df["_youtube_key"].isna()].copy()
+    df_with_url = df.dropna(subset=["_youtube_key"]).copy()
+    flow_url_columns = [
+        column for column in flow_for_join.columns
+        if column not in {"_youtube_key", "brand", "year"}
+    ]
+    url_metadata_check = df_with_url[["_youtube_key", "brand", "year"]].merge(
+        flow_for_join[["_youtube_key", "brand", "year"]],
+        on="_youtube_key",
+        how="inner",
+        validate="one_to_one",
+        suffixes=("_master", "_flow"),
+    )
+    url_metadata_mismatches = int(
+        ((url_metadata_check["brand_master"] != url_metadata_check["brand_flow"])
+         | (url_metadata_check["year_master"] != url_metadata_check["year_flow"])).sum()
+    )
+    df_with_url = df_with_url.merge(
+        flow_for_join.drop(columns=["brand", "year"]),
+        on="_youtube_key",
+        how="left",
+        validate="one_to_one",
+        indicator="_flow_match",
+    )
+    df_missing_url[flow_url_columns] = np.nan
+    df_missing_url["_flow_match"] = "left_only"
+    df = pd.concat([df_with_url, df_missing_url], ignore_index=True)
+    data_join_audit.extend([
+        {"Check": "Flow ads matched to master by YouTube URL", "Result": int(df["_flow_match"].eq("both").sum())},
+        {"Check": "Master rows unmatched to flow", "Result": int(df["_flow_match"].eq("left_only").sum())},
+        {"Check": "Flow join row count preserved", "Result": len(df) == rows_before_flow_join},
+        {"Check": "URLs with brand/year disagreement", "Result": url_metadata_mismatches},
+    ])
+    df = df.drop(columns=["_flow_match", "_youtube_key"])
+  except Exception as exc:
+    data_join_audit.append({"Check": "Broadcast/stock load or join error", "Result": str(exc)})
 
-  return df, traits
+  df = df.drop(columns=["_youtube_key"], errors="ignore")
+  return df, traits, data_join_audit
 
 
-df, TRAIT_COLS = load_data()
+df, TRAIT_COLS, DATA_JOIN_AUDIT = load_data()
 
 TRAIT_LABELS = {
     "funny": "Humor / Funny",
@@ -391,6 +507,20 @@ if not sel_traits:
 filtered = df[
     df["brand"].isin(sel_brands) & df["year"].between(yr_min, yr_max)
 ].copy()
+selected_trait_labels = ", ".join(TRAIT_LABELS[t] for t in sel_traits)
+st.caption(
+    f"Active filters — Brands: {', '.join(sel_brands)} · Years: {yr_min}–{yr_max} · "
+    f"Traits compared: {selected_trait_labels} · Ads in cohort: {len(filtered):,}. "
+    "Trait selection controls which traits are compared; each trait’s n is the number "
+    "of ads using that trait with data for the displayed metric."
+)
+with st.expander("Data quality and join checks"):
+    st.dataframe(pd.DataFrame(DATA_JOIN_AUDIT).astype(str), hide_index=True, use_container_width=True)
+    st.caption(
+        "Wikipedia and Google Trends are summarized by brand and year, then joined "
+        "many-to-one. Broadcast and stock records are matched by YouTube ad URL. "
+        "The checks above report duplicate IDs, missing URLs, match coverage, and whether joins preserved rows."
+    )
 
 # ── Executive Metric Ribbon ───────────────────────────────────────────────────
 st.markdown(
@@ -429,6 +559,11 @@ k4.metric(
 )
 
 st.markdown("---")
+
+st.caption(
+    "Views, comments, search activity, audience estimates, and stock movements are "
+    "historical observations; they do not prove that a creative strategy caused an outcome."
+)
 
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "T1 · Trait Engagement",
@@ -503,16 +638,22 @@ with tab1:
           x="Avg Engagement Rate (%)",
           y="Trait",
           orientation="h",
-          text=sorted_q1["Avg Engagement Rate (%)"].round(2),
+          text=[
+              f"{value:.2f}% (n={count})"
+              for value, count in zip(
+                  sorted_q1["Avg Engagement Rate (%)"],
+                  sorted_q1["Ads with engagement data (n)"],
+              )
+          ],
           color="Avg Engagement Rate (%)",
           color_continuous_scale="Blues",
           template="plotly_dark",
-          custom_data=["Ads (n)"],
+          custom_data=["Ads with engagement data (n)"],
       )
       fig1.update_traces(
-          texttemplate="%{text:.2f}%",
+          texttemplate="%{text}",
           textposition="outside",
-          hovertemplate="<b>%{y}</b><br>Engagement Rate: %{x:.2f}%<br>Ads in cohort: %{customdata[0]}<extra></extra>",
+          hovertemplate="<b>%{y}</b><br>Mean engagement rate: %{x:.2f}%<br>Ads with complete views, likes, and comments: %{customdata[0]}<extra></extra>",
       )
       fig1.update_layout(
           coloraxis_showscale=False,
@@ -522,6 +663,11 @@ with tab1:
           yaxis_title="",
       )
       st.plotly_chart(fig1, width="stretch")
+      st.caption(
+          "For each ad, engagement rate = (likes + comments) ÷ views. "
+          "Bars show the arithmetic mean of eligible ad-level rates; n counts ads "
+          "with all three values present and views above zero."
+      )
 
     with c2:
       has_gt_tab1 = "Avg Google Trends Lift (%)" in q1_df.columns and q1_df["Avg Google Trends Lift (%)"].notna().any()
@@ -553,14 +699,20 @@ with tab1:
             x="Avg Google Trends Lift (%)",
             y="Trait",
             orientation="h",
-            text=plot_df["Avg Google Trends Lift (%)"].round(0),
+            text=[
+                f"{value:+.0f}% (n={count})"
+                for value, count in zip(
+                    plot_df["Avg Google Trends Lift (%)"],
+                    plot_df["Ads with Google Trends data (n)"],
+                )
+            ],
             color="Avg Google Trends Lift (%)",
             color_continuous_scale="Purples",
             template="plotly_dark",
             custom_data=["Financial Q1 Lift (%)", "Financial Q2 Lift (%)", "Financial Q3 Lift (%)", "Financial Q4 Lift (%)"],
         )
         fig2.update_traces(
-            texttemplate="+%{text:.0f}%",
+            texttemplate="%{text}",
             textposition="outside",
             hovertemplate="<b>%{y}</b><br>Commercial Search Lift: +%{x:.1f}%<br>Financial Q1 Lift: +%{customdata[0]:.1f}%<br>Financial Q2 Lift: +%{customdata[1]:.1f}%<br>Financial Q3 Lift: +%{customdata[2]:.1f}%<br>Financial Q4 Lift: +%{customdata[3]:.1f}%<extra></extra>",
         )
@@ -572,6 +724,11 @@ with tab1:
             yaxis_title="",
         )
         st.plotly_chart(fig2, width="stretch")
+        st.caption(
+            "Google Trends lift is the percentage change in the normalized search "
+            "index during the ad broadcast compared with the pre-game baseline. "
+            "Each bar is the arithmetic mean across ads with a recorded lift; n is that ad count."
+        )
       else:
         fig2 = px.bar(
             q1_df.sort_values("Avg Wikipedia Spike (× normal)"),
@@ -598,7 +755,12 @@ with tab1:
         st.plotly_chart(fig2, width="stretch")
 
     st.caption(
-        "Financial Q1–Q4 are four successive three-month periods after the Super Bowl,"
+        "Wikipedia spike compares brand-page views around game day with the "
+        "brand’s normal level. This is a separate measure from Google Trends."
+    )
+    st.caption(
+        "Financial Q1–Q4 are four successive three-month periods after the Super Bowl. "
+        "All results reflect historical associations and do not show that an ad trait caused an outcome."
     )
 
     with st.expander("📋 View Trait Statistics & Post-Game Search Trends"):
@@ -671,12 +833,14 @@ with tab1:
 
 # ── Tab 2: T2 Trait Trends ────────────────────────────────────────────────────
 with tab2:
-  st.markdown("### T2 · How have creative strategies changed from 2000–2020?")
+  st.markdown(f"### T2 · How have creative strategies changed from {yr_min}–{yr_max}?")
   st.caption(
-      "Shows the share of ads from the selected brands using each trait, across all"
-      " available years. The shaded area marks the selected year window."
+      "Shows the share of ads from the selected brands using each selected trait "
+      "within the selected year window."
   )
-  selected_brand_history = df[df["brand"].isin(sel_brands)]
+  selected_brand_history = df[
+      df["brand"].isin(sel_brands) & df["year"].between(yr_min, yr_max)
+  ]
   trend_data = []
   for yr, grp in selected_brand_history.groupby("year"):
     for t in sel_traits:
@@ -826,7 +990,7 @@ with tab5:
 
   ca, cb = st.columns(2)
   with ca:
-    st.subheader("Audience Size & Effective CPM by Game Quarter (Telecast)")
+    st.subheader("Average viewers by game quarter")
     if "spot_actual_viewers_m" in filtered.columns:
       game_order = ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]
       flow_summary = (
@@ -864,9 +1028,9 @@ with tab5:
           color="broadcast_quarter",
           template="plotly_dark",
           text=flow_summary["avg_viewers"].round(1),
-          custom_data=["avg_cpm", "spot_count"],
+          custom_data=["spot_count"],
           labels={
-              "broadcast_quarter": "Game Quarter (Telecast)",
+              "broadcast_quarter": "Game Quarter (Broadcast)",
               "avg_viewers": "Avg Telecast Viewers (Millions)",
           },
       )
@@ -875,8 +1039,7 @@ with tab5:
           hovertemplate=(
               "<b>%{x}</b><br>"
               "Avg Viewers: %{y:.1f}M<br>"
-              "Effective CPM: $%{customdata[0]:.2f}<br>"
-              "Commercials in Cohort: %{customdata[1]:.0f}<extra></extra>"
+              "Ads in this quarter: %{customdata[0]:.0f}<extra></extra>"
           ),
       )
       fig_q.update_layout(
@@ -904,12 +1067,10 @@ with tab5:
       st.plotly_chart(fig_c, width="stretch")
 
   st.markdown(
-      '<div class="insight">💡 <b>Broadcast & Financial Takeaway:</b> Game Quarter'
-      " 2 (Game Q2) captures peak living-room viewership (~108–118% of game average),"
-      " delivering the lowest Effective CPM and maximum instant Google Trends search lift."
-      " In close games, Game Q4 retains high viewership, but blowouts exhibit an average 23.4% tune-out drop."
-      " Humor and celebrity spots sustain +70% to +110% search volume retention into Financial Q1 and Financial Q2,"
-      " which correlates with positive abnormal equity returns (+0.42% to +0.68%) and 4-week sales lift.</div>",
+      '<div class="insight">💡 <b>Broadcast & Financial Takeaway:</b> The bars compare '
+      "estimated average viewers across broadcast quarters for the selected ads. The "
+      "boxplot shows the spread of 7-day stock CAR values by brand. Viewer estimates, "
+      "search activity, and stock returns describe different outcomes and do not establish causation.</div>",
       unsafe_allow_html=True,
   )
 

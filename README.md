@@ -30,7 +30,8 @@ Open Terminal and move into the project folder:
 Install the packages:
 
 ```bash
-python3 -m pip install streamlit pandas numpy plotly statsmodels
+python3 -m pip install -r requirements.txt
+# or: python3 -m pip install streamlit pandas numpy plotly statsmodels scikit-learn shap
 ```
 
 Start the app:

@@ -5,11 +5,23 @@ Interactive Prototype for Presentation II (Due Oct 20, 2026)
 """
 
 import io
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PROCESSED_DIR = BASE_DIR / "data" / "processed"
+
+def get_data_path(filename: str) -> Path:
+    """Resolve data path checking data/processed, data/, and root directory."""
+    name = Path(filename).name
+    for candidate in [DATA_PROCESSED_DIR / name, BASE_DIR / "data" / name, BASE_DIR / name]:
+        if candidate.exists():
+            return candidate
+    return DATA_PROCESSED_DIR / name
 
 try:
     from sklearn.linear_model import Ridge
@@ -72,7 +84,7 @@ def build_ai_models():
     if not _ML_AVAILABLE:
         return None
     try:
-        df_ai = pd.read_csv("superbowl_ads_with_linear_ratings_flow.csv")
+        df_ai = pd.read_csv(get_data_path("superbowl_ads_with_linear_ratings_flow.csv"))
         _TRAITS = ["funny", "show_product_quickly", "patriotic", "celebrity",
                    "danger", "animals", "use_sex"]
         for t in _TRAITS:
@@ -170,7 +182,7 @@ AI_BUNDLE = build_ai_models()
 def load_data():
   data_join_audit = []
   # Base combined master (YouTube views, likes, comments, duration, Instagram)
-  master_df = pd.read_csv("superbowl_ads_combined_master.csv")
+  master_df = pd.read_csv(get_data_path("superbowl_ads_combined_master.csv"))
   def normalize_brand(values):
     cleaned = values.astype("string").str.strip()
     aliases = {
@@ -246,7 +258,7 @@ def load_data():
   ])
 
   # Wikipedia game-day search spikes
-  spikes = pd.read_csv("data/wiki_spikes.csv")
+  spikes = pd.read_csv(get_data_path("wiki_spikes.csv"))
   spikes["brand"] = normalize_brand(spikes["brand"])
   spikes["year"] = pd.to_numeric(spikes["year"], errors="coerce")
   spike_avg = (
@@ -268,7 +280,7 @@ def load_data():
 
   # Google Trends commercial search spikes and 4-quarter longitudinal tracking
   try:
-    gt_df = pd.read_csv("data/google_trends_spikes.csv")
+    gt_df = pd.read_csv(get_data_path("google_trends_spikes.csv"))
     gt_df["brand"] = normalize_brand(gt_df["brand"])
     gt_df["year"] = pd.to_numeric(gt_df["year"], errors="coerce")
     gt_summary = (
@@ -302,8 +314,8 @@ def load_data():
 
 # Merge Phase 2 broadcast ratings flow and capital market CAR data
   try:
-    flow_df = pd.read_csv("superbowl_ads_with_linear_ratings_flow.csv")
-    car_df = pd.read_csv("superbowl_ads_with_car.csv")
+    flow_df = pd.read_csv(get_data_path("superbowl_ads_with_linear_ratings_flow.csv"))
+    car_df = pd.read_csv(get_data_path("superbowl_ads_with_car.csv"))
     flow_df["brand"] = normalize_brand(flow_df["brand"])
     flow_df["_youtube_key"] = (
         flow_df["youtube_url"].astype("string").str.strip().str.rstrip("/").str.lower()
@@ -335,7 +347,7 @@ def load_data():
 
     # Map point margins to model Q4 blowout tune-out accurately
     try:
-      q_flow = pd.read_csv("superbowl_quarter_audience_flow_2000_2026.csv")
+      q_flow = pd.read_csv(get_data_path("superbowl_quarter_audience_flow_2000_2026.csv"))
       margin_map = q_flow.set_index("year")["point_margin"].to_dict()
     except Exception:
       margin_map = {}

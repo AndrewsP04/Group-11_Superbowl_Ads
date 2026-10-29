@@ -1,16 +1,18 @@
 """Pull Wikipedia daily pageviews for each brand around each Super Bowl (2016+).
 Wikimedia pageviews data only starts July 2015, so earlier games can't be covered.
 Run:  python fetch_wikipedia.py
-Outputs: data/wiki_daily.csv (daily series) and data/wiki_spikes.csv (one row per brand-year)
+Outputs: data/processed/wiki_daily.csv (daily series) and data/processed/wiki_spikes.csv (one row per brand-year)
 """
 import os
+from pathlib import Path
 import time
 import urllib.parse
 
 import pandas as pd
 import requests
 
-# Wikimedia asks for a descriptive User-Agent with contact info. Edit this.
+BASE_DIR = Path(__file__).resolve().parent.parent
+PROCESSED_DIR = BASE_DIR / "data" / "processed"
 HEADERS = {"User-Agent": "Group11-SuperBowlAds-class-project (your_email@example.edu)"}
 API = ("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/"
        "en.wikipedia/all-access/user/{title}/daily/{start}/{end}")
@@ -53,7 +55,7 @@ def daily_views(title, start, end):
 
 
 def main():
-    os.makedirs("data", exist_ok=True)
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     daily_rows, spike_rows = [], []
     for brand, title in ARTICLES.items():
         for year, game in GAME_DATES.items():
@@ -72,8 +74,8 @@ def main():
             spike_rows.append({"brand": brand, "year": year, "baseline_median": baseline,
                                "peak_views": peak,
                                "spike_ratio": peak / baseline if baseline > 0 else None})
-    pd.DataFrame(daily_rows).to_csv("data/wiki_daily.csv", index=False)
-    pd.DataFrame(spike_rows).to_csv("data/wiki_spikes.csv", index=False)
+    pd.DataFrame(daily_rows).to_csv(PROCESSED_DIR / "wiki_daily.csv", index=False)
+    pd.DataFrame(spike_rows).to_csv(PROCESSED_DIR / "wiki_spikes.csv", index=False)
     print(f"Saved {len(daily_rows)} daily rows and {len(spike_rows)} brand-year spikes.")
 
 

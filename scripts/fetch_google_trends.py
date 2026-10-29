@@ -4,14 +4,17 @@ Pulls and models Google Trends search volume changes for Super Bowl advertisers:
 - Search spike during commercial airing (game day / week)
 - Longitudinal decay across the following 4 financial quarters (Q1, Q2, Q3, Q4)
 Outputs:
-- data/google_trends_spikes.csv
-- data/google_trends_quarterly_decay.csv
+- data/processed/google_trends_spikes.csv
+- data/processed/google_trends_quarterly_decay.csv
 """
 
 import os
+from pathlib import Path
 import numpy as np
 import pandas as pd
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+PROCESSED_DIR = BASE_DIR / "data" / "processed"
 # 1. Historical Super Bowl Game Dates (Sundays) and Editions
 SUPER_BOWL_DATES = {
     2000: ("2000-01-30", "Super Bowl XXXIV"),
@@ -61,16 +64,16 @@ BRAND_PROFILES = {
 DEFAULT_PROFILE = {"base_idx": 20.0, "spike_mult": 4.0, "half_life": 4.0, "q1_decay": 0.55, "q2_decay": 0.80, "q3_decay": 0.82, "q4_decay": 0.82}
 
 def generate_google_trends_data():
-    os.makedirs("data", exist_ok=True)
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     
     # Load Master and Expanded ads
-    master_df = pd.read_csv("superbowl_ads_combined_master.csv")
+    master_df = pd.read_csv(PROCESSED_DIR / "superbowl_ads_combined_master.csv")
     master_df["brand"] = master_df["brand"].replace({"Hynudai": "Hyundai"})
     master_df["year"] = master_df["year"].astype(int)
     
     # Also load expanded to ensure coverage across all advertiser records
     try:
-        exp_df = pd.read_csv("superbowl_ads_with_linear_ratings_flow.csv")
+        exp_df = pd.read_csv(PROCESSED_DIR / "superbowl_ads_with_linear_ratings_flow.csv")
         exp_df["brand"] = exp_df["brand"].replace({"Hynudai": "Hyundai"})
         exp_df["year"] = exp_df["year"].astype(int)
     except Exception:
@@ -230,8 +233,8 @@ def generate_google_trends_data():
     spikes_df = pd.DataFrame(spikes_records)
     quarterly_df = pd.DataFrame(quarterly_records)
     
-    spikes_df.to_csv("data/google_trends_spikes.csv", index=False)
-    quarterly_df.to_csv("data/google_trends_quarterly_decay.csv", index=False)
+    spikes_df.to_csv(PROCESSED_DIR / "google_trends_spikes.csv", index=False)
+    quarterly_df.to_csv(PROCESSED_DIR / "google_trends_quarterly_decay.csv", index=False)
     print(f"Generated {len(spikes_df)} brand-year Google Trends spike records in data/google_trends_spikes.csv")
     print(f"Generated {len(quarterly_df)} quarterly tracking records in data/google_trends_quarterly_decay.csv")
     

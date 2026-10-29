@@ -1,9 +1,14 @@
-import pandas as pd
+from pathlib import Path
 import numpy as np
+import pandas as pd
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+MARKET_DIR = BASE_DIR / "data" / "market"
+PROCESSED_DIR = BASE_DIR / "data" / "processed"
 
 # 1. Load market returns and expanded ad records
-returns_df = pd.read_parquet("superbowl_advertisers_daily_returns_2000_2026.parquet")
-ads_df = pd.read_csv("superbowl-ads-admeter-sales-impact-expanded.csv")
+returns_df = pd.read_parquet(MARKET_DIR / "superbowl_advertisers_daily_returns_2000_2026.parquet")
+ads_df = pd.read_csv(PROCESSED_DIR / "superbowl-ads-admeter-sales-impact-expanded.csv")
 
 # 2. Historical Super Bowl Monday dates (first trading day post-game)
 SB_MONDAYS = {
@@ -66,5 +71,5 @@ for idx, row in ads_df.iterrows():
     car_results.append(round(car_val, 2))
 
 ads_df["car_7d_pct"] = car_results
-ads_df.to_csv("superbowl_ads_with_car.csv", index=False)
+ads_df.to_csv(PROCESSED_DIR / "superbowl_ads_with_car.csv", index=False)
 print(f"Calculated CAR for {ads_df['car_7d_pct'].notna().sum()} commercial entries.")

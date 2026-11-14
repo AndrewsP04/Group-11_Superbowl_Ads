@@ -6,6 +6,26 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 
 ---
 
+## Requirements
+
+### **1. System & Runtime Environment**
+- **Python:** `Python 3.9` or higher (`Python 3.11+` recommended for Google ADK and InterpretML)
+- **Operating System:** macOS, Linux, or Windows (WSL recommended)
+- **Memory:** Minimum 4 GB RAM (8 GB+ recommended for local EBM model fitting & 3072-d embeddings)
+
+### **2. Cloud & API Keys**
+- **Google Gemini / Vertex AI:** `GEMINI_API_KEY` (Required for natural language storyboard parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom)
+- **YouTube Data API v3:** `YOUTUBE_API_KEY` (Optional; required only for re-running raw YouTube extraction notebooks)
+
+### **3. Key Python Dependencies (`requirements.txt`)**
+- **App & Visualization:** `streamlit>=1.30.0`, `plotly>=5.18.0`, `matplotlib>=3.8.0`, `seaborn>=0.13.0`
+- **Data & Statistical Modeling:** `pandas>=2.0.0`, `numpy>=1.24.0`, `scikit-learn>=1.4.0`, `statsmodels>=0.14.0`, `scipy>=1.12.0`, `joblib>=1.3.0`
+- **Explainable AI (EAI):** `interpret>=0.6.0` (Microsoft Explainable Boosting Machine / EBM)
+- **Agentic AI & LLMs:** `google-genai>=1.0.0`, `google-adk>=0.1.0`, `pydantic>=2.0.0`
+- **Market & Financial Analysis:** `yfinance>=0.2.38`, `pyarrow>=15.0.0`
+
+---
+
 ## Key Highlights & Innovations
 
 - **Rejection of Tree Ensembles (LightGBM/XGBoost):** Small sample sizes ($N=244\text{--}567$ spots over 25 years) cause standard tree models to overfit on viral outliers, flatline outside historical ranges, and create jagged step-function cliffs on interactive sliders. Our **Two-Stage RidgeCV + Monotonic EBM** (`interpret`) decouples macro temporal trends (Stage 1) from additive creative residuals and pairwise non-linear synergies (Stage 2).

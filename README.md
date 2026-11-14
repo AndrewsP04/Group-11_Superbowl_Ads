@@ -1,23 +1,45 @@
 # Super Bowl Ads Decision Engine
 
-An interactive Streamlit app for comparing Super Bowl ad creative traits, YouTube engagement, Wikipedia pageview spikes, and brand performance.
+An enterprise-grade interactive Streamlit decision engine and analytics suite for comparing Super Bowl advertising creative traits, telecast audience flow, YouTube engagement, Wikipedia pageview surges, and equity market impact. 
 
-## Requirements
+Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)** predictive architecture, **3072-dimensional Vector RAG historical retrieval**, and an on-demand **Google ADK Multi-Agent Strategy Boardroom** on Vertex AI.
 
-- Python 3.9 or newer
-- The project files and directory structure listed below
-- Internet access the first time you install Python packages
+---
+
+## Key Highlights & Innovations
+
+- **Rejection of Tree Ensembles (LightGBM/XGBoost):** Small sample sizes ($N=244\text{--}567$ spots over 25 years) cause standard tree models to overfit on viral outliers, flatline outside historical ranges, and create jagged step-function cliffs on interactive sliders. Our **Two-Stage RidgeCV + Monotonic EBM** (`interpret`) decouples macro temporal trends (Stage 1) from additive creative residuals and pairwise non-linear synergies (Stage 2).
+- **Active 2026 Google Cloud Models:**
+  - **`gemini-3.5-flash-lite`:** Sub-second natural language concept brief parsing and offline semantic narrative extraction.
+  - **`gemini-embedding-001`:** Full 3072-dimensional vector RAG embeddings matching pitches against 25 years of historical commercials.
+  - **`gemini-3.8-flash`:** Multi-step reasoning and adversarial boardroom debates orchestrated via Google Agent Development Kit (ADK).
+- **Sub-20ms Deterministic Local Simulation:** Instant slider responsiveness (<20ms forward passes) without lag or redundant remote LLM calls.
+- **True 512-Grid Vectorized Prescriptive Optimizer:** Evaluates all $2^7 \times 4 = 512$ creative trait and broadcast quarter permutations in a single NumPy batch pass in under **`2 ms`**.
+- **CFO Governance & Conformal Prediction Bounds:** Enforces 80% conformal prediction intervals ($10^{\text{th}}$ percentile downside floors) and strict non-causal disclosures (modeled cohort interest vs. guaranteed retail revenue).
+
+---
 
 ## Project Structure
 
-The repository is organized into distinct functional layers:
-
 ```text
 Group-11_Superbowl_Ads/
-├── app.py                                          # Main Streamlit dashboard application
-├── requirements.txt                                # Python dependencies
-├── README.md                                       # Project documentation
-├── .gitignore                                      # Git configuration
+├── app.py                                          # Main Streamlit dashboard application (Tabs 1–6)
+├── requirements.txt                                # Python dependencies (interpret, google-adk, plotly, etc.)
+├── README.md                                       # Comprehensive project documentation
+├── .env                                            # Local environment configuration (API keys & Vertex routing)
+├── .gitignore                                      # Excludes .env, virtual environments, and caches
+│
+├── decision_engine/                                # Core AI & Multi-Agent Decision Engine Package
+│   ├── __init__.py                                 # Package initializer & public exports
+│   ├── tab6_decision_engine.py                     # Tab 6: Agentic Strategy Studio & Multi-POV UI
+│   ├── decision_tools.py                           # Sub-20ms local deterministic inference & 3072-d Vector RAG
+│   ├── adk_boardroom.py                            # Google ADK Multi-Agent Boardroom Engine (gemini-3.8-flash)
+│   ├── enrich_and_train.py                         # Two-Stage RidgeCV + EBM trainer & semantic enricher
+│   └── config_auth.py                              # Centralized Vertex AI & Gemini SDK authentication
+│
+├── artifacts/                                      # Serialized models & semantic embedding caches
+│   ├── decision_engine_bundle.joblib               # Fitted RidgeCV + EBM models, conformal bounds & RAG matrix
+│   └── gemini_semantic_cache.json                  # Cached 3072-d embeddings & continuous semantic scores
 │
 ├── data/
 │   ├── raw/                                        # Source & scraped initial inputs
@@ -64,41 +86,130 @@ Group-11_Superbowl_Ads/
     └── superbowl_real_dashboard.png
 ```
 
-## Install and Run
+---
 
-Open Terminal and move into the project folder:
+## Environment Configuration (`.env`)
 
-Install the packages:
+Create or update a `.env` file in the project root:
 
-```bash
-python3 -m pip install -r requirements.txt
-# or: python3 -m pip install streamlit pandas numpy plotly statsmodels scikit-learn shap pyarrow scipy
+```ini
+GEMINI_API_KEY=your_gemini_api_key_here
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+YOUTUBE_API_KEY=your_youtube_api_key_here  # Optional: for raw YouTube scraping workflows
 ```
 
-Start the app:
+* **`GEMINI_API_KEY`**: Authenticates Google GenAI API calls on Vertex AI.
+* **`GOOGLE_GENAI_USE_VERTEXAI=TRUE`**: Directs SDK and Google ADK calls through Vertex AI Agent Platform endpoints.
+* **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure keys are rotated in Google Cloud Console (`itcs-5122-513114`) before public distribution.
 
-```bash
-python3 -m streamlit run app.py
-```
+---
 
-Streamlit should open the app in your browser. If it does not, open the **Local URL** printed in Terminal, usually `http://localhost:8501`. Keep the Terminal window open while using the app. Stop the app with **Ctrl+C**.
+## Installation and Quickstart
 
-## App Guide
+1. **Clone the repository and set up a virtual environment:**
+   ```bash
+   git clone <repo_url>
+   cd Group-11_Superbowl_Ads
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
 
-- **T1 · Trait Engagement:** compares average YouTube engagement rate, Google Trends commercial search lift (with longitudinal Financial Q1–Q4 decay), and average Wikipedia spike for ads using each selected trait.
-- **T2 · Trends Over Time:** shows how the prevalence of selected creative traits changes by year across the full dataset. The highlighted area marks the selected year window.
-- **T3 · Brand Positioning:** ranks selected brands by median YouTube engagement rate and views, with hover metrics detailing commercial search lift and multi-quarter retention.
-- **T4 · Reach vs. Dialogue:** models the power-law relationship between raw impressions and active dialogue (comments).
-- **Phase 2 · Telecast Flow & Financial Return:** analyzes telecast ratings decay by Game Quarter (Game Q1–Game Q4), Effective CPM, and 7-day cumulative abnormal stock returns (CAR).
-- **AI Integration: Optimization & Airtime Allocation:** interactive prescriptive decision sandbox outlining the machine learning architecture for forecasting Ad Meter scores, 4-week sales volume lift, and optimal broadcast timing.
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Use the sidebar to select brands, a year window, and creative traits. Clear a brand selection to return to all brands.
+3. **Launch the Streamlit app:**
+   ```bash
+   streamlit run app.py
+   ```
+   *(Note: The engine automatically checks for artifacts on launch. If the bundle is missing, it auto-trains and serializes all models on first run with zero manual intervention).*
 
-## Metric Definitions and Limitations
+4. **(Optional) Run offline model training independently:**
+   ```bash
+   python3 -m decision_engine.enrich_and_train
+   ```
 
-- **Game Quarters (Game Q1–Game Q4)** = the four 15-minute quarters of the live Super Bowl telecast broadcast (plus Halftime), determining living-room viewer size, blowout tune-outs, and Effective CPM.
-- **Financial Quarters (Financial Q1–Financial Q4)** = the four 3-month fiscal periods following the Super Bowl ad (Q1: immediate post-game/spring, Q2: spring/summer, Q3: summer, Q4: fall/holiday), used to track long-term search interest decay.
-- **YouTube engagement rate** = (likes + comments) / views. In charts it is displayed as a percentage.
-- **Google Trends search lift** = percentage change in Google US search query volume index during the commercial broadcast window relative to the pre-game baseline, with longitudinal decay tracked across the following four Financial Quarters (Financial Q1–Financial Q4).
-- **Wikipedia spike** = peak brand-article page views on Super Bowl game day or the following day, divided by the median daily page views during the pre-game baseline period. It is a proxy for attention or search interest, not a direct measure of ad recall, persuasion, or purchase intent.
-- Results describe patterns in the available historical data. They do not establish that a creative trait caused engagement, and results based on few ads should be interpreted cautiously.
+---
+
+## Dashboard Navigation & Tab Architecture
+
+### **Tabs 1–5: Descriptive & Diagnostic Analytics**
+* **T1 · Trait Engagement:** Compares average YouTube engagement rate, Google Trends commercial search lift (with longitudinal Financial Q1–Q4 decay), and average Wikipedia pageview spikes for ads using each selected creative trait.
+* **T2 · Trends Over Time:** Visualizes how the prevalence of selected creative traits evolves by year (2000–2026) across the full dataset.
+* **T3 · Brand Positioning:** Ranks selected brands by median YouTube engagement rate and views, with hover metrics detailing search lift and multi-quarter retention.
+* **T4 · Reach vs. Dialogue:** Models the power-law relationship between raw impressions and active viewer dialogue (comments).
+* **Phase 2 · Telecast Flow & Financial Return:** Analyzes live telecast ratings decay by Game Quarter (Game Q1–Game Q4), Effective CPM, and 7-day cumulative abnormal stock returns (CAR vs. S&P 500).
+
+---
+
+### **Tab 6: Agentic Campaign Strategy Studio & Multi-POV Decision Engine**
+
+The decision engine unifies machine learning inference with multi-stakeholder governance:
+
+#### **1. Dual Input Modes**
+* **Natural Language Storyboard / Concept Parser:** Paste a free-form creative pitch (e.g., *"A 30-second Doritos spot with a celebrity dance-off..."*). `gemini-3.5-flash-lite` extracts brand vertical, airtime duration, broadcast quarter, point spread, active traits, and continuous narrative scores, synchronizing the UI controls via `st.rerun()`.
+* **Interactive Control Sliders:** Granular manual tuning of narrative depth, brand centrality, nostalgia hooks, runtime (:15s to :90s), and game blowout point spread.
+
+#### **2. Three Stakeholder Decision Lenses**
+* 🎨 **Creative Strategy Director POV:**
+  * Focuses on YouTube engagement rate % and Wikipedia search surge multipliers.
+  * **Plotly EBM Waterfall:** Renders exact additive feature contributions and non-linear pairwise interaction synergies (e.g., `Synergy: Celebrity Presence × Snacks/Food Vertical`, `Story Arc Depth`, `Humor Tone`).
+* 📡 **Media Buyer / Planner POV:**
+  * Living-room linear telecast delivery (calibrated from 2000–2026 Nielsen/SportsMediaWatch telecast ratings).
+  * Monotonic blowout decay model: $11\times$ steeper audience drop-off in Game Q4 if game point spread exceeds 10 points.
+  * **512-Grid Prescriptive Combinatorial Optimizer:** Vectorized sweep of all $2^7 \times 4 = 512$ trait-by-quarter permutations in $<2\text{ ms}$, ranking top blueprints by composite reach, search surge, and engagement.
+* 💼 **Brand CMO / CFO Risk POV:**
+  * Evaluates upfront capital commitment ($7M baseline for :30s).
+  * Conformal prediction downside risk floors ($10^{\text{th}}$ percentile 80% CI).
+  * Enforces strict non-causal governance disclaimers in accordance with ITCS 5122 standards.
+
+#### **3. Historical Precedents (Vector RAG Comps)**
+* Cosine similarity retrieval against 25 years of Super Bowl commercials using **3072-dimensional `gemini-embedding-001` vectors**.
+* Directly surfaces the Top-3 nearest historical spots with YouTube engagement rates, Wikipedia search spikes, match percentages, and playable YouTube links.
+
+#### **4. Google ADK Multi-Agent Strategy Boardroom**
+* On-demand adversarial debate orchestrated via `gemini-3.8-flash`:
+  * `CreativeDirectorAgent`: Champions cultural buzz, storytelling arc, and viral potential.
+  * `MediaPlannerAgent`: Scrutinizes living-room reach, blowout tune-out risks, and Effective CPM.
+  * `CFO_RiskAgent`: Audits downside risk floors and capital allocation governance.
+  * `ConsensusChairAgent`: Synthesizes debates into a formal **Executive Consensus Decision Brief** with conditional verdicts, strategic mandates, and one-click Markdown export (`.md`).
+
+---
+
+## Example Concept Prompts for Tab 6 Testing
+
+Copy and paste any of the following concept pitches into the **"Campaign Concept Pitch / Storyboard Narrative"** text area in **Tab 6** and click **🪄 Parse Brief into Simulator Controls** to test the engine:
+
+### 1. High-Performing Super Bowl Best Practice ("Good Idea")
+> A high-energy 30-second Doritos commercial in the Snacks & Food category. Two A-list comedic celebrities engage in a dramatic, humorous dance duel over the last bag of Doritos, with the loud crunch serving as the musical beat drop and punchline. Scheduled for Game Q2 during a tight 3-point game, ensuring high product visibility throughout.
+
+### 2. Abstract Arthouse Pitfall ("Bad Idea")
+> A dark, slow-paced 60-second philosophical drama for an unknown crypto startup in Consumer Tech. Actors wander through a foggy, dystopian wasteland whispering existential poetry about the future of society with chaotic explosions, with zero product or company name shown until a tiny 1-second obscure web link at second 59. Scheduled for Game Q4 during a 22-point blowout game.
+
+### 3. Fourth-Quarter Blowout Volatility Test
+> We are pitching a high-stakes 30-second Super Bowl spot for Doritos in the Snacks & Food category. The concept features an energetic, humorous dance-off between top pop celebrities and everyday fans, with the product integrated right into the punchline. We are leaning toward booking Game Q4 to capture final-quarter attention, even though the expected game point spread is around 10 points.
+
+### 4. Automotive Cinematic Storytelling (:60s)
+> A cinematic 60-second Toyota commercial telling an inspiring, patriotic story about an everyday hero and a rescue dog overcoming adversity on winter roads, scheduled for Game Q1 kickoff during a tight 3-point game.
+
+### 5. Beverage Slapstick & 90s Nostalgia (:30s)
+> A humorous 30-second Bud Light-style beer commercial featuring talking farm animals and a classic 90s rock anthem at a backyard barbecue, planned for Game Q3 during a 14-point margin game.
+
+### 6. High-Action Consumer Tech AI Thriller (:45s)
+> A high-stakes 45-second consumer tech commercial for a smart AI home device featuring a fast-paced action movie chase with a top action movie star, showing product features instantly, planned for Game Q2 in a 7-point game.
+
+### 7. Direct-to-Consumer FinTech Mascot (:15s)
+> A punchy, disruptive 15-second Consumer Tech commercial for a commission-free investing app. A funny talking golden retriever explains compound interest to wall street traders with rapid bold packaging and immediate phone screen UI. Scheduled for Game Q3 in an 11-point game.
+
+### 8. Rapid Direct Product Teaser in Blowout (:15s)
+> A fast-paced 15-second potato chip teaser focusing purely on bold flavor, loud crunches, and immediate packaging visibility, slotted for Game Q4 when the point spread is an extreme 21-point blowout.
+
+---
+
+## Statistical Methodology & Governance
+
+1. **Temporal Cross-Validation (`GroupKFold` on Year):** Models are evaluated using 5-fold temporal splitting by year to prevent chronological data leakage across multi-decade telecasts.
+2. **Empirical Wikipedia Surge Modeling:** Wikipedia search models train strictly on non-null empirical spike ratio observations (`df.dropna(subset=['spike_ratio'])`), avoiding variance collapse caused by naive global median imputation.
+3. **Conformal Prediction Intervals:** Dual-target heads generate 80% conformal bounds from out-of-fold residual distributions, providing defensible risk floors for media buyers and finance executives.
+4. **Non-Causal Reporting Disclaimer:** In compliance with empirical marketing science standards, modeled commercial lift metrics describe observed historical cohort patterns (2000–2026) across public advertisers and do not establish direct causal retail sales revenue or stock return guarantees.

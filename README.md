@@ -201,29 +201,45 @@ The decision engine unifies machine learning inference with multi-stakeholder go
 
 Copy and paste any of the following concept pitches into the **"Campaign Concept Pitch / Storyboard Narrative"** text area in **Tab 6** and click **🪄 Parse Brief into Simulator Controls** to test the engine:
 
-### 1. High-Performing Super Bowl Best Practice ("Good Idea")
+### 1. Core Benchmark & Demo Prompts (Happy Path)
+
+#### **High-Performing Super Bowl Best Practice ("Good Idea")**
 > A high-energy 30-second Doritos commercial in the Snacks & Food category. Two A-list comedic celebrities engage in a dramatic, humorous dance duel over the last bag of Doritos, with the loud crunch serving as the musical beat drop and punchline. Scheduled for Game Q2 during a tight 3-point game, ensuring high product visibility throughout.
 
-### 2. Abstract Arthouse Pitfall ("Bad Idea")
+#### **Abstract Arthouse Pitfall ("Bad Idea")**
 > A dark, slow-paced 60-second philosophical drama for an unknown crypto startup in Consumer Tech. Actors wander through a foggy, dystopian wasteland whispering existential poetry about the future of society with chaotic explosions, with zero product or company name shown until a tiny 1-second obscure web link at second 59. Scheduled for Game Q4 during a 22-point blowout game.
 
-### 3. Fourth-Quarter Blowout Volatility Test
-> We are pitching a high-stakes 30-second Super Bowl spot for Doritos in the Snacks & Food category. The concept features an energetic, humorous dance-off between top pop celebrities and everyday fans, with the product integrated right into the punchline. We are leaning toward booking Game Q4 to capture final-quarter attention, even though the expected game point spread is around 10 points.
+#### **Fourth-Quarter Blowout Volatility Test (13-pt Spread)**
+*(Triggers both UI & ADK Q4 warnings)*
+> We are pitching a high-stakes 30-second Super Bowl spot for Doritos in the Snacks & Food category. The concept features an energetic, humorous dance-off between top pop celebrities and everyday fans, with the product integrated right into the punchline. We are leaning toward booking Game Q4 to capture final-quarter attention, even though the expected game point spread is around 13 points.
 
-### 4. Automotive Cinematic Storytelling (:60s)
+#### **Automotive Cinematic Storytelling (:60s)**
 > A cinematic 60-second Toyota commercial telling an inspiring, patriotic story about an everyday hero and a rescue dog overcoming adversity on winter roads, scheduled for Game Q1 kickoff during a tight 3-point game.
 
-### 5. Beverage Slapstick & 90s Nostalgia (:30s)
+#### **Beverage Slapstick & 90s Nostalgia (:30s)**
 > A humorous 30-second Bud Light-style beer commercial featuring talking farm animals and a classic 90s rock anthem at a backyard barbecue, planned for Game Q3 during a 14-point margin game.
 
-### 6. High-Action Consumer Tech AI Thriller (:45s)
+#### **High-Action Consumer Tech AI Thriller (:45s)**
 > A high-stakes 45-second consumer tech commercial for a smart AI home device featuring a fast-paced action movie chase with a top action movie star, showing product features instantly, planned for Game Q2 in a 7-point game.
 
-### 7. Direct-to-Consumer FinTech Mascot (:15s)
-> A punchy, disruptive 15-second Consumer Tech commercial for a commission-free investing app. A funny talking golden retriever explains compound interest to wall street traders with rapid bold packaging and immediate phone screen UI. Scheduled for Game Q3 in an 11-point game.
+#### **Glamour & Sex-Appeal Beverage Spot (:30s)**
+*(Evaluates the `use_sex` attribute and sensory pacing)*
+> A glamorous, provocative 30-second sparkling beverage commercial featuring a charismatic celebrity model in a high-fashion poolside romance scene with bold bottle close-ups, scheduled for Game Q2 during a tight 4-point game.
 
-### 8. Rapid Direct Product Teaser in Blowout (:15s)
+#### **Rapid Direct Product Teaser in Blowout (:15s)**
 > A fast-paced 15-second potato chip teaser focusing purely on bold flavor, loud crunches, and immediate packaging visibility, slotted for Game Q4 when the point spread is an extreme 21-point blowout.
+
+---
+
+### 2. Adversarial & Governance Stress-Test Prompts (Edge Cases)
+
+#### **Under-Specified & Causal ROI Demand**
+*(Tests Default Fallback & CFO Non-Causal Guardrail)*
+> Make us a really good viral Super Bowl ad that guarantees a 10% stock bump and boosts retail sales by 15% next week.
+
+#### **Out-of-Bounds / Impossible Parameters**
+*(Tests Input Clamping & Schema Resilience)*
+> We want a 10-minute commercial in Game Q5 with a -12 point spread and every single creative trait turned on at the same time.
 
 ---
 

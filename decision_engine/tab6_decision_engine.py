@@ -328,17 +328,59 @@ def render_tab6():
     st.markdown("### 🎞️ Historical Precedents (Vector RAG Comps)")
     st.caption("Top 3 closest actual Super Bowl commercials retrieved via 3072-dimensional embedding similarity from 25 years of telecasts:")
 
+    TRAIT_BADGE_CONFIG = {
+        "Humor": {"icon": "😂", "bg": "rgba(249, 226, 175, 0.15)", "fg": "#f9e2af", "border": "#f9e2af55"},
+        "Celebrity": {"icon": "⭐", "bg": "rgba(203, 166, 247, 0.15)", "fg": "#cba6f7", "border": "#cba6f755"},
+        "Product-Forward": {"icon": "📦", "bg": "rgba(137, 220, 235, 0.15)", "fg": "#89dceb", "border": "#89dceb55"},
+        "Patriotic": {"icon": "🇺🇸", "bg": "rgba(243, 139, 168, 0.15)", "fg": "#f38ba8", "border": "#f38ba855"},
+        "Animals": {"icon": "🐾", "bg": "rgba(166, 227, 161, 0.15)", "fg": "#a6e3a1", "border": "#a6e3a155"},
+        "Danger/Action": {"icon": "⚡", "bg": "rgba(235, 160, 172, 0.15)", "fg": "#eba0ac", "border": "#eba0ac55"},
+        "Sex Appeal": {"icon": "✨", "bg": "rgba(245, 194, 231, 0.15)", "fg": "#f5c2e7", "border": "#f5c2e755"},
+    }
+
     comp_cols = st.columns(len(nearest_comps))
     for col_idx, comp in enumerate(nearest_comps):
         with comp_cols[col_idx]:
+            trait_names = comp.get("trait_names", [])
+            if trait_names:
+                pills = []
+                for t_name in trait_names:
+                    cfg = TRAIT_BADGE_CONFIG.get(t_name, {"icon": "🏷️", "bg": "rgba(147, 153, 178, 0.15)", "fg": "#9399b2", "border": "#9399b255"})
+                    pills.append(
+                        f'<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: {cfg["bg"]}; color: {cfg["fg"]}; font-weight: 600; border: 1px solid {cfg["border"]};">{cfg["icon"]} {t_name}</span>'
+                    )
+                traits_html = " ".join(pills)
+            else:
+                traits_html = '<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(180, 190, 254, 0.15); color: #b4befe; font-weight: 600; border: 1px solid #b4befe55;">📖 Pure Narrative Story</span>'
+
+            spot_fmt = comp.get("spot_format", f":{comp.get('runtime_sec', 30)}s spot")
+            approach_desc = comp.get("approach", "Cinematic narrative storytelling")
+
             st.markdown(
                 f"""
-                <div style="background: #181825; border: 1px solid #313244; border-radius: 8px; padding: 1.1rem; height: 100%;">
-                    <div style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{comp['year']} · {comp['brand']}</div>
-                    <div style="font-size: 0.95rem; font-weight: 600; color: #cdd6f4; margin: 0.35rem 0 0.5rem 0; min-height: 2.8rem;">
-                        {comp['title'][:65]}
+                <div style="background: #181825; border: 1px solid #313244; border-radius: 8px; padding: 1.1rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                            <span style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{comp['year']} · {comp['brand']}</span>
+                            <span style="font-size: 0.73rem; color: #a6adc8; background: #313244; padding: 2px 7px; border-radius: 4px; font-weight: 600;">{spot_fmt}</span>
+                        </div>
+                        <div style="font-size: 0.95rem; font-weight: 600; color: #cdd6f4; margin: 0.35rem 0 0.5rem 0; min-height: 2.8rem; line-height: 1.35;">
+                            {comp['title'][:65]}
+                        </div>
+                        <div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; margin-bottom: 0.6rem;">
+                            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #a6adc8; font-weight: 600;">Creative Approach</div>
+                            <div style="font-size: 0.82rem; font-weight: 600; color: #fab387; margin-top: 0.15rem; line-height: 1.3;">
+                                🎯 {approach_desc}
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0.7rem;">
+                            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #a6adc8; font-weight: 600; margin-bottom: 0.25rem;">Traits Detected</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center;">
+                                {traits_html}
+                            </div>
+                        </div>
                     </div>
-                    <div style="font-size: 0.83rem; color: #a6adc8; line-height: 1.55;">
+                    <div style="font-size: 0.82rem; color: #a6adc8; line-height: 1.55; border-top: 1px solid #313244; padding-top: 0.55rem; margin-top: 0.3rem;">
                         • YouTube Engagement: <b>{comp['engagement_rate']}%</b><br/>
                         • Wikipedia Surge: <b>{comp.get('wiki_spike_display', str(comp.get('wiki_spike', '1.0')) + 'x')}</b><br/>
                         • Match Similarity: <b>{int(comp['similarity'] * 100)}%</b>

@@ -408,8 +408,13 @@ def retrieve_nearest_historical_ads(
                 "brand": "Doritos",
                 "year": 2020,
                 "title": "The Cool Ranch (Lil Nas X vs Sam Elliott)",
+                "runtime_sec": 30,
+                "spot_format": ":30s spot",
+                "approach": "Comedic celebrity duel & pop-culture satire",
+                "trait_names": ["Humor", "Celebrity"],
                 "engagement_rate": 0.94,
                 "wiki_spike": 7.8,
+                "wiki_spike_display": "7.8x",
                 "url": "https://www.youtube.com/watch?v=9Oij_994j6o",
                 "traits": ["funny", "celebrity"],
                 "similarity": 0.94,
@@ -418,8 +423,13 @@ def retrieve_nearest_historical_ads(
                 "brand": "Bud Light",
                 "year": 2019,
                 "title": "Special Delivery (Corn Syrup / Dilly Dilly)",
+                "runtime_sec": 60,
+                "spot_format": ":60s spot",
+                "approach": "Character-driven medieval humor & danger parody",
+                "trait_names": ["Humor", "Danger/Action"],
                 "engagement_rate": 0.81,
                 "wiki_spike": 6.4,
+                "wiki_spike_display": "6.4x",
                 "url": "https://www.youtube.com/watch?v=2Tz8gqA6oH8",
                 "traits": ["funny", "danger"],
                 "similarity": 0.88,
@@ -428,8 +438,13 @@ def retrieve_nearest_historical_ads(
                 "brand": "Toyota",
                 "year": 2018,
                 "title": "Good Odds (Paralympian Lauren Woolstencroft)",
+                "runtime_sec": 60,
+                "spot_format": ":60s spot",
+                "approach": "Inspirational / heroic adversity storytelling",
+                "trait_names": ["Patriotic"],
                 "engagement_rate": 0.70,
                 "wiki_spike": 4.5,
+                "wiki_spike_display": "4.5x",
                 "url": "https://www.youtube.com/watch?v=zeBZvwYQ-hA",
                 "traits": ["patriotic"],
                 "similarity": 0.82,
@@ -481,10 +496,19 @@ def retrieve_nearest_historical_ads(
     sims = np.dot(embs, query_vec)
     top_indices = np.argsort(sims)[::-1][:k]
 
+    def _is_active(val) -> bool:
+        if isinstance(val, bool):
+            return val
+        if isinstance(val, (int, float)):
+            return not np.isnan(val) and val > 0.5
+        if isinstance(val, str):
+            return val.strip().lower() in ("true", "1", "1.0", "yes")
+        return False
+
     results = []
     for idx in top_indices:
         rec = records[idx]
-        active_traits = [t for t in TRAITS if rec.get(t, 0.0) == 1.0]
+        active_traits = [t for t in TRAITS if _is_active(rec.get(t))]
 
         brand_clean = str(rec.get("brand", "Unknown")).strip()
         if brand_clean.lower() in ["nan", "none", ""]:
@@ -520,15 +544,82 @@ def retrieve_nearest_historical_ads(
             wiki_spike_num = 1.0
             wiki_display = "1.0x (Baseline)"
 
+        # Trait classification and strategic approach summary
+        active_trait_names = []
+        if _is_active(rec.get("funny")):
+            active_trait_names.append("Humor")
+        if _is_active(rec.get("celebrity")):
+            active_trait_names.append("Celebrity")
+        if _is_active(rec.get("show_product_quickly")):
+            active_trait_names.append("Product-Forward")
+        if _is_active(rec.get("patriotic")):
+            active_trait_names.append("Patriotic")
+        if _is_active(rec.get("danger")):
+            active_trait_names.append("Danger/Action")
+        if _is_active(rec.get("animals")):
+            active_trait_names.append("Animals")
+        if _is_active(rec.get("use_sex")):
+            active_trait_names.append("Sex Appeal")
+
+        # Distinguish creative strategy approach
+        if "Celebrity" in active_trait_names and "Humor" in active_trait_names:
+            approach_text = "Comedic celebrity duel & pop-culture satire"
+        elif "Patriotic" in active_trait_names and "Animals" in active_trait_names:
+            approach_text = "Heroic patriotic story with animal companion"
+        elif "Patriotic" in active_trait_names:
+            approach_text = "Inspirational / heroic American storytelling"
+        elif "Animals" in active_trait_names and "Humor" in active_trait_names:
+            approach_text = "Character-driven animal humor & antics"
+        elif "Animals" in active_trait_names:
+            approach_text = "Heartwarming animal-centric narrative"
+        elif "Danger/Action" in active_trait_names and "Product-Forward" in active_trait_names:
+            approach_text = "High-octane stunt thriller with rapid product demo"
+        elif "Danger/Action" in active_trait_names:
+            approach_text = "Fast-paced action & cinematic suspense"
+        elif "Sex Appeal" in active_trait_names:
+            approach_text = "Provocative glamour & high-fashion romance"
+        elif "Humor" in active_trait_names:
+            approach_text = "Situational slapstick & punchline humor"
+        elif "Product-Forward" in active_trait_names:
+            approach_text = "Direct packaging benefit & immediate brand demo"
+        else:
+            approach_text = "Cinematic emotional drama & inspirational story"
+
+        # Spot runtime & broadcast format classification
+        rt_val = rec.get("yt_duration_seconds")
+        if rt_val is None or (isinstance(rt_val, float) and np.isnan(rt_val)):
+            rt_val = rec.get("spot_runtime", 30)
+        try:
+            runtime_clean = int(round(float(rt_val)))
+        except (ValueError, TypeError):
+            runtime_clean = 30
+
+        if 25 <= runtime_clean <= 35:
+            spot_format = ":30s spot"
+        elif 55 <= runtime_clean <= 65:
+            spot_format = ":60s spot"
+        elif 85 <= runtime_clean <= 95:
+            spot_format = ":90s spot"
+        elif runtime_clean > 65:
+            spot_format = f":{runtime_clean}s extended"
+        elif runtime_clean < 25:
+            spot_format = f":{runtime_clean}s teaser"
+        else:
+            spot_format = f":{runtime_clean}s spot"
+
         results.append({
             "brand": brand_clean,
             "year": year_clean,
             "title": title_clean,
+            "runtime_sec": runtime_clean,
+            "spot_format": spot_format,
+            "approach": approach_text,
+            "traits": active_traits,
+            "trait_names": active_trait_names,
             "engagement_rate": eng_rate,
             "wiki_spike": wiki_spike_num,
             "wiki_spike_display": wiki_display,
             "url": url_clean,
-            "traits": active_traits,
             "similarity": round(float(sims[idx]), 2),
         })
 

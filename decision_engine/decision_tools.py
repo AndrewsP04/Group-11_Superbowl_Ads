@@ -293,17 +293,92 @@ def clean_ad_title(title_val: Any, brand: str, year: int, sb_url: Any = None) ->
     return f"{brand} Super Bowl Commercial ({year})"
 
 
+VERIFIED_ACTIVE_URL_OVERRIDES: Dict[str, str] = {
+    # 2019 Toyota Supra Wizard (was ZuBbnZ3UbJw - 404)
+    "https://www.youtube.com/watch?v=ZuBbnZ3UbJw": "https://www.youtube.com/watch?v=f9SS8hhbjSI",
+    # 2018 Toyota One Team (was QwF3ipuNyfc - 404)
+    "https://www.youtube.com/watch?v=QwF3ipuNyfc": "https://www.youtube.com/watch?v=5IIPtWdYGps",
+    # 2015 Toyota Camry My Bold Dad (was 9u4--TxE2gI - 404)
+    "https://www.youtube.com/watch?v=9u4--TxE2gI": "https://www.youtube.com/watch?v=lrOnaAYs21o",
+    # 2016 Pokemon / Toyota (was KLkQ9c9-QFI - 404)
+    "https://www.youtube.com/watch?v=KLkQ9c9-QFI": "https://www.youtube.com/watch?v=2F46tGehnfo",
+    # 2020 Kia Tough Never Quits (was lMs79UXam9A - 404)
+    "https://www.youtube.com/watch?v=lMs79UXam9A": "https://www.youtube.com/watch?v=KguFoGJVuF0",
+    # 2020 NFL Next 100 (was lbkafMhmvMo - 403)
+    "https://www.youtube.com/watch?v=lbkafMhmvMo": "https://www.youtube.com/watch?v=90RwiGmZHLI",
+    # 2017 NFL Baby Legends (was 9csH_Hy-7A4 - 403)
+    "https://www.youtube.com/watch?v=9csH_Hy-7A4": "https://www.youtube.com/watch?v=sryly7XTqLY",
+    # 2018 NFL Touchdown Celebrations (was KUoD-gPDahw - 403)
+    "https://www.youtube.com/watch?v=KUoD-gPDahw": "https://www.youtube.com/watch?v=6aODdlRfQA8",
+    # 2000 Budweiser Whaasup Game (was loimTUjV92Q - 404)
+    "https://www.youtube.com/watch?v=loimTUjV92Q": "https://www.youtube.com/watch?v=JJmqCKtJnxM",
+    # 2017 Kia Melissa McCarthy Hero's Journey (was pVxmT2x3Od4 - 404)
+    "https://www.youtube.com/watch?v=pVxmT2x3Od4": "https://www.youtube.com/watch?v=HIpoTW1JDFQ",
+    # 2016 Pepsi Joy of Pepsi (was B9j4Cw5dkBs - 404)
+    "https://www.youtube.com/watch?v=B9j4Cw5dkBs": "https://www.youtube.com/watch?v=eCUwwsHpGU0",
+    # 2004 Budweiser Referee (was uO-E2T1hayU - 404)
+    "https://www.youtube.com/watch?v=uO-E2T1hayU": "https://www.youtube.com/watch?v=yr6JHOptvcI",
+    # 2018 Coca-Cola Wonder of Us (was ucCvhK2CZMo - 404)
+    "https://www.youtube.com/watch?v=ucCvhK2CZMo": "https://www.youtube.com/watch?v=-R-EEdvDrUU",
+    # 2015 Budweiser Brewed The Hard Way (was 7_EfXuGev24 - 404)
+    "https://www.youtube.com/watch?v=7_EfXuGev24": "https://www.youtube.com/watch?v=-8POof-aSHo",
+    # 2000 Budweiser Talking Dog
+    "https://superbowl-ads.com/2000-budweiser-talking-dog/": "https://www.youtube.com/watch?v=sIiFxyqijRE",
+    # 2017 Hyundai Operation Better (was KpN6fxOorwE - 404)
+    "https://www.youtube.com/watch?v=KpN6fxOorwE": "https://www.youtube.com/watch?v=ugyaU7BfFlw",
+    # 2019 Budweiser Wind Never Felt Better
+    "https://superbowl-ads.com/2019-budweiser-wind-never-felt-better/": "https://www.youtube.com/watch?v=GAVgVDNhIbU",
+    # 2019 Coca-Cola A Coke is a Coke (was WTqL_giKNHQ - 404)
+    "https://www.youtube.com/watch?v=WTqL_giKNHQ": "https://www.youtube.com/watch?v=CiEcW_YEs3E",
+    # 2008 Hyundai Genesis (was PsKJUnGEGSs - 404)
+    "https://www.youtube.com/watch?v=PsKJUnGEGSs": "https://www.youtube.com/watch?v=QDxDoRkSui4",
+    # 2018 Bud Light Knight (was UizTtcBsNi8 - 403)
+    "https://www.youtube.com/watch?v=UizTtcBsNi8": "https://www.youtube.com/watch?v=RHt3Fskjw9Y",
+    # 2004 Bud Light Sleigh Ride (was yQ_nU0_R7PE - 404)
+    "https://www.youtube.com/watch?v=yQ_nU0_R7PE": "https://www.youtube.com/watch?v=9kp7Tu0OrrM",
+    # 2014 Bud Light Up For Whatever 2 (was PnOW5qj_R6A - 404)
+    "https://www.youtube.com/watch?v=PnOW5qj_R6A": "https://www.youtube.com/watch?v=7D3lBaGuZAU",
+    # 2014 Bud Light Up For Whatever 1
+    "https://superbowl-ads.com/2014-bud-light-up-for-whatever-1/": "https://www.youtube.com/watch?v=84TLtA2le-E",
+    # 2005 Bud Light Skydiver (was Y9wyIID8Khs - 403)
+    "https://www.youtube.com/watch?v=Y9wyIID8Khs": "https://www.youtube.com/watch?v=K_fWZru0hvw",
+    # 2008 Bud Light X-Ray Vision (was cOEMI8HRhlA - 404)
+    "https://www.youtube.com/watch?v=cOEMI8HRhlA": "https://www.youtube.com/watch?v=u5I2vjlntLA",
+    # 2018 Bud Light Ye Olde Pep Talk (was xza7T89Lda4 - 403)
+    "https://www.youtube.com/watch?v=xza7T89Lda4": "https://www.youtube.com/watch?v=ovus7sg4ieY",
+    # 2015 Doritos Cheesy Pirates
+    "https://superbowl-ads.com/2015-doritos-cheesy-pirates/": "https://www.youtube.com/watch?v=Qh_gOK6xDNA",
+    # 2019 Bud Light Special Delivery (was eIlX0Gg0GRI - 404)
+    "https://www.youtube.com/watch?v=eIlX0Gg0GRI": "https://www.youtube.com/watch?v=Ulhq0m0INDE",
+    # 2019 Kia The Great Unknowns (was nONhop0Kq-E - 404)
+    "https://www.youtube.com/watch?v=nONhop0Kq-E": "https://www.youtube.com/watch?v=sS8dkRhDirY",
+    # 2014 NFL Now
+    "https://superbowl-ads.com/nfl-now/": "https://www.youtube.com/watch?v=tUzwx8yZ5Qc",
+    # 2002 Budweiser Tushy
+    "https://superbowl-ads.com/2002-budweiser-tushy/": "https://superbowl-ads.com/2002-budweiser-tushy/",
+    # 2000 Bud Light She Has A Cat
+    "https://superbowl-ads.com/2000-bud-light-she-has-a-cat/": "https://superbowl-ads.com/2000-bud-light-she-has-a-cat/",
+    # 2001 NFL Perfect Day
+    "https://superbowl-ads.com/2001-nfl-perfect-day/": "https://superbowl-ads.com/2001-nfl-perfect-day/",
+}
+
+
 def clean_ad_url(url_val: Any, brand: str, year: int, title: str, sb_url: Any = None) -> str:
     """
     Ensures a commercial spot has a valid clickable link (never 'nan').
+    Intercepts and maps known dead or unavailable YouTube URLs to verified active working videos.
     """
     if url_val is not None and not (isinstance(url_val, float) and np.isnan(url_val)):
         s_url = str(url_val).strip()
+        if s_url in VERIFIED_ACTIVE_URL_OVERRIDES:
+            return VERIFIED_ACTIVE_URL_OVERRIDES[s_url]
         if s_url.startswith("http") and s_url.lower() not in ["nan", "none", "null"]:
             return s_url
 
     if sb_url is not None and not (isinstance(sb_url, float) and np.isnan(sb_url)):
         s_sb = str(sb_url).strip()
+        if s_sb in VERIFIED_ACTIVE_URL_OVERRIDES:
+            return VERIFIED_ACTIVE_URL_OVERRIDES[s_sb]
         if s_sb.startswith("http") and s_sb.lower() not in ["nan", "none", "null"]:
             return s_sb
 

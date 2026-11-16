@@ -354,12 +354,6 @@ def render_tab6():
                     st.session_state["t6_active_video_title"] = f"{comp['year']} · {comp['brand']} — {comp['title']}"
                     st.rerun()
 
-                with st.expander("🎬 Inline Preview", expanded=False):
-                    if "youtube.com" in target_url or "youtu.be" in target_url:
-                        st.video(target_url)
-                    else:
-                        st.components.v1.iframe(target_url, height=280)
-
     # In-App Theater Video Player (when a spot is selected to play inside the app)
     active_video_url = st.session_state.get("t6_active_video_url")
     active_video_title = st.session_state.get("t6_active_video_title", "Commercial Spot")

@@ -161,6 +161,7 @@ def simulate_multi_pov(
     brand_centrality: float = 7.0,
     cultural_nostalgia: float = 5.0,
     target_year: int = 2026,
+    brand_tier: str = "Enterprise Megabrand ($15M+ Budget)",
 ) -> Dict[str, Any]:
     """
     Fast (<20ms) multi-KPI forward pass through RidgeCV + EBM models.
@@ -1408,6 +1409,11 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
         "- narrative_arc: float 1.0 to 10.0 (1 = direct product pitch, 10 = character mini-movie)\n"
         "- brand_centrality: float 1.0 to 10.0 (1 = brand forgotten, 10 = product essential to story)\n"
         "- cultural_nostalgia: float 1.0 to 10.0 (1 = modern/neutral, 10 = heavy retro/nostalgia)\n"
+        "- brand_tier: exactly one of 'Enterprise Megabrand ($15M+ Budget)', 'Challenger / Growth Brand ($6M–$15M Budget)', or 'Emerging / Non-Mainstream (<$6M Budget)'. "
+        "Classify based on brand name and scale: "
+        "'Enterprise Megabrand ($15M+ Budget)' for Fortune 500 & global giants (e.g., Apple, Google, Toyota, Doritos, Snickers, Budweiser, Amazon, Pepsi, Audi, Ford, Microsoft, Disney); "
+        "'Challenger / Growth Brand ($6M–$15M Budget)' for well-funded mid-tier scaleups (e.g., Liquid Death, Oatly, Celsius, Duolingo, Klarna, Manscaped, Squarespace, Copilot, TurboTax); "
+        "'Emerging / Non-Mainstream (<$6M Budget)' for bootstrapped DTC startups, regional brands, indie apps, local services, or early-stage products with limited budgets.\n"
     )
 
     try:
@@ -1419,6 +1425,8 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
         data = json.loads(response.text)
         if "is_valid_brief" not in data:
             data["is_valid_brief"] = True
+        if "brand_tier" not in data or not data["brand_tier"]:
+            data["brand_tier"] = "Enterprise Megabrand ($15M+ Budget)"
         return data
     except Exception:
         return None
@@ -1434,6 +1442,7 @@ def compute_executive_roi_and_decision(
     brand_centrality: float = 7.5,
     narrative_arc: float = 6.0,
     cultural_nostalgia: float = 5.0,
+    brand_tier: str = "Enterprise Megabrand ($15M+ Budget)",
 ) -> Dict[str, Any]:
     """
     Computes the 3 Executive Pillars for CMO/CFO decision-makers:
@@ -1443,6 +1452,11 @@ def compute_executive_roi_and_decision(
     """
     if traits is None:
         traits = []
+
+    tier_str = str(brand_tier or "Enterprise Megabrand ($15M+ Budget)").strip()
+    is_emerging = "emerging" in tier_str.lower() or "<$6m" in tier_str.lower()
+    is_challenger = "challenger" in tier_str.lower() or "growth" in tier_str.lower() or "6m–" in tier_str.lower()
+    is_megabrand = not is_emerging and not is_challenger
 
     # 1. Financial Investment Model
     # Broadcast Airtime Cost by quarter and runtime (:30s baseline: Q1=$6.8M, Q2=$7.8M, Q3=$6.4M, Q4=$5.8M)
@@ -1463,6 +1477,13 @@ def compute_executive_roi_and_decision(
         prod_cost_m += 1.0  # Stunts / CGI / Action choreography
 
     total_capital_m = round(airtime_cost_m + prod_cost_m, 2)
+
+    # Digital & Alternative Economics for non-mainstream / emerging brands
+    digital_budget_k = 500  # $500K social / creator blitz
+    digital_expected_value_m = 2.4  # $2.4M commercial / DTC GMV
+    digital_roas = "4.8x ROAS"
+    local_dma_cost_range = "$40,000–$120,000"
+    capital_saved_vs_broadcast_m = round(total_capital_m - (digital_budget_k / 1000.0), 1)
 
     # 2. Commercial & Earned Media Value Creation
     reach_m = float(sim.get("effective_reach_m", 102.1))
@@ -1497,8 +1518,47 @@ def compute_executive_roi_and_decision(
     downside_mult = 1.05 + (ci_low_eng / 0.85) * 0.35
     downside_floor_m = round(linear_value_m * downside_mult * min(brand_recall_factor, 1.0), 2)
 
-    # 3. Channel Allocation Verdict: Super Bowl vs. Social Media
-    if retention_pct >= 90.0 and roi_pct >= 20.0 and brand_centrality >= 5.0:
+    # Quarter rate benchmarks for smart pivots
+    q2_cost_cur = round(QUARTER_BASE_COST_M["Game Q2"] * runtime_ratio, 2)
+    q3_cost_cur = round(QUARTER_BASE_COST_M["Game Q3"] * runtime_ratio, 2)
+    q1_cost_cur = round(QUARTER_BASE_COST_M["Game Q1"] * runtime_ratio, 2)
+    q4_cost_cur = round(QUARTER_BASE_COST_M["Game Q4"] * runtime_ratio, 2)
+
+    # 3. Channel Allocation Verdict: Super Bowl vs. Social Media (Factoring Brand Capital Tier)
+    if is_emerging:
+        channel_verdict = "PIVOT TO TARGETED SOCIAL MEDIA (CAPITAL CEILING EXCEEDED)"
+        channel_color = "#fab387"  # peach/orange
+        channel_icon = "🟡"
+        channel_summary = "National Broadcast Infeasible (Under $6M Budget) — Deploy High-ROI Creator & Social Blitz"
+        channel_headline = f"National ${total_capital_m}M broadcast capital exceeds total solvency. Direct capital to Social Media or Local Cable DMA."
+        channel_detail = (
+            f"National Super Bowl airtime (:${runtime_sec}s in {quarter} at **${airtime_cost_m}M**) plus production (**${prod_cost_m}M**) "
+            f"demands **${total_capital_m}M in upfront cash** — exceeding viable marketing capital for emerging and non-mainstream brands (Under $6M budget). "
+            f"Attempting national broadcast creates acute cash flow and solvency risk. Instead, you can hijack game-day cultural conversation with zero telecast airtime costs."
+        )
+        social_comparison = (
+            f"**Recommended Digital Blueprint:** Reallocate **${digital_budget_k}K–$1.2M** into a high-velocity Social Creator Blitz across TikTok, "
+            f"Instagram Reels, and YouTube Shorts targeting game-day hashtags (#SuperBowl, #BigGame) and halftime meme drops (when 110M viewers check phones). "
+            f"Delivers an estimated **${digital_expected_value_m}M** in trackable e-commerce/DTC GMV (**{digital_roas}**) with zero blowout risk.<br/>"
+            f"**Local DMA Alternative:** If television presence is essential, buy a **Local Cable Interconnect spot in 1–2 target DMAs** "
+            f"(e.g., Austin, Los Angeles, or Miami) for **{local_dma_cost_range}**, putting your ad on Super Bowl living-room screens locally without paying the $7M national rate."
+        )
+    elif is_challenger and quarter == "Game Q2":
+        channel_verdict = "HYBRID BROADCAST + SOCIAL BLITZ (AVOID Q2 INFLATION)"
+        channel_color = "#89b4fa"  # blue
+        channel_icon = "⚖️"
+        channel_summary = "Broadcast Feasible — Pivot Away From Inflated Q2 to Protect Digital Reserves"
+        channel_headline = f"Q2 airtime (${airtime_cost_m}M) consumes excessive capital. Shifting to Q3 ($6.4M) frees ${round(q2_cost_cur - q3_cost_cur, 1)}M for digital."
+        channel_detail = (
+            f"For Challenger brands ($6M–$15M budget), committing **${airtime_cost_m}M** to a single Q2 broadcast spot creates an unhedged 'bet-the-company' "
+            f"capital concentration. Shifting to **Game Q3 (${q3_cost_cur}M)** delivers **{QUARTER_VIEWERS_M['Game Q3']}M viewers** with 94–98% retention "
+            f"while saving **${round(q2_cost_cur - q3_cost_cur, 1)}M** in cash."
+        )
+        social_comparison = (
+            f"Bank the **${round(q2_cost_cur - q3_cost_cur, 1)}M savings** from moving out of Q2 and invest it into an omnichannel social retargeting funnel. "
+            f"This captures telecast search surge ({wiki_mult}x) and converts living-room awareness into immediate customer acquisition."
+        )
+    elif retention_pct >= 90.0 and roi_pct >= 20.0 and brand_centrality >= 5.0:
         channel_verdict = "RUN SUPER BOWL CAMPAIGN"
         channel_color = "#a6e3a1"  # green
         channel_icon = "🟢"
@@ -1548,7 +1608,17 @@ def compute_executive_roi_and_decision(
     # 4. Winning Creative Recipe: What to Put in the Ad to Maximize Effectiveness
     vertical_clean = vertical.lower()
 
-    if "auto" in vertical_clean:
+    if is_emerging:
+        category_label = f"{vertical} (Challenger Guerrilla Playbook)"
+        recipe_elements = [
+            ("⚡ David vs. Goliath Self-Aware Hook", "Humorously poke fun at legacy megabrands blowing $7M on broadcast while your product delivers 10x everyday utility."),
+            ("📦 Rapid 3-Second Product Proof", "Showcase the exact functional product demo and consumer pain-point relief within the first 3 seconds (unskippable digital format)."),
+            ("📱 Mobile Halftime Meme Hijack", "Drop social reaction stunts, TikTok meme responses, and promo codes during halftime when 110M TV viewers look down at phones.")
+        ]
+        avoid_elements = "Avoid paying $2M+ for A-list celebrity talent or signing linear TV upfront commitments that lock up liquidity."
+        primary_lift = "+4.8x Direct Digital ROAS & +85% First-Time Purchase Conversion"
+        immediate_action = "🚀 Execute creator sprint on TikTok/Shorts + reserve $60K Local DMA Cable spot in top market!"
+    elif "auto" in vertical_clean:
         category_label = "Automotive"
         recipe_elements = [
             ("⚡ High-Octane Action & Stunt Hook", "Show dynamic vehicle performance or thrilling chase to capture viewer adrenaline."),
@@ -1585,18 +1655,19 @@ def compute_executive_roi_and_decision(
         avoid_elements = "Avoid somber or excessively complex story arcs that clash with noisy Super Bowl party living rooms."
         primary_lift = "+28% Social Buzz Volume & +32% Living-Room Co-Viewing Recall"
 
-    # Specific immediate improvement opportunity based on current traits
-    suggestions = []
-    if not has_product:
-        suggestions.append("📦 Add immediate product pacing in first 5s (+0.18% engagement / +$2.1M value)")
-    if not has_humor and not has_celeb:
-        suggestions.append("⭐ Add humor or celebrity hook (+0.25% engagement / +1.5x search surge)")
-    if brand_centrality < 7.0:
-        suggestions.append(f"🎯 Increase Brand Centrality from {brand_centrality:.1f} to 8.0+ to prevent the 'Loved Ad, Forgot Brand' recall trap (-28% loss)")
-    if "Q4" in quarter and point_spread > 10:
-        suggestions.append("📡 Shift airtime from Q4 to Q3 or Q1 to rescue 35M+ lost blowout viewers")
+    # Specific immediate improvement opportunity based on current traits (if not emerging)
+    if not is_emerging:
+        suggestions = []
+        if not has_product:
+            suggestions.append("📦 Add immediate product pacing in first 5s (+0.18% engagement / +$2.1M value)")
+        if not has_humor and not has_celeb:
+            suggestions.append("⭐ Add humor or celebrity hook (+0.25% engagement / +1.5x search surge)")
+        if brand_centrality < 7.0:
+            suggestions.append(f"🎯 Increase Brand Centrality from {brand_centrality:.1f} to 8.0+ to prevent the 'Loved Ad, Forgot Brand' recall trap (-28% loss)")
+        if "Q4" in quarter and point_spread > 10:
+            suggestions.append("📡 Shift airtime from Q4 to Q3 or Q1 to rescue 35M+ lost blowout viewers")
 
-    immediate_action = suggestions[0] if suggestions else "🔥 Creative formula is highly optimized for maximum commercial ROI!"
+        immediate_action = suggestions[0] if suggestions else "🔥 Creative formula is highly optimized for maximum commercial ROI!"
 
     # 4. Intelligent Quarter Airtime & Inventory Advisory
     q_info = QUARTER_INVENTORY_METRICS.get(quarter, QUARTER_INVENTORY_METRICS["Game Q2"])
@@ -1724,13 +1795,38 @@ def compute_executive_roi_and_decision(
                 "advantage": "100% immune to game score dynamics with zero blowout attrition.",
             })
 
-    # Comparative Quarter Matrix Table Data
+    # Comparative Quarter Matrix Table Data (Factoring Brand Capital Tier)
     quarter_comparison_matrix = []
     for q_key in ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]:
         m_cost = round(QUARTER_BASE_COST_M[q_key] * runtime_ratio, 2)
         q_reach, q_ret = compute_effective_reach(q_key, point_spread)
         q_cpm = round((m_cost * 1_000_000 / (q_reach * 1_000_000)) * 1000, 2)
         q_data = QUARTER_INVENTORY_METRICS[q_key]
+
+        if is_emerging:
+            tier_feasibility = "🔴 Exceeds Budget (Under $6M Ceiling)"
+            tier_action = "Unviable for national TV — Deploy $500K Social Blitz or Local DMA ($40K–$120K)"
+        elif is_challenger:
+            if q_key == "Game Q2":
+                tier_feasibility = "🟡 High Capital Strain"
+                tier_action = f"Avoid Q2 Surcharge — Shift to Q3 to bank ${round(q2_cost_cur - q3_cost_cur, 1)}M for digital"
+            elif q_key == "Game Q3":
+                tier_feasibility = "⭐ Recommended Challenger Slot"
+                tier_action = "Optimal balance of reach (96.3M) & capital efficiency"
+            elif q_key == "Game Q1":
+                tier_feasibility = "🟢 High Value First Mover"
+                tier_action = "Clean undistracted recall, zero blowout risk"
+            else:
+                tier_feasibility = "🟢 Value Arbitrage"
+                tier_action = "Lowest entry cost; monitor spread"
+        else:
+            if q_key == "Game Q2":
+                tier_feasibility = "🟢 Prime Incumbent Anchor"
+                tier_action = "Maximum live cultural reach (104M viewers)"
+            else:
+                tier_feasibility = "🟢 Fully Viable"
+                tier_action = "Strategic allocation option"
+
         quarter_comparison_matrix.append({
             "quarter": q_key,
             "cost_m": m_cost,
@@ -1741,8 +1837,26 @@ def compute_executive_roi_and_decision(
             "scarcity": q_data["scarcity"],
             "allotment_status": q_data["allotment_status"],
             "ideal_for": q_data["ideal_for"],
+            "tier_feasibility": tier_feasibility,
+            "tier_action": tier_action,
             "is_selected": q_key == quarter,
         })
+
+    tier_advisory = {
+        "brand_tier": brand_tier,
+        "is_emerging": is_emerging,
+        "is_challenger": is_challenger,
+        "is_megabrand": is_megabrand,
+        "tier_badge": "🌱 Emerging (Under $6M)" if is_emerging else ("🚀 Challenger ($6M–$15M)" if is_challenger else "🏛️ Megabrand ($15M+)"),
+        "tier_color": "#fab387" if is_emerging else ("#89b4fa" if is_challenger else "#a6e3a1"),
+        "capital_ceiling_m": 6.0 if is_emerging else (15.0 if is_challenger else 50.0),
+        "broadcast_viable": not is_emerging,
+        "digital_budget_k": digital_budget_k,
+        "digital_expected_value_m": digital_expected_value_m,
+        "digital_roas": digital_roas,
+        "local_dma_cost_range": local_dma_cost_range,
+        "capital_saved_m": capital_saved_vs_broadcast_m,
+    }
 
     quarter_advisory = {
         "selected_quarter": quarter,
@@ -1754,6 +1868,7 @@ def compute_executive_roi_and_decision(
         "smart_alt_summary": smart_alt_summary,
         "alternatives": alternatives,
         "matrix": quarter_comparison_matrix,
+        "tier_advisory": tier_advisory,
     }
 
     return {
@@ -1787,4 +1902,5 @@ def compute_executive_roi_and_decision(
             "immediate_action": immediate_action,
         },
         "quarter_advisory": quarter_advisory,
+        "tier_advisory": tier_advisory,
     }

@@ -173,6 +173,7 @@ def generate_baseline_strategy_memos(
     sim: Dict[str, Any],
     comps: List[Dict[str, Any]],
     exec_dec: Optional[Dict[str, Any]] = None,
+    brand_tier: str = "Enterprise Megabrand ($15M+ Budget)",
 ) -> Dict[str, str]:
     """
     Generates deterministic, high-fidelity strategic stakeholder memos and consensus brief in 0ms.
@@ -190,16 +191,20 @@ def generate_baseline_strategy_memos(
 
     # Compute executive decision pillars if not provided
     if not exec_dec:
-        exec_dec = compute_executive_roi_and_decision(sim)
+        exec_dec = compute_executive_roi_and_decision(sim, brand_tier=brand_tier)
 
     cv = exec_dec["channel_verdict"]
     fr = exec_dec["financial_roi"]
     cr = exec_dec["creative_recipe"]
     qa = exec_dec.get("quarter_advisory", {})
+    ta = exec_dec.get("tier_advisory", {})
+    is_emerging = ta.get("is_emerging", False)
+    is_challenger = ta.get("is_challenger", False)
+    tier_badge = ta.get("tier_badge", "🏛️ Megabrand ($15M+)")
 
     # Creative Strategy Memo
     creative_memo = (
-        f"**Concept Analysis & Narrative Hook:**\n"
+        f"**Concept Analysis & Narrative Hook ({tier_badge}):**\n"
         f"The concept models a predicted YouTube engagement rate of **{eng}%** with an expected Wikipedia pageview surge multiplier of **{wiki}x**. "
         f"This performance trajectory aligns closely with historical precedent **{top_comp.get('brand')} ({top_comp.get('year')}) — '{top_comp.get('title')}'**.\n\n"
         f"**Creative Mandate & Winning Recipe:**\n"
@@ -229,10 +234,30 @@ def generate_baseline_strategy_memos(
         f"{decay_warning}"
     )
 
-    # CFO Governance Memo
+    # CFO Governance Memo with Brand Capital Solvency Audit
+    if is_emerging:
+        cfo_solvency_text = (
+            f"🔴 **CAPITAL CEILING VETO:** Total broadcast outlay of **${fr['total_capital_m']}M** exceeds total brand solvency (<$6M budget ceiling). "
+            f"Direct CFO directive: Veto national telecast commitment. Authorize **${ta.get('digital_budget_k', 500)}K Social Creator Sprint** "
+            f"(projected **${ta.get('digital_expected_value_m', 2.4)}M** GMV / **{ta.get('digital_roas', '4.8x ROAS')}**) and/or a "
+            f"**{ta.get('local_dma_cost_range', '$40K–$120K')} Local DMA Interconnect spot** in top target metro market. "
+            f"Preserves **${ta.get('capital_saved_m', 8.5)}M in treasury cash**."
+        )
+    elif is_challenger and qa.get("selected_quarter") == "Game Q2":
+        cfo_solvency_text = (
+            f"⚠️ **CAPITAL DISCIPLINE DIRECTIVE:** Q2 airtime (${fr['airtime_cost_m']}M) consumes excessive challenger capital reserves. "
+            f"CFO directive: Reallocate from Q2 to Game Q3 ($6.4M rate) to unlock $1.4M in cash reserves for retail and digital conversion funnels."
+        )
+    else:
+        cfo_solvency_text = (
+            f"🟢 **CAPITAL ALLOCATION CLEARED:** Total upfront exposure of **${fr['total_capital_m']}M** is well within corporate treasury risk boundaries. "
+            f"Expected Net Commercial Value is positive (**+${fr['net_profit_m']}M** / **+{fr['roi_pct']}%** net ROI)."
+        )
+
     cfo_memo = (
-        f"**Downside Floor & Capital Governance Audit:**\n"
-        f"Total upfront capital exposure is calibrated at **${fr['total_capital_m']}M** (${fr['airtime_cost_m']}M airtime + ${fr['prod_cost_m']}M production).\n"
+        f"**Downside Floor & Capital Governance Audit ({tier_badge}):**\n"
+        f"{cfo_solvency_text}\n\n"
+        f"• Total Upfront Capital Exposure: **${fr['total_capital_m']}M** (${fr['airtime_cost_m']}M airtime + ${fr['prod_cost_m']}M production).\n"
         f"• Expected Gross Commercial Value: **${fr['expected_gross_value_m']}M** (Expected Net ROI: **+{fr['roi_pct']}%** / **{fr['roi_multiplier']}x** multiple).\n"
         f"• Maximum Viable Budget Cap: **${fr['max_viable_budget_m']}M**.\n"
         f"• Downside Capital Safety Floor: **${fr['downside_floor_m']}M** (10th percentile worst-case protection floor).\n\n"
@@ -245,6 +270,8 @@ def generate_baseline_strategy_memos(
     recipe_bullets = "\n".join([f"   • **{elem[0]}:** {elem[1]}" for elem in cr["recipe_elements"]])
     consensus_memo = (
         f"### 📋 Executive Consensus Decision Brief\n\n"
+        f"**0. Brand Capital & Scale Tier: {tier_badge}**\n"
+        f"- {cfo_solvency_text}\n\n"
         f"**1. Strategic Channel Verdict: {cv['badge']}**\n"
         f"- **Primary Finding:** {cv['summary']}. {cv['headline']}\n"
         f"- **Broadcast Delivery:** {reach}M living-room viewers delivered at ${cpm} Effective CPM ({retention}% retention).\n"

@@ -224,12 +224,14 @@ def render_tab6():
     )
 
     active_pitch = st.session_state.get("tab6_pitch_input", "")
+    live_yt_enabled = st.session_state.get("t6_live_yt_toggle", True)
     nearest_comps = retrieve_nearest_historical_ads(
         traits=trait_keys,
         vertical=sel_vertical,
         runtime_sec=sel_runtime,
         pitch_text=active_pitch,
         k=3,
+        enable_live_augment=live_yt_enabled,
     )
 
     scenario_text = (
@@ -323,10 +325,19 @@ def render_tab6():
             key="t6_dl_memo_btn",
         )
 
-    # ── 4. Historical Precedents (Vector RAG Comps) (MIDDLE) ───────────────────
+    # ── 4. Historical Precedents & Live Comps (Vector RAG) (MIDDLE) ───────────
     st.markdown("---")
-    st.markdown("### 🎞️ Historical Precedents (Vector RAG Comps)")
-    st.caption("Top 3 closest actual Super Bowl commercials retrieved via 3072-dimensional embedding similarity from 25 years of telecasts:")
+    col_t3_title, col_t3_toggle = st.columns([2.2, 1.0])
+    with col_t3_title:
+        st.markdown("### 🎞️ Historical Precedents & Big Game Comps (Vector RAG)")
+        st.caption("Closest Super Bowl commercial spots combining 25-year telecast archives with real-time YouTube Big Game pulls:")
+    with col_t3_toggle:
+        live_toggle_val = st.toggle(
+            "⚡ Live YouTube Augment",
+            value=st.session_state.get("t6_live_yt_toggle", True),
+            help="When active, dynamically queries YouTube Data API v3 to pull real-world commercials for modern categories (e.g. Consumer Tech, AI, Crypto, Apps) unrepresented in the historical 2000-2020 archive.",
+            key="t6_live_yt_toggle",
+        )
 
     TRAIT_BADGE_CONFIG = {
         "Humor": {"icon": "😂", "bg": "rgba(249, 226, 175, 0.15)", "fg": "#f9e2af", "border": "#f9e2af55"},
@@ -355,13 +366,25 @@ def render_tab6():
 
             spot_fmt = comp.get("spot_format", f":{comp.get('runtime_sec', 30)}s spot")
             approach_desc = comp.get("approach", "Cinematic narrative storytelling")
+            is_live = comp.get("source") == "live"
+            source_badge = (
+                '<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(166, 227, 161, 0.18); color: #a6e3a1; font-weight: 700; border: 1px solid #a6e3a155;">📡 Live Registry</span>'
+                if is_live
+                else '<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(137, 180, 250, 0.18); color: #89b4fa; font-weight: 700; border: 1px solid #89b4fa55;">🏛️ 25-Yr Archive</span>'
+            )
+
+            metric_2_label = "Live Video Telemetry" if is_live else "Wikipedia Surge"
+            metric_2_val = comp.get("views_display") if (is_live and comp.get("views_display")) else comp.get("wiki_spike_display", str(comp.get("wiki_spike", "1.0")) + "x")
 
             st.markdown(
                 f"""
                 <div style="background: #181825; border: 1px solid #313244; border-radius: 8px; padding: 1.1rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
-                            <span style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{comp['year']} · {comp['brand']}</span>
+                            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                <span style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{comp['year']} · {comp['brand'][:18]}</span>
+                                {source_badge}
+                            </div>
                             <span style="font-size: 0.73rem; color: #a6adc8; background: #313244; padding: 2px 7px; border-radius: 4px; font-weight: 600;">{spot_fmt}</span>
                         </div>
                         <div style="font-size: 0.95rem; font-weight: 600; color: #cdd6f4; margin: 0.35rem 0 0.5rem 0; min-height: 2.8rem; line-height: 1.35;">
@@ -382,7 +405,7 @@ def render_tab6():
                     </div>
                     <div style="font-size: 0.82rem; color: #a6adc8; line-height: 1.55; border-top: 1px solid #313244; padding-top: 0.55rem; margin-top: 0.3rem;">
                         • YouTube Engagement: <b>{comp['engagement_rate']}%</b><br/>
-                        • Wikipedia Surge: <b>{comp.get('wiki_spike_display', str(comp.get('wiki_spike', '1.0')) + 'x')}</b><br/>
+                        • {metric_2_label}: <b>{metric_2_val}</b><br/>
                         • Match Similarity: <b>{int(comp['similarity'] * 100)}%</b>
                     </div>
                 </div>

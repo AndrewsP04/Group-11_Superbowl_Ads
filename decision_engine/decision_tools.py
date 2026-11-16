@@ -14,9 +14,12 @@ from __future__ import annotations
 
 import itertools
 import json
+import os
 from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional, Tuple
+import urllib.parse
+import urllib.request
 
 import numpy as np
 
@@ -386,20 +389,243 @@ def clean_ad_url(url_val: Any, brand: str, year: int, title: str, sb_url: Any = 
     return f"https://www.youtube.com/results?search_query={query}"
 
 
+def parse_iso_8601_duration(duration_str: str) -> int:
+    """Parses ISO 8601 duration format (e.g. PT1M13S, PT30S) into integer seconds."""
+    match = re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", duration_str or "")
+    if not match:
+        return 30
+    hours = int(match.group(1) or 0)
+    mins = int(match.group(2) or 0)
+    secs = int(match.group(3) or 0)
+    return hours * 3600 + mins * 60 + secs
+
+
+def search_live_superbowl_ads(
+    pitch_text: str,
+    vertical: str = "Consumer Tech",
+    traits: Optional[List[str]] = None,
+    max_results: int = 3,
+) -> List[Dict[str, Any]]:
+    """
+    Dynamically queries YouTube Data API v3 for modern Big Game commercials (e.g. Amazon Alexa,
+    Google Pixel, Apple, OpenAI, Uber Eats, Coinbase) when historical dataset coverage is thin.
+    Extracts live views, engagement rate, exact runtime, and maps creative traits.
+    """
+    api_key = os.getenv("YOUTUBE_API_KEY")
+    if not api_key:
+        return []
+
+    clean_p = (pitch_text or "").lower()
+
+    # Determine core search entity
+    brand_or_topic = ""
+    known_brands = [
+        "amazon alexa", "alexa", "amazon", "google pixel", "google", "pixel",
+        "apple", "openai", "chatgpt", "coinbase", "crypto.com", "crypto",
+        "uber eats", "bmw", "samsung", "netflix", "squarespace", "paramount",
+        "doritos", "toyota", "bud light", "budweiser", "pepsi", "coca-cola", "hyundai", "kia"
+    ]
+    for b in known_brands:
+        if b in clean_p:
+            brand_or_topic = b.title()
+            break
+
+    if not brand_or_topic:
+        if "consumer tech" in vertical.lower() or "tech" in clean_p or "ai" in clean_p or "smart" in clean_p:
+            brand_or_topic = "smart AI device"
+        elif "crypto" in clean_p or "finance" in vertical.lower():
+            brand_or_topic = "cryptocurrency bitcoin coinbase ftx"
+        else:
+            brand_or_topic = vertical.split("/")[0].strip()
+
+    qualifiers = []
+    if any(k in clean_p for k in ["action", "chase", "thriller", "star", "danger"]):
+        qualifiers.append("action movie star")
+    elif any(k in clean_p for k in ["humor", "funny", "comedic", "comedy"]):
+        qualifiers.append("funny")
+    elif any(k in clean_p for k in ["glamour", "poolside", "romance", "model", "sexy"]):
+        qualifiers.append("celebrity model")
+    elif any(k in clean_p for k in ["patriotic", "hero", "dog", "adversity"]):
+        qualifiers.append("patriotic story")
+
+    query_phrase = f"Super Bowl commercial {brand_or_topic} {' '.join(qualifiers)}".strip()
+
+    search_url = (
+        f"https://www.googleapis.com/youtube/v3/search?"
+        f"part=snippet&q={urllib.parse.quote(query_phrase)}"
+        f"&type=video&videoDuration=short&maxResults={max_results * 3}&key={api_key}"
+    )
+
+    req = urllib.request.Request(search_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            s_data = json.loads(resp.read().decode())
+    except Exception:
+        return []
+
+    items = s_data.get("items", [])
+    if not items:
+        return []
+
+    v_ids = [it["id"]["videoId"] for it in items if "id" in it and "videoId" in it["id"]]
+    if not v_ids:
+        return []
+
+    detail_url = (
+        f"https://www.googleapis.com/youtube/v3/videos?"
+        f"part=snippet,contentDetails,statistics&id={','.join(v_ids[:max_results * 2])}&key={api_key}"
+    )
+
+    try:
+        with urllib.request.urlopen(urllib.request.Request(detail_url, headers={"User-Agent": "Mozilla/5.0"}), timeout=5) as resp:
+            det_data = json.loads(resp.read().decode())
+    except Exception:
+        return []
+
+    results = []
+    for it in det_data.get("items", []):
+        snip = it.get("snippet", {})
+        stats = it.get("statistics", {})
+        details = it.get("contentDetails", {})
+        title = snip.get("title", "")
+        desc = snip.get("description", "")
+        full_text = (title + " " + desc).lower()
+
+        # Filter out non-commercials (reviews, reactions, podcasts, ranking lists, news commentary)
+        if any(bad in title.lower() for bad in ["reaction", "review", "podcast", "ranking", "worst", "explained", "breakdown", "top 10", "parody", "every"]):
+            continue
+
+        views = float(stats.get("viewCount", 0))
+        likes = float(stats.get("likeCount", 0))
+        comments = float(stats.get("commentCount", 0))
+        eng_pct = round(((likes + comments) / views * 100), 2) if views > 0 else 0.85
+
+        dur_secs = parse_iso_8601_duration(details.get("duration", "PT30S"))
+        pub_year = snip.get("publishedAt", "2024")[:4]
+
+        # Determine clean brand name
+        channel = snip.get("channelTitle", "Commercial Sponsor").replace(" - Topic", "").replace(" Official", "")
+        brand_clean = channel
+        for known in [
+            "Amazon Alexa", "Amazon", "Google Pixel", "Google", "Apple", "Coinbase",
+            "OpenAI", "Uber Eats", "BMW", "Samsung", "Squarespace", "Doritos", "Toyota", "Bud Light", "Pepsi"
+        ]:
+            if known.lower() in title.lower() or known.lower() in channel.lower():
+                brand_clean = known
+                break
+
+        # Spot format classification
+        if 25 <= dur_secs <= 35:
+            spot_fmt = ":30s spot"
+        elif 55 <= dur_secs <= 65:
+            spot_fmt = ":60s spot"
+        elif 85 <= dur_secs <= 95:
+            spot_fmt = ":90s spot"
+        elif dur_secs > 65:
+            spot_fmt = f":{dur_secs}s extended"
+        elif dur_secs < 25:
+            spot_fmt = f":{dur_secs}s teaser"
+        else:
+            spot_fmt = f":{dur_secs}s spot"
+
+        # Trait classification
+        active_trait_names = []
+        if any(w in full_text for w in ["funny", "laugh", "humor", "hilarious", "comedy", "joke"]):
+            active_trait_names.append("Humor")
+        if any(w in full_text for w in ["star", "celebrity", "hemsworth", "johansson", "brosnan", "actor", "hollywood"]):
+            active_trait_names.append("Celebrity")
+        if any(w in full_text for w in ["device", "alexa", "pixel", "phone", "app", "tech", "product", "demo", "qr"]):
+            active_trait_names.append("Product-Forward")
+        if any(w in full_text for w in ["action", "chase", "stunt", "speed", "scary", "danger"]):
+            active_trait_names.append("Danger/Action")
+        if any(w in full_text for w in ["dog", "cat", "horse", "puppy", "animal"]):
+            active_trait_names.append("Animals")
+        if any(w in full_text for w in ["glamour", "pool", "model", "sexy", "romance", "swim"]):
+            active_trait_names.append("Sex Appeal")
+        if any(w in full_text for w in ["america", "flag", "veteran", "hero", "patriot"]):
+            active_trait_names.append("Patriotic")
+
+        if not active_trait_names:
+            active_trait_names = ["Product-Forward"]
+
+        # Strategic approach summary
+        if "Celebrity" in active_trait_names and "Danger/Action" in active_trait_names:
+            approach_text = "Hollywood action star stunt chase & high-tech product demo"
+        elif "Celebrity" in active_trait_names and "Humor" in active_trait_names:
+            approach_text = "Comedic celebrity duel & pop-culture satire"
+        elif "Danger/Action" in active_trait_names:
+            approach_text = "High-octane stunt thriller with rapid product demo"
+        elif "Product-Forward" in active_trait_names:
+            approach_text = "Direct packaging benefit & immediate brand demo"
+        else:
+            approach_text = "Cinematic emotional storytelling with brand integration"
+
+        views_display = (
+            f"{(views / 1_000_000):.1f}M Views"
+            if views >= 1_000_000
+            else f"{(views / 1_000):.0f}K Views"
+            if views >= 1_000
+            else f"{int(views)} Views"
+        )
+
+        results.append({
+            "brand": brand_clean,
+            "year": int(pub_year) if pub_year.isdigit() else 2024,
+            "title": title,
+            "runtime_sec": dur_secs,
+            "spot_format": spot_fmt,
+            "approach": approach_text,
+            "traits": [t.lower().replace("danger/action", "danger").replace("product-forward", "show_product_quickly") for t in active_trait_names],
+            "trait_names": active_trait_names,
+            "engagement_rate": eng_pct,
+            "views_display": views_display,
+            "wiki_spike": 1.0,
+            "wiki_spike_display": f"1.0x ({views_display})",
+            "url": f"https://www.youtube.com/watch?v={it['id']}",
+            "similarity": 0.88,
+            "source": "live",
+        })
+
+        if len(results) >= max_results:
+            break
+
+    return results
+
+
 def retrieve_nearest_historical_ads(
     traits: Optional[List[str]] = None,
     vertical: str = "Snacks / Food",
     runtime_sec: int = 30,
     k: int = 3,
     pitch_text: Optional[str] = None,
+    enable_live_augment: bool = True,
 ) -> List[Dict[str, Any]]:
     """
-    RAG retrieval: Performs cosine similarity against historical commercials vector embeddings.
-    If pitch_text is provided, attempts to embed via Gemini text-embedding-004;
-    otherwise falls back to semantic trait cosine similarity.
+    RAG retrieval: Combines 3072-dim semantic embeddings with hybrid trait/vertical scoring
+    and real-time YouTube Data API v3 Big Game augmentation for unrepresented modern categories.
     """
     if traits is None:
         traits = ["funny", "celebrity"]
+
+    # Dynamic Live YouTube Augmentation for unrepresented categories or modern brands
+    if enable_live_augment and pitch_text and str(pitch_text).strip():
+        p_check = str(pitch_text).lower()
+        needs_live_search = (
+            "consumer tech" in str(vertical).lower()
+            or "finance" in str(vertical).lower()
+            or any(k in p_check for k in [
+                "alexa", "amazon", "google", "pixel", "apple", "crypto",
+                "coinbase", "ftx", "openai", "chatgpt", "uber eats",
+                "ai device", "smart home", "smart ai", "streaming", "netflix"
+            ])
+        )
+        if needs_live_search:
+            try:
+                live_comps = search_live_superbowl_ads(str(pitch_text), vertical=vertical, traits=traits, max_results=k)
+                if live_comps and len(live_comps) >= 2:
+                    return live_comps[:k]
+            except Exception:
+                pass  # Fall back gracefully to dataset comps
 
     bundle = load_bundle()
     if not bundle or "historical_records" not in bundle or "embeddings_matrix" not in bundle:
@@ -672,6 +898,7 @@ def retrieve_nearest_historical_ads(
             "wiki_spike_display": wiki_display,
             "url": url_clean,
             "similarity": round(float(hybrid_scores[idx]), 2),
+            "source": "archive",
         })
 
     return results

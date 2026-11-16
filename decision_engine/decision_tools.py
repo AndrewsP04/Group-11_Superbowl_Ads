@@ -420,10 +420,19 @@ def search_live_superbowl_ads(
     # Determine core search entity
     brand_or_topic = ""
     known_brands = [
+        # Automotive
+        "audi", "bmw", "porsche", "mercedes", "ford", "chevrolet", "chevy",
+        "jeep", "dodge", "ram", "volkswagen", "honda", "nissan", "cadillac", "chrysler", "lexus", "subaru",
+        "hyundai", "kia", "toyota",
+        # Snacks & Food
+        "snickers", "m&ms", "m&m", "pringles", "cheetos", "avocados from mexico", "heinz", "planters", "skittles",
+        "t-mobile", "doritos", "lays", "tostitos",
+        # Beverage
+        "bud light", "budweiser", "pepsi", "coca-cola", "michelob", "heineken", "stella artois", "mountain dew", "dr pepper",
+        # Tech, Fintech & Delivery
         "amazon alexa", "alexa", "amazon", "google pixel", "google", "pixel",
-        "apple", "openai", "chatgpt", "coinbase", "crypto.com", "crypto",
-        "uber eats", "bmw", "samsung", "netflix", "squarespace", "paramount",
-        "doritos", "toyota", "bud light", "budweiser", "pepsi", "coca-cola", "hyundai", "kia"
+        "apple", "openai", "chatgpt", "coinbase", "crypto.com", "crypto", "ftx",
+        "uber eats", "doordash", "samsung", "netflix", "squarespace", "paramount"
     ]
     for b in known_brands:
         if b in clean_p:
@@ -610,14 +619,23 @@ def retrieve_nearest_historical_ads(
     # Dynamic Live YouTube Augmentation for unrepresented categories or modern brands
     if enable_live_augment and pitch_text and str(pitch_text).strip():
         p_check = str(pitch_text).lower()
+        EXTERNAL_NON_DATASET_BRANDS = [
+            # Non-dataset Automotive (e.g. Audi, Porsche, BMW, Mercedes, Ford, Chevrolet)
+            "audi", "bmw", "porsche", "mercedes", "ford", "chevrolet", "chevy",
+            "jeep", "dodge", "ram", "volkswagen", "honda", "nissan", "cadillac", "chrysler", "lexus", "subaru",
+            # Non-dataset Snacks & Food (e.g. Snickers, M&Ms, Pringles, Cheetos, Heinz)
+            "snickers", "m&ms", "m&m", "pringles", "cheetos", "avocados from mexico", "heinz", "planters", "skittles",
+            # Non-dataset Beverage (e.g. Michelob, Heineken, Stella Artois)
+            "michelob", "heineken", "stella artois", "guinness",
+            # Tech, Fintech & Delivery (e.g. Apple, Google, Amazon, OpenAI, Coinbase, Uber Eats)
+            "apple", "google", "pixel", "amazon", "alexa", "openai", "chatgpt", "coinbase", "crypto.com", "crypto", "ftx",
+            "uber eats", "doordash", "squarespace", "netflix", "paramount"
+        ]
         needs_live_search = (
             "consumer tech" in str(vertical).lower()
             or "finance" in str(vertical).lower()
-            or any(k in p_check for k in [
-                "alexa", "amazon", "google", "pixel", "apple", "crypto",
-                "coinbase", "ftx", "openai", "chatgpt", "uber eats",
-                "ai device", "smart home", "smart ai", "streaming", "netflix"
-            ])
+            or any(k in p_check for k in EXTERNAL_NON_DATASET_BRANDS)
+            or any(k in p_check for k in ["ai device", "smart home", "smart ai", "streaming", "bitcoin", "cryptocurrency"])
         )
         if needs_live_search:
             try:
@@ -780,7 +798,53 @@ def retrieve_nearest_historical_ads(
         clamped_score = min(0.99, max(0.40, score))
         hybrid_scores.append(clamped_score)
 
-    top_indices = np.argsort(hybrid_scores)[::-1][:k]
+    ranked_indices = np.argsort(hybrid_scores)[::-1]
+
+    # Smart Brand Selection:
+    # Case 1: Specific dataset brand requested in brief -> isolate/prioritize that exact brand.
+    # Case 2: Generic / brand-agnostic brief -> enforce Brand Diversity (max 1 comp per brand among top 3).
+    CANONICAL_DATASET_BRANDS = [
+        "toyota", "hyundai", "kia", "doritos", "bud light", "budweiser",
+        "pepsi", "coca-cola", "etrade", "e-trade"
+    ]
+    detected_dataset_brand = None
+    for b in CANONICAL_DATASET_BRANDS:
+        if b in p_lower:
+            detected_dataset_brand = b
+            break
+
+    if detected_dataset_brand:
+        # User requested a specific dataset brand -> show comps from that exact brand
+        top_indices = []
+        for idx in ranked_indices:
+            r_b = str(records[idx].get("brand", "")).lower().replace("hynudai", "hyundai")
+            if detected_dataset_brand in r_b or r_b in detected_dataset_brand:
+                top_indices.append(idx)
+                if len(top_indices) >= k:
+                    break
+        if len(top_indices) < k:
+            for idx in ranked_indices:
+                if idx not in top_indices:
+                    top_indices.append(idx)
+                    if len(top_indices) >= k:
+                        break
+    else:
+        # Generic brief -> enforce Brand Diversity constraint so competitive alternatives are surfaced
+        top_indices = []
+        seen_brands = set()
+        for idx in ranked_indices:
+            r_b = str(records[idx].get("brand", "")).lower().replace("hynudai", "hyundai")
+            if r_b not in seen_brands:
+                seen_brands.add(r_b)
+                top_indices.append(idx)
+                if len(top_indices) >= k:
+                    break
+        if len(top_indices) < k:
+            for idx in ranked_indices:
+                if idx not in top_indices:
+                    top_indices.append(idx)
+                    if len(top_indices) >= k:
+                        break
 
     results = []
     for idx in top_indices:

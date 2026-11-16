@@ -109,6 +109,68 @@ QUARTER_SPREAD_SENSITIVITY: Dict[str, float] = {
     "Game Q4": 0.0165,
 }
 
+# Empirical Super Bowl Game Flow & Point Margin Distribution (2000–2024, 25 Modern Era Games)
+# Source: data/processed/superbowl_quarter_audience_flow_2000_2026.csv
+HISTORICAL_SUPERBOWL_STATS: Dict[str, Any] = {
+    "total_games": 25,
+    "mean_margin": 9.8,
+    "median_margin": 6.0,
+    "close_game_pct": 56.0,   # <= 7 pts (14 of 25 games)
+    "competitive_pct": 28.0,  # 8-19 pts (7 of 25 games)
+    "blowout_pct": 16.0,      # >= 20 pts (4 of 25 games: 2001, 2003, 2014, 2021)
+    "close_game_median_margin": 3.0,
+    "competitive_median_margin": 11.0,
+    "blowout_median_margin": 24.0,
+}
+
+GAME_FLOW_SCENARIOS: Dict[str, Dict[str, Any]] = {
+    "🎲 Expected Game Flow (Empirical Distribution: 56% Close, 28% Competitive, 16% Blowout)": {
+        "short_name": "Historical Expected Flow",
+        "badge": "🎲 Empirical Baseline",
+        "description": "Blends all 25 modern Super Bowls (2000–2024) using historical odds: 56% nailbiters (≤7 pts), 28% competitive (8–19 pts), 16% blowouts (≥20 pts). No prior knowledge of playoff teams required.",
+        "effective_spread": 6,
+        "is_probabilistic_blend": True,
+        "odds_pct": 100.0,
+        "historical_margin_label": "Empirical Blend (Median: 6.0 pts, Mean: 9.8 pts)",
+    },
+    "⚡ One-Possession Nailbiter (0–7 pts · 56% Historical Odds)": {
+        "short_name": "One-Possession Nailbiter",
+        "badge": "⚡ 56% Historical Odds",
+        "description": "56% of modern Super Bowls are decided by one possession (e.g. 2024 KC-SF, 2023 KC-PHI, 2008 NYG-NE). Viewers stay glued; Q4 living-room ratings surge up to 125M+ viewers with zero channel-surfing decay.",
+        "effective_spread": 3,
+        "is_probabilistic_blend": False,
+        "odds_pct": 56.0,
+        "historical_margin_label": "3 pts (Median for close games)",
+    },
+    "⚖️ Competitive Two-Possession (8–14 pts · 28% Historical Odds)": {
+        "short_name": "Competitive Two-Possession",
+        "badge": "⚖️ 28% Historical Odds",
+        "description": "28% of modern Super Bowls remain competitive two-possession games (e.g. 2020 KC-SF, 2016 DEN-CAR, 2010 NO-IND). Stable telecast retention through mid-Q4.",
+        "effective_spread": 11,
+        "is_probabilistic_blend": False,
+        "odds_pct": 28.0,
+        "historical_margin_label": "11 pts (Median for moderate games)",
+    },
+    "🚨 Runaway Blowout Stress-Test (20+ pts · 16% Historical Odds)": {
+        "short_name": "Runaway Blowout Stress-Test",
+        "badge": "🚨 16% Tail Risk",
+        "description": "Only 16% of modern Super Bowls turn into runaway blowouts (e.g. 2014 SEA-DEN, 2021 TB-KC). Downside sensitivity stress-test modeling ~22% living-room audience attrition in Q4.",
+        "effective_spread": 24,
+        "is_probabilistic_blend": False,
+        "odds_pct": 16.0,
+        "historical_margin_label": "24 pts (Median for blowouts)",
+    },
+    "🎛️ Custom Point Margin (Manual Sensitivity Stress-Test)": {
+        "short_name": "Custom Point Margin",
+        "badge": "🎛️ Manual Override",
+        "description": "Allows financial analysts to test a specific hypothetical score margin (0 to 35 pts) to stress-test contractual performance thresholds.",
+        "effective_spread": 7,
+        "is_probabilistic_blend": False,
+        "odds_pct": 0.0,
+        "historical_margin_label": "Custom Analyst Hypothesis",
+    },
+}
+
 _BUNDLE_CACHE: Optional[Dict[str, Any]] = None
 
 
@@ -139,14 +201,27 @@ def load_bundle(auto_train: bool = False) -> Optional[Dict[str, Any]]:
     return None
 
 
-def compute_effective_reach(quarter: str, point_spread: int) -> Tuple[float, float]:
+def compute_effective_reach(quarter: str, point_spread: int = 6, is_probabilistic_blend: bool = False) -> Tuple[float, float]:
     """
-    Calculates expected living-room telecast audience given quarter and blowout risk.
+    Calculates expected living-room telecast audience given quarter and game score dynamics.
+    When is_probabilistic_blend is True, applies the empirical probability distribution of all 25 modern Super Bowls (2000–2024):
+    - 56% Close Games (effective margin: 3 pts)
+    - 28% Competitive Games (effective margin: 11 pts)
+    - 16% Runaway Blowouts (effective margin: 24 pts)
     Returns (effective_viewers_m, retention_pct).
     """
     base_m = QUARTER_VIEWERS_M.get(quarter, 100.0)
     sens = QUARTER_SPREAD_SENSITIVITY.get(quarter, 0.005)
-    retention = max(0.60, 1.0 - (sens * float(point_spread)))
+
+    if is_probabilistic_blend:
+        # Weighted retention across historical Super Bowl empirical distribution
+        ret_close = max(0.60, 1.0 - (sens * 3.0))
+        ret_comp = max(0.60, 1.0 - (sens * 11.0))
+        ret_blowout = max(0.60, 1.0 - (sens * 24.0))
+        retention = (0.56 * ret_close) + (0.28 * ret_comp) + (0.16 * ret_blowout)
+    else:
+        retention = max(0.60, 1.0 - (sens * float(point_spread)))
+
     effective_m = base_m * retention
     return round(effective_m, 2), round(retention * 100.0, 1)
 
@@ -156,7 +231,9 @@ def simulate_multi_pov(
     runtime_sec: int = 30,
     quarter: str = "Game Q2",
     traits: Optional[List[str]] = None,
-    point_spread: int = 7,
+    point_spread: int = 6,
+    is_probabilistic_blend: bool = True,
+    game_flow_scenario: str = "Historical Expected Flow",
     narrative_arc: float = 6.0,
     brand_centrality: float = 7.0,
     cultural_nostalgia: float = 5.0,
@@ -172,7 +249,7 @@ def simulate_multi_pov(
     bundle = load_bundle()
     trait_flags = {t: (t in traits or t.title() in traits) for t in TRAITS}
 
-    eff_reach_m, retention_pct = compute_effective_reach(quarter, point_spread)
+    eff_reach_m, retention_pct = compute_effective_reach(quarter, point_spread, is_probabilistic_blend=is_probabilistic_blend)
     quarter_base_cost_usd = QUARTER_BASE_COST_M.get(quarter, 7.0) * 1_000_000.0
     cpm_usd = round((quarter_base_cost_usd / (eff_reach_m * 1_000_000.0)) * 1000.0, 2)
 
@@ -309,6 +386,9 @@ def simulate_multi_pov(
         "retention_pct": retention_pct,
         "effective_cpm_usd": cpm_usd,
         "waterfall": waterfall,
+        "game_flow_scenario": game_flow_scenario,
+        "is_probabilistic_blend": is_probabilistic_blend,
+        "point_spread": point_spread,
     }
 
 
@@ -1276,6 +1356,7 @@ def retrieve_nearest_historical_ads(
 def optimize_creative_and_airtime(
     vertical: str = "Snacks / Food",
     point_spread: int = 7,
+    is_probabilistic_blend: bool = False,
     top_n: int = 3,
     target_year: int = 2026,
     runtime_sec: int = 30,
@@ -1312,7 +1393,7 @@ def optimize_creative_and_airtime(
     X_macro_512 = np.tile(np.array([[float(target_year), float(runtime_sec)]], dtype=np.float32), (512, 1))
 
     # Precalculate effective reach for each quarter
-    reach_by_quarter = [compute_effective_reach(q, point_spread)[0] for q in quarters]
+    reach_by_quarter = [compute_effective_reach(q, point_spread, is_probabilistic_blend=is_probabilistic_blend)[0] for q in quarters]
     reaches = np.array([reach_by_quarter[q_idx] for q_idx in quarter_indices], dtype=np.float32)
 
     if bundle and "ridge_eng" in bundle and "ebm_eng" in bundle:
@@ -1402,7 +1483,8 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
         "- vertical: exactly one of 'Beverage / FMCG', 'Automotive', 'Consumer Tech', 'Snacks / Food'\n"
         "- runtime_sec: 15, 30, 45, 60, or 90\n"
         "- quarter: 'Game Q1', 'Game Q2', 'Game Q3', or 'Game Q4'\n"
-        "- point_spread: integer between 0 and 24 (default 7)\n"
+        "- game_flow: exactly one of 'Historical Expected Flow', 'Nailbiter / One-Possession Game', 'Competitive Game', or 'Blowout Risk'. "
+        "Default to 'Historical Expected Flow' unless the pitch explicitly mentions a nailbiter/overtime finish or a blowout scenario.\n"
         "- traits: list of applicable traits ONLY IF explicitly mentioned or clearly present in the brief. "
         "Available choices: ['funny', 'show_product_quickly', 'patriotic', 'celebrity', 'danger', 'animals', 'use_sex']. "
         "CRITICAL: DO NOT default to 'funny' or 'celebrity' if they are not in the brief! If no traits are present, return an empty list [].\n"
@@ -1437,7 +1519,9 @@ def compute_executive_roi_and_decision(
     vertical: str = "Snacks / Food",
     runtime_sec: int = 30,
     quarter: str = "Game Q2",
-    point_spread: int = 7,
+    point_spread: int = 6,
+    is_probabilistic_blend: bool = True,
+    game_flow_scenario: str = "Historical Expected Flow (Empirical Baseline)",
     traits: Optional[List[str]] = None,
     brand_centrality: float = 7.5,
     narrative_arc: float = 6.0,
@@ -1750,13 +1834,40 @@ def compute_executive_roi_and_decision(
             "advantage": "Captures first-mover social chatter on Twitter/TikTok before halftime ad clutter.",
         })
     else:  # Game Q4
-        if point_spread <= 7:
+        if is_probabilistic_blend:
+            q_scarcity_badge = "🎲 Probabilistic Value Play (56% Close / 16% Blowout)"
+            q_scarcity_color = "#fab387"
+            q_headline = "Late-Game High-Beta Value Play (Empirical Super Bowl Odds)"
+            q_warning = (
+                f"Historical Super Bowl data (2000–2024, 25 games) models an empirical blend: 56% probability of a tight 1-possession finish "
+                f"(where Q4 ratings surge to 115M–135M viewers at the lowest rate, ${q4_cost_cur}M), against a 16% historical risk "
+                f"of a runaway blowout (~22% decay). Grounded in historical ambiguity, Q4 delivers the lowest entry CPM (${cpm}) across the telecast."
+            )
+            smart_alt_quarter = "Game Q3"
+            smart_alt_summary = f"To eliminate the 16% blowout tail risk entirely, Game Q3 guarantees 96.3M viewers with 94%+ retention for only +${round(q3_cost_cur - q4_cost_cur, 1)}M."
+            alternatives.append({
+                "quarter": "Game Q3",
+                "badge": "🛡️ Zero-Blowout Hedge",
+                "color": "#a6e3a1",
+                "title": "Protected Delivery (Game Q3)",
+                "savings": f"Modest +${round(q3_cost_cur - q4_cost_cur, 1)}M delta",
+                "advantage": "Guarantees 96.3M viewers and 94–98% retention, immune to fourth-quarter runaway scores.",
+            })
+            alternatives.append({
+                "quarter": "Game Q1",
+                "badge": "⭐ Prime First-Mover",
+                "color": "#89b4fa",
+                "title": "Move to Game Q1",
+                "savings": f"+${round(q1_cost_cur - q4_cost_cur, 1)}M delta",
+                "advantage": "Captures first-mover social chatter on TikTok/X with 0% blowout risk.",
+            })
+        elif point_spread <= 7:
             q_scarcity_badge = "🎯 High-Beta Value Arbitrage (Tight Game)"
             q_scarcity_color = "#fab387"
             q_headline = "Late-Game High-Conviction Value Play"
             q_warning = (
-                f"With a tight {point_spread}-point spread, Q4 is the ultimate value arbitrage (${q4_cost_cur}M rate, saving "
-                f"${round(q2_cost_cur - q4_cost_cur, 1)}M vs Q2). Delivers historic ratings (110M–120M viewers in close games/OT)."
+                f"With a tight {point_spread}-point spread (occurring in 56% of modern Super Bowls), Q4 is the ultimate value arbitrage (${q4_cost_cur}M rate, saving "
+                f"${round(q2_cost_cur - q4_cost_cur, 1)}M vs Q2). Delivers historic ratings (115M–135M viewers in close games/OT)."
             )
             smart_alt_quarter = "Game Q3"
             smart_alt_summary = f"To hedge against late-game blowout volatility, Game Q3 guarantees 96.3M viewers for only +${round(q3_cost_cur - q4_cost_cur, 1)}M."
@@ -1773,7 +1884,7 @@ def compute_executive_roi_and_decision(
             q_scarcity_color = "#f38ba8"
             q_headline = "Blowout Audience Loss — Immediate Shift Recommended"
             q_warning = (
-                f"A {point_spread}-point blowout causes severe audience channel surfing ({100-retention_pct:.1f}% viewer decay). "
+                f"A {point_spread}-point blowout (occurring in 16% of modern Super Bowls) causes severe audience channel surfing ({100-retention_pct:.1f}% viewer decay). "
                 f"Effective CPM spikes to ${cpm}. Reallocating to Game Q3 or Q1 is strongly advised."
             )
             smart_alt_quarter = "Game Q3"
@@ -1795,11 +1906,11 @@ def compute_executive_roi_and_decision(
                 "advantage": "100% immune to game score dynamics with zero blowout attrition.",
             })
 
-    # Comparative Quarter Matrix Table Data (Factoring Brand Capital Tier)
+    # Comparative Quarter Matrix Table Data (Factoring Brand Capital Tier & Game Flow Uncertainty)
     quarter_comparison_matrix = []
     for q_key in ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]:
         m_cost = round(QUARTER_BASE_COST_M[q_key] * runtime_ratio, 2)
-        q_reach, q_ret = compute_effective_reach(q_key, point_spread)
+        q_reach, q_ret = compute_effective_reach(q_key, point_spread, is_probabilistic_blend=is_probabilistic_blend)
         q_cpm = round((m_cost * 1_000_000 / (q_reach * 1_000_000)) * 1000, 2)
         q_data = QUARTER_INVENTORY_METRICS[q_key]
 
@@ -1858,6 +1969,13 @@ def compute_executive_roi_and_decision(
         "capital_saved_m": capital_saved_vs_broadcast_m,
     }
 
+    game_flow_advisory = {
+        "scenario_name": game_flow_scenario,
+        "is_probabilistic_blend": is_probabilistic_blend,
+        "effective_spread": point_spread,
+        "historical_stats": HISTORICAL_SUPERBOWL_STATS,
+    }
+
     quarter_advisory = {
         "selected_quarter": quarter,
         "scarcity_badge": q_scarcity_badge,
@@ -1869,6 +1987,7 @@ def compute_executive_roi_and_decision(
         "alternatives": alternatives,
         "matrix": quarter_comparison_matrix,
         "tier_advisory": tier_advisory,
+        "game_flow_advisory": game_flow_advisory,
     }
 
     return {

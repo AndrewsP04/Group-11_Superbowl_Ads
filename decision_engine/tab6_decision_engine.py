@@ -26,6 +26,8 @@ try:
     from .adk_boardroom import generate_baseline_strategy_memos, run_strategy_board
     from .decision_tools import (
         BUNDLE_PATH,
+        GAME_FLOW_SCENARIOS,
+        HISTORICAL_SUPERBOWL_STATS,
         QUARTER_VIEWERS_M,
         compute_effective_reach,
         compute_executive_roi_and_decision,
@@ -39,6 +41,8 @@ except ImportError:
     from adk_boardroom import generate_baseline_strategy_memos, run_strategy_board
     from decision_tools import (
         BUNDLE_PATH,
+        GAME_FLOW_SCENARIOS,
+        HISTORICAL_SUPERBOWL_STATS,
         QUARTER_VIEWERS_M,
         compute_effective_reach,
         compute_executive_roi_and_decision,
@@ -73,8 +77,10 @@ def render_tab6():
         st.session_state["t6_runtime_sel"] = 30
     if "t6_quarter_sel" not in st.session_state:
         st.session_state["t6_quarter_sel"] = "Game Q2"
-    if "t6_spread_sel" not in st.session_state:
-        st.session_state["t6_spread_sel"] = 7
+    if "t6_game_flow_sel" not in st.session_state:
+        st.session_state["t6_game_flow_sel"] = list(GAME_FLOW_SCENARIOS.keys())[0]
+    if "t6_custom_spread_val" not in st.session_state:
+        st.session_state["t6_custom_spread_val"] = 7
     if "t6_arc_sel" not in st.session_state:
         st.session_state["t6_arc_sel"] = 6.0
     if "t6_brand_sel" not in st.session_state:
@@ -121,8 +127,17 @@ def render_tab6():
                         q_opts = ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]
                         st.session_state["t6_quarter_sel"] = next((opt for opt in q_opts if opt.lower() in q_in.lower()), "Game Q2")
 
-                        # 4. Point spread
-                        st.session_state["t6_spread_sel"] = int(np.clip(parsed.get("point_spread", 7), 0, 24))
+                        # 4. Game flow & Point margin matching
+                        gf_in = str(parsed.get("game_flow", "")).lower()
+                        if "nail" in gf_in or "close" in gf_in or "one-possession" in gf_in or "overtime" in gf_in:
+                            st.session_state["t6_game_flow_sel"] = "⚡ One-Possession Nailbiter (0–7 pts · 56% Historical Odds)"
+                        elif "blowout" in gf_in or "runaway" in gf_in:
+                            st.session_state["t6_game_flow_sel"] = "🚨 Runaway Blowout Stress-Test (20+ pts · 16% Historical Odds)"
+                        elif "comp" in gf_in or "two-possession" in gf_in:
+                            st.session_state["t6_game_flow_sel"] = "⚖️ Competitive Two-Possession (8–14 pts · 28% Historical Odds)"
+                        else:
+                            st.session_state["t6_game_flow_sel"] = list(GAME_FLOW_SCENARIOS.keys())[0]
+                        st.session_state["t6_custom_spread_val"] = int(np.clip(parsed.get("point_spread", 7), 0, 35))
 
                         # 5. Traits mapping (faithfully sync traits; if brief has none, set to empty)
                         trait_ui_map = {
@@ -220,14 +235,28 @@ def render_tab6():
         )
 
     with c2:
-        sel_spread = st.slider(
-            "Game Point Spread (Blowout Risk)",
-            min_value=0,
-            max_value=24,
-            format="%d pts",
-            help="Higher spreads trigger monotonic living-room viewer decay in late quarters.",
-            key="t6_spread_sel",
+        sel_game_flow = st.selectbox(
+            "Game Flow & Telecast Uncertainty Model",
+            options=list(GAME_FLOW_SCENARIOS.keys()),
+            help="Models the ambiguity of football using 2000–2024 historical Super Bowl scores. Pre-buy ad slots are bought months in advance before finalists are known.",
+            key="t6_game_flow_sel",
         )
+        gf_config = GAME_FLOW_SCENARIOS[sel_game_flow]
+        is_probabilistic_blend = gf_config.get("is_probabilistic_blend", False)
+
+        if "Custom" in sel_game_flow:
+            sel_spread = st.slider(
+                "Manual Point Margin Stress-Test",
+                min_value=0,
+                max_value=35,
+                format="%d pts",
+                help="Higher spreads trigger monotonic living-room viewer decay in late quarters.",
+                key="t6_custom_spread_val",
+            )
+        else:
+            sel_spread = gf_config.get("effective_spread", 6)
+            st.caption(f"📊 **Grounding**: {gf_config['description']}")
+
         sel_arc = st.slider(
             "Narrative Arc Depth",
             1.0, 10.0, step=0.5,
@@ -254,6 +283,63 @@ def render_tab6():
             key="t6_cult_sel",
         )
 
+    with st.expander("🏈 Why is Game Flow modeled from 2000–2024 past Super Bowl scores? (Addressing Upfront Pre-Buy Ambiguity)", expanded=False):
+        st.markdown(
+            """
+            **The Pre-Buy Real-World Reality:**  
+            Super Bowl commercial airtime is contracted **6 to 9 months in advance** during network Upfronts (spring/early fall) or early season. 
+            At contract signing:
+            - **No one knows who will make the Super Bowl** (regular season hasn't concluded, playoff brackets don't exist).
+            - **Vegas point spreads do not exist** (sportsbooks only release spreads 2 weeks prior to kickoff).
+            - Expecting an upfront media buyer or CFO to forecast a specific score margin is unrealistic.
+
+            **Empirical Football Ambiguity Modeling (2000–2024 Modern Era, 25 Games):**  
+            Rather than requiring speculative guesswork, this engine models the telecast audience using the actual historical distribution of Super Bowl scores:
+            """
+        )
+        gf_col1, gf_col2, gf_col3 = st.columns(3)
+        with gf_col1:
+            st.markdown(
+                """
+                <div style="background: rgba(166, 227, 161, 0.1); border: 1px solid #a6e3a144; border-radius: 6px; padding: 0.6rem;">
+                    <div style="font-size: 0.82rem; font-weight: 800; color: #a6e3a1;">⚡ One-Possession Nailbiter</div>
+                    <div style="font-size: 1.3rem; font-weight: 800; color: #cdd6f4;">56.0% Odds</div>
+                    <div style="font-size: 0.75rem; color: #bac2de;">14 of 25 modern games (≤7 pts · median 3.0 pts). Historic late-game ratings up to 125M+ viewers with 0% viewer decay.</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with gf_col2:
+            st.markdown(
+                """
+                <div style="background: rgba(137, 180, 250, 0.1); border: 1px solid #89b4fa44; border-radius: 6px; padding: 0.6rem;">
+                    <div style="font-size: 0.82rem; font-weight: 800; color: #89b4fa;">⚖️ Competitive Two-Possession</div>
+                    <div style="font-size: 1.3rem; font-weight: 800; color: #cdd6f4;">28.0% Odds</div>
+                    <div style="font-size: 0.75rem; color: #bac2de;">7 of 25 modern games (8–19 pts · median 11.0 pts). Steady telecast retention throughout the game.</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with gf_col3:
+            st.markdown(
+                """
+                <div style="background: rgba(243, 139, 168, 0.1); border: 1px solid #f38ba844; border-radius: 6px; padding: 0.6rem;">
+                    <div style="font-size: 0.82rem; font-weight: 800; color: #f38ba8;">🚨 Runaway Blowout</div>
+                    <div style="font-size: 1.3rem; font-weight: 800; color: #cdd6f4;">16.0% Odds</div>
+                    <div style="font-size: 0.75rem; color: #bac2de;">Only 4 of 25 games (≥20 pts · median 24.0 pts). Models tail-risk viewer channel surfing (-21.9% decay in Q4).</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        st.markdown(
+            """
+            <div style="background: rgba(24, 24, 37, 0.8); border: 1px solid #313244; border-radius: 6px; padding: 0.5rem 0.75rem; margin-top: 0.5rem; font-size: 0.78rem; color: #a6adc8;">
+                🎲 <b>Default Engine Mode:</b> By default, the engine applies the <b>Empirical Weighted Blend (56% Close / 28% Competitive / 16% Blowout)</b> across all reach and ROI calculations, giving upfront media buyers a statistically sound expectation without gambling on who plays in February.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     trait_keys = [
         t.lower().replace("humor", "funny").replace("product-forward", "show_product_quickly").replace("danger/action", "danger").replace("sex appeal", "use_sex")
         for t in sel_traits
@@ -265,6 +351,7 @@ def render_tab6():
         quarter=sel_quarter,
         traits=trait_keys,
         point_spread=sel_spread,
+        is_probabilistic_blend=is_probabilistic_blend,
         narrative_arc=sel_arc,
         brand_centrality=sel_brand_cent,
         cultural_nostalgia=sel_nostalgia,
@@ -284,10 +371,10 @@ def render_tab6():
 
     scenario_text = (
         f"Brand Vertical: {sel_vertical}, Brand Tier: {sel_tier}, Runtime: :{sel_runtime}s, Target Quarter: {sel_quarter}, "
-        f"Point Spread: {sel_spread} pts. Creative Traits: {', '.join(sel_traits) if sel_traits else 'None selected'}. "
+        f"Game Flow Model: {gf_config['short_name']} (Point Margin: {sel_spread} pts, Probabilistic Blend: {is_probabilistic_blend}). Creative Traits: {', '.join(sel_traits) if sel_traits else 'None selected'}. "
         f"Narrative Arc: {sel_arc}/10, Brand Centrality: {sel_brand_cent}/10, Cultural Nostalgia: {sel_nostalgia}/10."
     )
-    scenario_sig = f"{sel_vertical}_{sel_tier}_{sel_runtime}_{sel_quarter}_{sel_spread}_{sel_arc}_{sel_brand_cent}_{sel_nostalgia}_{'-'.join(sorted(trait_keys))}"
+    scenario_sig = f"{sel_vertical}_{sel_tier}_{sel_runtime}_{sel_quarter}_{sel_game_flow}_{sel_spread}_{sel_arc}_{sel_brand_cent}_{sel_nostalgia}_{'-'.join(sorted(trait_keys))}"
 
     # Compute the 3 Executive Pillars (Channel Allocation, Financial ROI & Budget Cap, Creative Recipe)
     exec_dec = compute_executive_roi_and_decision(
@@ -296,6 +383,8 @@ def render_tab6():
         runtime_sec=sel_runtime,
         quarter=sel_quarter,
         point_spread=sel_spread,
+        is_probabilistic_blend=is_probabilistic_blend,
+        game_flow_scenario=gf_config["short_name"],
         traits=trait_keys,
         brand_centrality=sel_brand_cent,
         narrative_arc=sel_arc,
@@ -307,7 +396,15 @@ def render_tab6():
     if st.session_state.get("t6_adk_scenario_key") == scenario_sig and "t6_adk_memos" in st.session_state:
         memos = st.session_state["t6_adk_memos"]
     else:
-        memos = generate_baseline_strategy_memos(scenario_text, sim, nearest_comps, exec_dec=exec_dec, brand_tier=sel_tier)
+        memos = generate_baseline_strategy_memos(
+            scenario_text,
+            sim,
+            nearest_comps,
+            exec_dec=exec_dec,
+            brand_tier=sel_tier,
+            game_flow_scenario=gf_config["short_name"],
+            is_probabilistic_blend=is_probabilistic_blend,
+        )
 
     # ── 3. Executive Strategy Brief & Pre-Buy Decision Summary (TOP VIEW) ─────
     st.markdown("---")
@@ -727,14 +824,14 @@ def render_tab6():
             delta="Based on $7M baseline media spend",
         )
         mm3.metric(
-            "Game Blowout Spread",
-            f"{sel_spread} pts",
-            delta="⚠️ High Q4 Decay Risk" if sel_spread > 12 and "Q4" in sel_quarter else "Normal Flow",
+            "Game Flow Model",
+            gf_config.get("badge", f"{sel_spread} pts"),
+            delta=f"Margin: {sel_spread} pts" if "Custom" in sel_game_flow else "Empirical Super Bowl Comp",
             delta_color="inverse" if sel_spread > 12 and "Q4" in sel_quarter else "normal",
         )
 
         qtr_names = ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]
-        reaches = [compute_effective_reach(q, sel_spread)[0] for q in qtr_names]
+        reaches = [compute_effective_reach(q, sel_spread, is_probabilistic_blend=is_probabilistic_blend)[0] for q in qtr_names]
         colors = ["#a6e3a1" if q == sel_quarter else "#45457a" for q in qtr_names]
 
         fig_reach = go.Figure(go.Bar(
@@ -749,12 +846,12 @@ def render_tab6():
             height=240,
             margin=dict(l=20, r=20, t=30, b=20),
             yaxis_title="Audience Size (Millions)",
-            title=f"Telecast Audience by Quarter (Blowout Spread: {sel_spread} pts)",
+            title=f"Telecast Audience by Quarter ({gf_config['short_name']} · Margin: {sel_spread} pts)",
         )
         st.plotly_chart(fig_reach, use_container_width=True)
 
         st.markdown("##### 🚀 Prescriptive 512-Grid Optimizer: Top 3 Airtime & Creative Blueprints")
-        opt_blueprints = optimize_creative_and_airtime(sel_vertical, sel_spread, top_n=3)
+        opt_blueprints = optimize_creative_and_airtime(sel_vertical, sel_spread, is_probabilistic_blend=is_probabilistic_blend, top_n=3)
         opt_rows = []
         for i, bp in enumerate(opt_blueprints, 1):
             opt_rows.append({

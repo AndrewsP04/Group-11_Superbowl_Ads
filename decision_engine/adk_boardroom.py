@@ -174,6 +174,8 @@ def generate_baseline_strategy_memos(
     comps: List[Dict[str, Any]],
     exec_dec: Optional[Dict[str, Any]] = None,
     brand_tier: str = "Enterprise Megabrand ($15M+ Budget)",
+    game_flow_scenario: str = "Historical Expected Flow",
+    is_probabilistic_blend: bool = True,
 ) -> Dict[str, str]:
     """
     Generates deterministic, high-fidelity strategic stakeholder memos and consensus brief in 0ms.
@@ -191,16 +193,37 @@ def generate_baseline_strategy_memos(
 
     # Compute executive decision pillars if not provided
     if not exec_dec:
-        exec_dec = compute_executive_roi_and_decision(sim, brand_tier=brand_tier)
+        exec_dec = compute_executive_roi_and_decision(
+            sim,
+            brand_tier=brand_tier,
+            point_spread=sim.get("point_spread", 6),
+            is_probabilistic_blend=is_probabilistic_blend,
+            game_flow_scenario=game_flow_scenario,
+        )
 
     cv = exec_dec["channel_verdict"]
     fr = exec_dec["financial_roi"]
     cr = exec_dec["creative_recipe"]
     qa = exec_dec.get("quarter_advisory", {})
     ta = exec_dec.get("tier_advisory", {})
+    gf_adv = qa.get("game_flow_advisory", {})
     is_emerging = ta.get("is_emerging", False)
     is_challenger = ta.get("is_challenger", False)
     tier_badge = ta.get("tier_badge", "🏛️ Megabrand ($15M+)")
+
+    scenario_label = gf_adv.get("scenario_name", game_flow_scenario)
+    blend_active = gf_adv.get("is_probabilistic_blend", is_probabilistic_blend)
+    if blend_active:
+        flow_context = (
+            "Pre-buy audience projection utilizes the **2000–2024 Modern Super Bowl Empirical Distribution** "
+            "(56% close nailbiters, 28% competitive, 16% runaway blowouts), acknowledging that upfront commercial inventory "
+            "is contracted months before playoff seeds or matchups are determined."
+        )
+    else:
+        flow_context = (
+            f"Pre-buy sensitivity stress-test models the **{scenario_label}** scenario "
+            f"(effective margin: {gf_adv.get('effective_spread', 6)} pts) to stress-test telecast retention downside."
+        )
 
     # Creative Strategy Memo
     creative_memo = (
@@ -223,6 +246,9 @@ def generate_baseline_strategy_memos(
     media_memo = (
         f"**Airtime Allocation & Audience Delivery:**\n"
         f"Telecast delivery is projected at **{reach}M living-room viewers** (**{retention}%** audience retention index) at an Effective Broadcast CPM of **${cpm}** against the upfront ${fr['airtime_cost_m']}M airtime allocation.\n\n"
+        f"**Game Score Flow & Upfront Pre-Buy Model:**\n"
+        f"• **Scenario:** {scenario_label}\n"
+        f"• **Rationale:** {flow_context}\n\n"
         f"**Quarter Allotment & Scarcity Advisory ({qa.get('selected_quarter', 'Quarter')}):**\n"
         f"• Status: {qa.get('scarcity_badge', '')}\n"
         f"• Intelligence: {qa.get('warning', '')}\n"
@@ -275,6 +301,7 @@ def generate_baseline_strategy_memos(
         f"**1. Strategic Channel Verdict: {cv['badge']}**\n"
         f"- **Primary Finding:** {cv['summary']}. {cv['headline']}\n"
         f"- **Broadcast Delivery:** {reach}M living-room viewers delivered at ${cpm} Effective CPM ({retention}% retention).\n"
+        f"- **Game Flow Uncertainty Model:** {scenario_label} ({flow_context})\n"
         f"- **Quarter Allotment Strategy:** {qa.get('headline', '')} — {qa.get('smart_alt_summary', '')}\n"
         f"- **Social Media Tradeoff:** {cv['social_comparison']}\n\n"
         f"**2. Financial ROI & Budget Cap (Total Capital: ${fr['total_capital_m']}M):**\n"

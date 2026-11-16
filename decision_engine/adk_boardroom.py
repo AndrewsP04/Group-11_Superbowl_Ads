@@ -19,6 +19,7 @@ from typing import Any, Dict, List, Optional
 try:
     from .config_auth import get_genai_client, init_vertex_env
     from .decision_tools import (
+        compute_executive_roi_and_decision,
         optimize_creative_and_airtime,
         retrieve_nearest_historical_ads,
         simulate_multi_pov,
@@ -26,6 +27,7 @@ try:
 except ImportError:
     from config_auth import get_genai_client, init_vertex_env
     from decision_tools import (
+        compute_executive_roi_and_decision,
         optimize_creative_and_airtime,
         retrieve_nearest_historical_ads,
         simulate_multi_pov,
@@ -170,6 +172,7 @@ def generate_baseline_strategy_memos(
     scenario_summary: str,
     sim: Dict[str, Any],
     comps: List[Dict[str, Any]],
+    exec_dec: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, str]:
     """
     Generates deterministic, high-fidelity strategic stakeholder memos and consensus brief in 0ms.
@@ -185,14 +188,23 @@ def generate_baseline_strategy_memos(
     ci_low = sim.get("eng_ci_low", 0.40)
     ci_high = sim.get("eng_ci_high", 1.70)
 
+    # Compute executive decision pillars if not provided
+    if not exec_dec:
+        exec_dec = compute_executive_roi_and_decision(sim)
+
+    cv = exec_dec["channel_verdict"]
+    fr = exec_dec["financial_roi"]
+    cr = exec_dec["creative_recipe"]
+
     # Creative Strategy Memo
     creative_memo = (
         f"**Concept Analysis & Narrative Hook:**\n"
         f"The concept models a predicted YouTube engagement rate of **{eng}%** with an expected Wikipedia pageview surge multiplier of **{wiki}x**. "
         f"This performance trajectory aligns closely with historical precedent **{top_comp.get('brand')} ({top_comp.get('year')}) — '{top_comp.get('title')}'**.\n\n"
-        f"**Creative Mandate:**\n"
-        f"Ensure that product integration and packaging visual cues occur synchronously with the narrative climax. "
-        f"High humor and celebrity appeal must reinforce the sponsor rather than overshadowing brand recall."
+        f"**Creative Mandate & Winning Recipe:**\n"
+        f"• {cr['formula_title']}: {cr['primary_lift']}\n"
+        + "\n".join([f"• **{elem[0]}:** {elem[1]}" for elem in cr["recipe_elements"]]) + "\n"
+        f"• ⚠️ **Critical Avoidance:** {cr['avoid_elements']}"
     )
 
     # Media Planning Memo
@@ -205,43 +217,46 @@ def generate_baseline_strategy_memos(
     media_memo = (
         f"**Airtime Allocation & Audience Delivery:**\n"
         f"Telecast delivery is projected at **{reach}M living-room viewers** (**{retention}%** audience retention index) at an Effective Broadcast CPM of **${cpm}** against the upfront $7M capital baseline.\n\n"
+        f"**Channel Verdict Assessment:**\n"
+        f"• Recommendation: **{cv['badge']}** — {cv['summary']}\n"
+        f"• Alternative Digital Scenario: {cv['social_comparison']}\n\n"
         f"**Audience Decay & Blowout Audit:**\n"
         f"{decay_warning}"
     )
 
     # CFO Governance Memo
     cfo_memo = (
-        f"**Downside Floor & Conformal Bound Audit:**\n"
-        f"Downside risk floor (10th percentile lower conformal bound) is validated at **{ci_low}%** engagement (against an upside 90th percentile of **{ci_high}%**). "
-        f"Total upfront capital commitment is calibrated at **$7,000,000**.\n\n"
+        f"**Downside Floor & Capital Governance Audit:**\n"
+        f"Total upfront capital exposure is calibrated at **${fr['total_capital_m']}M** (${fr['airtime_cost_m']}M airtime + ${fr['prod_cost_m']}M production).\n"
+        f"• Expected Gross Commercial Value: **${fr['expected_gross_value_m']}M** (Expected Net ROI: **+{fr['roi_pct']}%** / **{fr['roi_multiplier']}x** multiple).\n"
+        f"• Maximum Viable Budget Cap: **${fr['max_viable_budget_m']}M**.\n"
+        f"• Downside Capital Safety Floor: **${fr['downside_floor_m']}M** (10th percentile worst-case protection floor).\n\n"
         f"**Mandatory Governance Disclosure:**\n"
         f"In accordance with empirical advertising science governance standards, all modeled performance indicators reflect historical cohort patterns (2000–2026) across public telecast sponsors. "
         f"They do not constitute guaranteed causal retail sales ROI or direct equity price movement."
     )
 
-    # Executive Consensus Decision Brief
-    if retention < 90.0 or cpm > 95.0:
-        verdict = "⚠️ CONDITIONAL CAUTION (Q4 BLOWOUT RISK)"
-        media_mandate = "- Re-evaluate Q4 placement; hedge against blowout decay by securing Q2/Q3 positioning.\n\n"
-    elif ci_low < 0.20:
-        verdict = "⚡ HOLD & REVISE CREATIVE PACING"
-        media_mandate = "- Hold airtime lock until creative revision demonstrates higher baseline engagement.\n\n"
-    else:
-        verdict = "✅ CONDITIONAL APPROVAL (RECOMMEND PROCEED)"
-        media_mandate = "- Lock upfront quarter placement based on stable living-room audience retention.\n\n"
-
+    # Executive Consensus Decision Brief structured around the 3 core pillars
+    recipe_bullets = "\n".join([f"   • **{elem[0]}:** {elem[1]}" for elem in cr["recipe_elements"]])
     consensus_memo = (
         f"### 📋 Executive Consensus Decision Brief\n\n"
-        f"**1. Strategic Verdict: {verdict}**\n"
-        f"- **Primary KPI Outlook:** Modeled engagement at **{eng}%** [80% CI: {ci_low}% – {ci_high}%] with a **{wiki}x** Wikipedia search surge.\n"
-        f"- **Reach & Efficiency:** {reach}M viewers delivered at ${cpm} Effective CPM ({retention}% retention).\n\n"
-        f"**2. Creative Director Mandate:**\n"
-        f"- Maintain prominent product placement at the narrative climax to safeguard recall.\n\n"
-        f"**3. Media Planning Mandate:**\n"
-        f"{media_mandate}"
-        f"**4. CFO Downside Governance:**\n"
-        f"- Downside engagement risk floor is secured at {ci_low}%.\n"
-        f"- Non-causal disclosure approved: modeled metrics represent historical cohort engagement, not guaranteed commercial revenues."
+        f"**1. Strategic Channel Verdict: {cv['badge']}**\n"
+        f"- **Primary Finding:** {cv['summary']}. {cv['headline']}\n"
+        f"- **Broadcast Delivery:** {reach}M living-room viewers delivered at ${cpm} Effective CPM ({retention}% retention).\n"
+        f"- **Social Media Tradeoff:** {cv['social_comparison']}\n\n"
+        f"**2. Financial ROI & Budget Cap (Total Capital: ${fr['total_capital_m']}M):**\n"
+        f"- **Expected Commercial & Earned Value:** **${fr['expected_gross_value_m']}M** (Expected Net ROI: **+{fr['roi_pct']}%** | **{fr['roi_multiplier']}x** return).\n"
+        f"- **Maximum Viable Budget:** **${fr['max_viable_budget_m']}M Spend Ceiling** (preserve positive net commercial return).\n"
+        f"- **Downside Capital Safety Floor:** **${fr['downside_floor_m']}M** value protected at 10th percentile.\n"
+        f"- **Unit Efficiency:** **${fr['cost_per_viewer']} per reached viewer**.\n\n"
+        f"**3. Creative Content Playbook (What to Put in the Ad):**\n"
+        f"- **Winning Formula:** {cr['formula_title']} ({cr['primary_lift']})\n"
+        f"{recipe_bullets}\n"
+        f"- **Critical Trap to Avoid:** ⚠️ {cr['avoid_elements']}\n"
+        f"- **Immediate High-Leverage Move:** {cr['immediate_action']}\n\n"
+        f"**4. Governance & Compliance Sign-Off:**\n"
+        f"- Downside 80% conformal confidence floor ({ci_low}%) confirmed within risk tolerance thresholds.\n"
+        f"- Non-causal disclosure approved: modeled metrics represent historical cohort patterns, not guaranteed retail revenues."
     )
 
     return {

@@ -28,6 +28,7 @@ try:
         BUNDLE_PATH,
         QUARTER_VIEWERS_M,
         compute_effective_reach,
+        compute_executive_roi_and_decision,
         load_bundle,
         optimize_creative_and_airtime,
         parse_concept_pitch_to_controls,
@@ -40,6 +41,7 @@ except ImportError:
         BUNDLE_PATH,
         QUARTER_VIEWERS_M,
         compute_effective_reach,
+        compute_executive_roi_and_decision,
         load_bundle,
         optimize_creative_and_airtime,
         parse_concept_pitch_to_controls,
@@ -92,7 +94,9 @@ def render_tab6():
             if pitch_input.strip():
                 with st.spinner("Extracting parameters with Gemini 3.5 Flash Lite..."):
                     parsed = parse_concept_pitch_to_controls(pitch_input)
-                    if parsed:
+                    if parsed and not parsed.get("is_valid_brief", True):
+                        st.error(f"⚠️ {parsed.get('error_message', 'Invalid brief. Please enter a valid commercial storyboard concept.')}")
+                    elif parsed:
                         # 1. Vertical matching
                         v_in = parsed.get("vertical", "Snacks / Food")
                         v_opts = ["Snacks / Food", "Beverage / FMCG", "Automotive", "Consumer Tech"]
@@ -112,7 +116,7 @@ def render_tab6():
                         # 4. Point spread
                         st.session_state["t6_spread_sel"] = int(np.clip(parsed.get("point_spread", 7), 0, 24))
 
-                        # 5. Traits mapping
+                        # 5. Traits mapping (faithfully sync traits; if brief has none, set to empty)
                         trait_ui_map = {
                             "funny": "Humor",
                             "humor": "Humor",
@@ -134,8 +138,7 @@ def render_tab6():
                             for k, v in trait_ui_map.items():
                                 if k in t_clean and v not in synced_traits:
                                     synced_traits.append(v)
-                        if synced_traits:
-                            st.session_state["t6_traits_sel"] = synced_traits
+                        st.session_state["t6_traits_sel"] = synced_traits
 
                         # 6. Continuous semantic scores
                         st.session_state["t6_arc_sel"] = float(np.clip(parsed.get("narrative_arc", 6.0), 1.0, 10.0))
@@ -241,44 +244,136 @@ def render_tab6():
     )
     scenario_sig = f"{sel_vertical}_{sel_runtime}_{sel_quarter}_{sel_spread}_{sel_arc}_{sel_brand_cent}_{sel_nostalgia}_{'-'.join(sorted(trait_keys))}"
 
+    # Compute the 3 Executive Pillars (Channel Allocation, Financial ROI & Budget Cap, Creative Recipe)
+    exec_dec = compute_executive_roi_and_decision(
+        sim=sim,
+        vertical=sel_vertical,
+        runtime_sec=sel_runtime,
+        quarter=sel_quarter,
+        point_spread=sel_spread,
+        traits=trait_keys,
+        brand_centrality=sel_brand_cent,
+        narrative_arc=sel_arc,
+        cultural_nostalgia=sel_nostalgia,
+    )
+
     # Maintain or generate strategic memos
     if st.session_state.get("t6_adk_scenario_key") == scenario_sig and "t6_adk_memos" in st.session_state:
         memos = st.session_state["t6_adk_memos"]
     else:
-        memos = generate_baseline_strategy_memos(scenario_text, sim, nearest_comps)
+        memos = generate_baseline_strategy_memos(scenario_text, sim, nearest_comps, exec_dec=exec_dec)
 
     # ── 3. Executive Strategy Brief & Pre-Buy Decision Summary (TOP VIEW) ─────
     st.markdown("---")
     st.markdown("### 📋 Executive Strategy Brief & Pre-Buy Decision Summary")
-    st.caption("Synthesized cross-functional decision brief for executive leadership: core KPIs, strategic mandates, and governance clearance.")
+    st.caption("Synthesized cross-functional decision brief for executive leadership: channel choice, financial ROI & spending limits, and winning creative playbook.")
 
-    # Headline 4-KPI Row
-    kpi1, kpi2, kpi3, kpi4 = st.columns(4)
-    with kpi1:
-        st.metric(
-            "Predicted YouTube Engagement",
-            f"{sim['pred_eng_pct']}%",
-            delta=f"80% CI: {sim['eng_ci_low']}% – {sim['eng_ci_high']}%",
+    # 3 High-Impact Executive Pillar Cards (Replacing the previous 4 KPI row)
+    c_p1, c_p2, c_p3 = st.columns(3)
+
+    cv = exec_dec["channel_verdict"]
+    fr = exec_dec["financial_roi"]
+    cr = exec_dec["creative_recipe"]
+
+    with c_p1:
+        st.markdown(
+            f"""
+            <div style="background: #181825; border: 1px solid #313244; border-top: 4px solid {cv['color']}; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">1. Channel Choice</span>
+                        <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(166, 227, 161, 0.15); color: {cv['color']}; font-weight: 700; border: 1px solid {cv['color']}55;">{cv['badge']}</span>
+                    </div>
+                    <div style="font-size: 1.05rem; font-weight: 700; color: #cdd6f4; margin-bottom: 0.4rem; line-height: 1.3;">
+                        {cv['summary']}
+                    </div>
+                    <div style="font-size: 0.83rem; color: #bac2de; line-height: 1.45; margin-bottom: 0.6rem;">
+                        {cv['detail']}
+                    </div>
+                </div>
+                <div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.55rem 0.7rem; font-size: 0.78rem; color: #a6adc8; line-height: 1.4;">
+                    💡 <b>Social Media Tradeoff:</b> {cv['social_comparison']}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-    with kpi2:
-        st.metric(
-            "Predicted Wikipedia Surge",
-            f"{sim['pred_wiki_mult']}x",
-            delta=f"80% CI: {sim['wiki_ci_low']}x – {sim['wiki_ci_high']}x",
+
+    with c_p2:
+        roi_sign = "+" if fr['net_profit_m'] >= 0 else ""
+        roi_color = "#a6e3a1" if fr['net_profit_m'] >= 0 else "#f38ba8"
+        st.markdown(
+            f"""
+            <div style="background: #181825; border: 1px solid #313244; border-top: 4px solid #89b4fa; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">2. Financial ROI & Budget Cap</span>
+                        <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(137, 180, 250, 0.15); color: #89b4fa; font-weight: 700; border: 1px solid #89b4fa55;">💰 {fr['roi_multiplier']}x ROI Return</span>
+                    </div>
+                    <div style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.2rem;">
+                        <span style="font-size: 1.65rem; font-weight: 800; color: #cdd6f4;">${fr['expected_gross_value_m']}M</span>
+                        <span style="font-size: 0.85rem; color: {roi_color}; font-weight: 700;">({roi_sign}{fr['roi_pct']}% Net ROI)</span>
+                    </div>
+                    <div style="font-size: 0.77rem; color: #a6adc8; margin-bottom: 0.6rem;">
+                        Expected Commercial & Earned Media Brand Value
+                    </div>
+                    <div style="font-size: 0.82rem; color: #cdd6f4; line-height: 1.5; border-top: 1px solid #313244; padding-top: 0.5rem;">
+                        • <b>Max Viable Budget:</b> <span style="color: #fab387; font-weight: 700;">${fr['max_viable_budget_m']}M Spend Ceiling</span><br/>
+                        • <b>Capital Outlay:</b> ${fr['total_capital_m']}M (${fr['airtime_cost_m']}M Airtime + ${fr['prod_cost_m']}M Prod)<br/>
+                        • <b>Downside Safety Floor:</b> ${fr['downside_floor_m']}M (10th %ile Capital Protection)
+                    </div>
+                </div>
+                <div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.78rem; color: #a6adc8; margin-top: 0.4rem;">
+                    💵 <b>Breakeven Spend:</b> <b>${fr['cost_per_viewer']} / viewer reached</b> (${sim['effective_cpm_usd']} CPM)
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-    with kpi3:
-        st.metric(
-            f"Effective Telecast Reach ({sel_quarter})",
-            f"{sim['effective_reach_m']}M",
-            delta=f"Retention: {sim['retention_pct']}% (${sim['effective_cpm_usd']} CPM)",
+
+    with c_p3:
+        bullets_html = "".join([f"<li style='margin-bottom: 0.25rem;'><b>{title}:</b> <span style='color: #bac2de;'>{desc}</span></li>" for title, desc in cr['recipe_elements']])
+        st.markdown(
+            f"""
+            <div style="background: #181825; border: 1px solid #313244; border-top: 4px solid #fab387; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">3. Creative Content Recipe</span>
+                        <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(250, 179, 135, 0.15); color: #fab387; font-weight: 700; border: 1px solid #fab38755;">⚡ What to Put in Ad</span>
+                    </div>
+                    <div style="font-size: 0.88rem; font-weight: 700; color: #fab387; margin-bottom: 0.35rem;">
+                        {cr['formula_title']}
+                    </div>
+                    <ul style="font-size: 0.78rem; color: #cdd6f4; padding-left: 1.1rem; margin-bottom: 0.5rem; line-height: 1.35;">
+                        {bullets_html}
+                    </ul>
+                </div>
+                <div>
+                    <div style="font-size: 0.77rem; color: #f38ba8; margin-bottom: 0.35rem; line-height: 1.3;">
+                        ⚠️ <b>{cr['avoid_elements']}</b>
+                    </div>
+                    <div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.76rem; color: #a6e3a1; font-weight: 600;">
+                        🚀 {cr['immediate_action']}
+                    </div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-    with kpi4:
-        st.metric(
-            "Downside Risk Floor (10th %ile)",
-            f"{sim['eng_ci_low']}%",
-            delta="Lower 80% Conformal Bound",
-            delta_color="off",
-        )
+
+    # Streamlined Supporting Telemetry Ribbon
+    st.markdown(
+        f"""
+        <div style="background: rgba(24, 24, 37, 0.6); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.9rem; margin: 0.75rem 0 1rem 0; font-size: 0.79rem; color: #a6adc8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <span>📡 <b>Telecast Delivery:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['effective_reach_m']}M viewers ({sim['retention_pct']}% retention)</span></span>
+            <span>💵 <b>Effective CPM:</b> <span style="color: #cdd6f4; font-weight: 600;">${sim['effective_cpm_usd']}</span></span>
+            <span>📈 <b>Predicted YouTube Engagement:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['pred_eng_pct']}% [CI: {sim['eng_ci_low']}%–{sim['eng_ci_high']}%]</span></span>
+            <span>🔍 <b>Search Surge:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['pred_wiki_mult']}x</span></span>
+            <span>🛡️ <b>Downside Risk Floor:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['eng_ci_low']}%</span></span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # Executive Consensus Brief Box
     consensus_text = memos.get("consensus", "Executive strategy brief is being calibrated.")

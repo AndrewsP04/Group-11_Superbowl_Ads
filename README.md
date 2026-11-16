@@ -14,7 +14,7 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 - **Memory:** Minimum 4 GB RAM (8 GB+ recommended for local EBM model fitting & 3072-d embeddings)
 
 ### **2. Cloud & API Keys**
-- **Google Gemini / Vertex AI:** `GEMINI_API_KEY` (Required for natural language storyboard parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom)
+- **Google Agent Platform / Vertex AI / Gemini:** `GEMINI_API_KEY` (Required for natural language storyboard parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom; supports Google Agent Platform keys `AQ....` or Gemini API keys)
 - **YouTube Data API v3:** `YOUTUBE_API_KEY` (Required for real-time live YouTube search augmentation in Tab 6 and raw extraction notebooks; if omitted, the platform falls back strictly to the offline 2000–2020 archive)
 
 ### **3. Key Python Dependencies (`requirements.txt`)**
@@ -128,12 +128,12 @@ Group-11_Superbowl_Ads/
 Create or update a `.env` file in the project root:
 
 ```ini
-GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_API_KEY=your_agent_platform_api_key_here
 GOOGLE_GENAI_USE_VERTEXAI=TRUE
 YOUTUBE_API_KEY=your_youtube_api_key_here  # Required for real-time YouTube commercial pulls (Tab 6) & scraping
 ```
 
-* **`GEMINI_API_KEY`**: Authenticates Google GenAI API calls on Vertex AI.
+* **`GEMINI_API_KEY`**: Authenticates Google Agent Platform / Vertex AI calls (supports Agent Platform API keys starting with `AQ....` or Gemini API keys).
 * **`GOOGLE_GENAI_USE_VERTEXAI=TRUE`**: Directs SDK and Google ADK calls through Vertex AI Agent Platform endpoints.
 * **`YOUTUBE_API_KEY`**: Required to query the YouTube Data API v3 for live Big Game commercial pulls in Tab 6 (e.g. pulling modern Apple, Google Pixel, or OpenAI ads not found in the offline 2000–2020 dataset). If omitted, the application runs normally but falls back to the static historical archive.
 * **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure keys are rotated in Google Cloud Console (`itcs-5122-513114`) before public distribution.

@@ -166,6 +166,92 @@ def run_strategy_board(
         return _run_direct_gemini_fallback(scenario_summary, simulation_results, nearest_comps, client)
 
 
+def generate_baseline_strategy_memos(
+    scenario_summary: str,
+    sim: Dict[str, Any],
+    comps: List[Dict[str, Any]],
+) -> Dict[str, str]:
+    """
+    Generates deterministic, high-fidelity strategic stakeholder memos and consensus brief in 0ms.
+    Used for instant Executive Summary rendering and fallback.
+    """
+    top_comp = comps[0] if comps else {"brand": "Doritos", "year": 2020, "title": "Historical Super Bowl Comps"}
+
+    eng = sim.get("pred_eng_pct", 0.85)
+    wiki = sim.get("pred_wiki_mult", 3.2)
+    reach = sim.get("effective_reach_m", 102.1)
+    retention = sim.get("retention_pct", 98.2)
+    cpm = sim.get("effective_cpm_usd", 68.57)
+    ci_low = sim.get("eng_ci_low", 0.40)
+    ci_high = sim.get("eng_ci_high", 1.70)
+
+    # Creative Strategy Memo
+    creative_memo = (
+        f"**Concept Analysis & Narrative Hook:**\n"
+        f"The concept models a predicted YouTube engagement rate of **{eng}%** with an expected Wikipedia pageview surge multiplier of **{wiki}x**. "
+        f"This performance trajectory aligns closely with historical precedent **{top_comp.get('brand')} ({top_comp.get('year')}) — '{top_comp.get('title')}'**.\n\n"
+        f"**Creative Mandate:**\n"
+        f"Ensure that product integration and packaging visual cues occur synchronously with the narrative climax. "
+        f"High humor and celebrity appeal must reinforce the sponsor rather than overshadowing brand recall."
+    )
+
+    # Media Planning Memo
+    decay_warning = (
+        "⚠️ **CRITICAL WARNING:** Late-game airtime (Game Q4) paired with a high point spread creates severe risk of audience attrition "
+        f"and spikes Effective CPM (${cpm}) above efficient thresholds. Strongly recommend front-loading airtime into Game Q2 or Q3."
+        if (retention < 90.0 or cpm > 95.0)
+        else "Audience flow shows resilient viewer retention under current point spread conditions with no immediate blowout penalty."
+    )
+    media_memo = (
+        f"**Airtime Allocation & Audience Delivery:**\n"
+        f"Telecast delivery is projected at **{reach}M living-room viewers** (**{retention}%** audience retention index) at an Effective Broadcast CPM of **${cpm}** against the upfront $7M capital baseline.\n\n"
+        f"**Audience Decay & Blowout Audit:**\n"
+        f"{decay_warning}"
+    )
+
+    # CFO Governance Memo
+    cfo_memo = (
+        f"**Downside Floor & Conformal Bound Audit:**\n"
+        f"Downside risk floor (10th percentile lower conformal bound) is validated at **{ci_low}%** engagement (against an upside 90th percentile of **{ci_high}%**). "
+        f"Total upfront capital commitment is calibrated at **$7,000,000**.\n\n"
+        f"**Mandatory Governance Disclosure:**\n"
+        f"In accordance with empirical advertising science governance standards, all modeled performance indicators reflect historical cohort patterns (2000–2026) across public telecast sponsors. "
+        f"They do not constitute guaranteed causal retail sales ROI or direct equity price movement."
+    )
+
+    # Executive Consensus Decision Brief
+    if retention < 90.0 or cpm > 95.0:
+        verdict = "⚠️ CONDITIONAL CAUTION (Q4 BLOWOUT RISK)"
+        media_mandate = "- Re-evaluate Q4 placement; hedge against blowout decay by securing Q2/Q3 positioning.\n\n"
+    elif ci_low < 0.20:
+        verdict = "⚡ HOLD & REVISE CREATIVE PACING"
+        media_mandate = "- Hold airtime lock until creative revision demonstrates higher baseline engagement.\n\n"
+    else:
+        verdict = "✅ CONDITIONAL APPROVAL (RECOMMEND PROCEED)"
+        media_mandate = "- Lock upfront quarter placement based on stable living-room audience retention.\n\n"
+
+    consensus_memo = (
+        f"### 📋 Executive Consensus Decision Brief\n\n"
+        f"**1. Strategic Verdict: {verdict}**\n"
+        f"- **Primary KPI Outlook:** Modeled engagement at **{eng}%** [80% CI: {ci_low}% – {ci_high}%] with a **{wiki}x** Wikipedia search surge.\n"
+        f"- **Reach & Efficiency:** {reach}M viewers delivered at ${cpm} Effective CPM ({retention}% retention).\n\n"
+        f"**2. Creative Director Mandate:**\n"
+        f"- Maintain prominent product placement at the narrative climax to safeguard recall.\n\n"
+        f"**3. Media Planning Mandate:**\n"
+        f"{media_mandate}"
+        f"**4. CFO Downside Governance:**\n"
+        f"- Downside engagement risk floor is secured at {ci_low}%.\n"
+        f"- Non-causal disclosure approved: modeled metrics represent historical cohort engagement, not guaranteed commercial revenues."
+    )
+
+    return {
+        "creative": creative_memo,
+        "media": media_memo,
+        "cfo": cfo_memo,
+        "consensus": consensus_memo,
+    }
+
+
 def _run_direct_gemini_fallback(
     scenario_summary: str,
     sim: Dict[str, Any],
@@ -176,12 +262,7 @@ def _run_direct_gemini_fallback(
     Direct prompt-engineered fallback that produces the exact 3 stakeholder memos + consensus.
     """
     if not client:
-        return {
-            "creative": "Creative Director: Concept demonstrates strong engagement potential based on historical comps.",
-            "media": "Media Planner: Quarter placement provides stable living-room audience reach.",
-            "cfo": "CFO Risk: Modeled lift within expected variance. Caution against fourth-quarter blowout risks.",
-            "consensus": "Executive Consensus: Proceed with concept subject to creative lock and airtime confirmation.",
-        }
+        return generate_baseline_strategy_memos(scenario_summary, sim, comps)
 
     prompt = (
         f"You are simulating a 3-person executive strategy board for a $7M Super Bowl commercial buy:\n"
@@ -199,33 +280,8 @@ def _run_direct_gemini_fallback(
     try:
         resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
         return _parse_memos_from_text(resp.text)
-    except Exception as e:
-        top_comp = comps[0] if comps else {"brand": "Doritos", "year": 2020, "title": "Historical Super Bowl Comps"}
-        return {
-            "creative": (
-                f"Creative Director Memo: Concept achieves a strong predicted YouTube engagement of {sim.get('pred_eng_pct', 0.85)}% "
-                f"and a {sim.get('pred_wiki_mult', 3.2)}x Wikipedia attention surge. The narrative structure aligns closely with "
-                f"{top_comp.get('brand')} ({top_comp.get('year')}) — '{top_comp.get('title')}'. "
-                f"We strongly endorse the creative direction, recommending high product visibility during the humor setup."
-            ),
-            "media": (
-                f"Media Planning Memo: Telecast delivery is calibrated at {sim.get('effective_reach_m', 102.1)}M living-room viewers "
-                f"({sim.get('retention_pct', 98.2)}% audience retention) at an Effective CPM of ${sim.get('effective_cpm_usd', 68.57)}. "
-                f"Target placement avoids late-game blowout volatility under current point spread conditions."
-            ),
-            "cfo": (
-                f"CFO Governance Memo: Approved with an 80% conformal confidence interval of {sim.get('eng_ci_low', 0.4)}% to "
-                f"{sim.get('eng_ci_high', 1.7)}% engagement. Disclaimer: In compliance with ITCS 5122 governance standards, "
-                f"projected lift metrics represent modeled historical cohort patterns and do not constitute guaranteed causal sales revenue."
-            ),
-            "consensus": (
-                f"Executive Consensus Pre-Buy Brief:\n\n"
-                f"1. VERDICT: Conditional Approval to proceed with pre-production.\n"
-                f"2. CREATIVE MANDATE: Protect product pacing to ensure brand recall does not lag creative humor.\n"
-                f"3. AIRTIME LOCK: Target quarter approved based on living-room viewer retention.\n"
-                f"4. RISK DISCLOSURE: Downside risk floor validated at {sim.get('eng_ci_low', 0.4)}% engagement."
-            ),
-        }
+    except Exception:
+        return generate_baseline_strategy_memos(scenario_summary, sim, comps)
 
 
 def _parse_memos_from_text(full_text: str) -> Dict[str, str]:

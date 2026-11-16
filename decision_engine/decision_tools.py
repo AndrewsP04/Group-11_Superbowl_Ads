@@ -15,6 +15,7 @@ from __future__ import annotations
 import itertools
 import json
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -260,6 +261,56 @@ def simulate_multi_pov(
     }
 
 
+def clean_ad_title(title_val: Any, brand: str, year: int, sb_url: Any = None) -> str:
+    """
+    Ensures a commercial spot never has 'nan' or empty title.
+    Extracts descriptive title from superbowl_ads_dot_com_url or fallback.
+    """
+    if title_val is not None and not (isinstance(title_val, float) and np.isnan(title_val)):
+        s_title = str(title_val).strip()
+        if s_title and s_title.lower() not in ["nan", "none", "null", "undefined"]:
+            # Clean file extensions like .mp4, .mov, etc.
+            s_title = re.sub(r"\.(mp4|mov|avi|wmv|mkv)$", "", s_title, flags=re.IGNORECASE).strip()
+            # Clean leading/trailing brackets like [HQ] or [HD]
+            s_title = re.sub(r"\[(HD|HQ|720p|1080p|Official)\]", "", s_title, flags=re.IGNORECASE).strip()
+            if s_title:
+                return s_title
+
+    if sb_url is not None and not (isinstance(sb_url, float) and np.isnan(sb_url)):
+        raw_url = str(sb_url).strip()
+        if "superbowl-ads.com" in raw_url:
+            slug = raw_url.rstrip("/").split("/")[-1]
+            slug = re.sub(r"^\d{4}-", "", slug)
+            slug = re.sub(rf"^{re.escape(str(brand).lower())}-", "", slug, flags=re.IGNORECASE)
+            slug = re.sub(r"super-bowl(-\w+)?-commercial-?", "", slug, flags=re.IGNORECASE)
+            slug = re.sub(r"super-bowl(-\w+)?-ad-?", "", slug, flags=re.IGNORECASE)
+            slug = re.sub(r"super-bowl-?", "", slug, flags=re.IGNORECASE)
+            words = [w.capitalize() for w in slug.split("-") if w]
+            clean = " ".join(words).strip()
+            if clean:
+                return clean
+
+    return f"{brand} Super Bowl Commercial ({year})"
+
+
+def clean_ad_url(url_val: Any, brand: str, year: int, title: str, sb_url: Any = None) -> str:
+    """
+    Ensures a commercial spot has a valid clickable link (never 'nan').
+    """
+    if url_val is not None and not (isinstance(url_val, float) and np.isnan(url_val)):
+        s_url = str(url_val).strip()
+        if s_url.startswith("http") and s_url.lower() not in ["nan", "none", "null"]:
+            return s_url
+
+    if sb_url is not None and not (isinstance(sb_url, float) and np.isnan(sb_url)):
+        s_sb = str(sb_url).strip()
+        if s_sb.startswith("http") and s_sb.lower() not in ["nan", "none", "null"]:
+            return s_sb
+
+    query = f"{brand} {year} Super Bowl Commercial {title}".replace(" ", "+")
+    return f"https://www.youtube.com/results?search_query={query}"
+
+
 def retrieve_nearest_historical_ads(
     traits: Optional[List[str]] = None,
     vertical: str = "Snacks / Food",
@@ -359,13 +410,49 @@ def retrieve_nearest_historical_ads(
     for idx in top_indices:
         rec = records[idx]
         active_traits = [t for t in TRAITS if rec.get(t, 0.0) == 1.0]
+
+        brand_clean = str(rec.get("brand", "Unknown")).strip()
+        if brand_clean.lower() in ["nan", "none", ""]:
+            brand_clean = "Historical Sponsor"
+
+        year_val = rec.get("year", 2015)
+        try:
+            year_clean = int(year_val) if not (isinstance(year_val, float) and np.isnan(year_val)) else 2015
+        except (ValueError, TypeError):
+            year_clean = 2015
+
+        sb_url = rec.get("superbowl_ads_dot_com_url")
+        title_clean = clean_ad_title(rec.get("yt_title"), brand_clean, year_clean, sb_url)
+        url_clean = clean_ad_url(rec.get("youtube_url"), brand_clean, year_clean, title_clean, sb_url)
+
+        # Engagement rate sanitization
+        raw_eng = rec.get("eng_rate_pct")
+        try:
+            eng_rate = round(float(raw_eng), 2) if (raw_eng is not None and not np.isnan(float(raw_eng))) else 0.50
+        except (ValueError, TypeError):
+            eng_rate = 0.50
+
+        # Wikipedia surge multiplier sanitization (strictly prevents 'nanx')
+        raw_spike = rec.get("spike_ratio")
+        try:
+            if raw_spike is not None and not np.isnan(float(raw_spike)) and float(raw_spike) > 0:
+                wiki_spike_num = round(float(raw_spike), 1)
+                wiki_display = f"{wiki_spike_num}x"
+            else:
+                wiki_spike_num = 1.0
+                wiki_display = "1.0x (Baseline)"
+        except (ValueError, TypeError):
+            wiki_spike_num = 1.0
+            wiki_display = "1.0x (Baseline)"
+
         results.append({
-            "brand": rec.get("brand", "Unknown"),
-            "year": int(rec.get("year", 2015)),
-            "title": str(rec.get("yt_title", "Commercial Spot")),
-            "engagement_rate": round(float(rec.get("eng_rate_pct", 0.5)), 2),
-            "wiki_spike": round(float(rec.get("spike_ratio", 3.0)), 1),
-            "url": str(rec.get("youtube_url", "")),
+            "brand": brand_clean,
+            "year": year_clean,
+            "title": title_clean,
+            "engagement_rate": eng_rate,
+            "wiki_spike": wiki_spike_num,
+            "wiki_spike_display": wiki_display,
+            "url": url_clean,
             "traits": active_traits,
             "similarity": round(float(sims[idx]), 2),
         })

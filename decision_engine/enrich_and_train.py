@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Tuple
 
 import joblib
@@ -253,6 +254,45 @@ def run_pipeline():
     df_master["year"] = pd.to_numeric(df_master["year"], errors="coerce").fillna(2010).astype(int)
     df_wiki["year"] = pd.to_numeric(df_wiki["year"], errors="coerce").fillna(2010).astype(int)
 
+    def clean_slug_to_title(url: Any, brand: str, year: int) -> str:
+        if not isinstance(url, str) or not url.strip():
+            return f"{brand} Super Bowl Commercial ({year})"
+        slug = url.strip().rstrip("/").split("/")[-1]
+        slug = re.sub(r"^\d{4}-", "", slug)
+        slug = re.sub(rf"^{re.escape(str(brand).lower())}-", "", slug, flags=re.IGNORECASE)
+        slug = re.sub(r"super-bowl(-\w+)?-commercial-?", "", slug, flags=re.IGNORECASE)
+        slug = re.sub(r"super-bowl(-\w+)?-ad-?", "", slug, flags=re.IGNORECASE)
+        slug = re.sub(r"super-bowl-?", "", slug, flags=re.IGNORECASE)
+        words = [w.capitalize() for w in slug.split("-") if w]
+        clean = " ".join(words).strip()
+        return clean if clean else f"{brand} Super Bowl Commercial ({year})"
+
+    clean_titles = []
+    for _, r in df_master.iterrows():
+        val = r.get("yt_title")
+        if pd.isna(val) or str(val).lower() in ["nan", "none", "null", ""]:
+            clean_titles.append(clean_slug_to_title(r.get("superbowl_ads_dot_com_url"), r.get("brand"), r.get("year")))
+        else:
+            s = str(val).strip()
+            s = re.sub(r"\.(mp4|mov|avi|wmv|mkv)$", "", s, flags=re.IGNORECASE).strip()
+            s = re.sub(r"\[(HD|HQ|720p|1080p|Official)\]", "", s, flags=re.IGNORECASE).strip()
+            clean_titles.append(s)
+    df_master["yt_title"] = clean_titles
+
+    clean_urls = []
+    for _, r in df_master.iterrows():
+        u = r.get("youtube_url")
+        if pd.isna(u) or str(u).lower() in ["nan", "none", "null", ""] or not str(u).startswith("http"):
+            sb_u = r.get("superbowl_ads_dot_com_url")
+            if not pd.isna(sb_u) and isinstance(sb_u, str) and sb_u.startswith("http"):
+                clean_urls.append(sb_u.strip())
+            else:
+                q = f"{r['brand']} {r['year']} Super Bowl Commercial {r['yt_title']}".replace(" ", "+")
+                clean_urls.append(f"https://www.youtube.com/results?search_query={q}")
+        else:
+            clean_urls.append(str(u).strip())
+    df_master["youtube_url"] = clean_urls
+
     df = pd.merge(df_master, df_wiki[["brand", "year", "spike_ratio"]], on=["brand", "year"], how="left")
     df["spike_ratio"] = pd.to_numeric(df["spike_ratio"], errors="coerce")
 
@@ -373,7 +413,7 @@ def run_pipeline():
         "q90_eng": q90_eng,
         "rmse_eng": rmse_eng,
         "historical_records": df[[
-            "year", "brand", "yt_title", "youtube_url", "eng_rate_pct", "spike_ratio", "spot_runtime"
+            "year", "brand", "yt_title", "youtube_url", "superbowl_ads_dot_com_url", "eng_rate_pct", "spike_ratio", "spot_runtime"
         ] + TRAITS].to_dict(orient="records"),
         "embeddings_matrix": embeddings_matrix,
         "has_ebm": HAS_EBM,

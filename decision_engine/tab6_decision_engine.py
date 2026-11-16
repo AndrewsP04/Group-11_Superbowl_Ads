@@ -5,12 +5,12 @@ Renders Tab 6 in app.py:
 1. Auto-training check on first launch (no manual training step required)
 2. Natural language storyboard/pitch parser expander (Gemini 3.5 Flash Lite)
 3. Interactive multi-parameter simulation sandbox (<20ms response)
-4. Three Stakeholder Decision Lenses:
-   - Creative Strategy Director (Engagement, Search Surge, EBM Waterfall)
-   - Media Buyer / Planner (Telecast flow, Blowout decay, 512-Grid Optimizer)
-   - Brand CMO / CFO Risk (Downside 80% CI floor, Non-causal disclosures)
-5. Vector RAG Top-3 Nearest Historical Commercials cards (with YouTube links)
-6. Google ADK Multi-Agent Boardroom Debate & Executive Memo Generator
+4. Executive Strategy Brief & Pre-Buy Decision Summary (Top view for decision-makers)
+5. Vector RAG Top-3 Nearest Historical Commercials cards (Historical Precedents)
+6. Deep-Dive Stakeholder Perspectives & Specialist Audits (Pushed to the end):
+   - Creative Strategy Director (AI Memo + Engagement, Search Surge, EBM Waterfall)
+   - Media Buyer / Planner (AI Memo + Telecast flow, Blowout decay, 512-Grid Optimizer)
+   - Brand CMO / CFO Risk (AI Memo + Downside 80% CI floor, Non-causal disclosures)
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 try:
-    from .adk_boardroom import run_strategy_board
+    from .adk_boardroom import generate_baseline_strategy_memos, run_strategy_board
     from .decision_tools import (
         BUNDLE_PATH,
         QUARTER_VIEWERS_M,
@@ -35,7 +35,7 @@ try:
         simulate_multi_pov,
     )
 except ImportError:
-    from adk_boardroom import run_strategy_board
+    from adk_boardroom import generate_baseline_strategy_memos, run_strategy_board
     from decision_tools import (
         BUNDLE_PATH,
         QUARTER_VIEWERS_M,
@@ -142,6 +142,10 @@ def render_tab6():
                         st.session_state["t6_brand_sel"] = float(np.clip(parsed.get("brand_centrality", 7.5), 1.0, 10.0))
                         st.session_state["t6_cult_sel"] = float(np.clip(parsed.get("cultural_nostalgia", 5.0), 1.0, 10.0))
 
+                        # Invalidate cached ADK debate to force fresh synthesis for new pitch
+                        if "t6_adk_scenario_key" in st.session_state:
+                            del st.session_state["t6_adk_scenario_key"]
+
                         st.toast("✅ Synchronized simulator controls with creative brief!", icon="🪄")
                         st.rerun()
                     else:
@@ -228,32 +232,155 @@ def render_tab6():
         k=3,
     )
 
-    st.markdown("---")
+    scenario_text = (
+        f"Brand Vertical: {sel_vertical}, Runtime: :{sel_runtime}s, Target Quarter: {sel_quarter}, "
+        f"Point Spread: {sel_spread} pts. Creative Traits: {', '.join(sel_traits) if sel_traits else 'None selected'}. "
+        f"Narrative Arc: {sel_arc}/10, Brand Centrality: {sel_brand_cent}/10, Cultural Nostalgia: {sel_nostalgia}/10."
+    )
+    scenario_sig = f"{sel_vertical}_{sel_runtime}_{sel_quarter}_{sel_spread}_{sel_arc}_{sel_brand_cent}_{sel_nostalgia}_{'-'.join(sorted(trait_keys))}"
 
-    # ── 3. Multi-Stakeholder Decision Lens Switcher ───────────────────────────
-    st.markdown("#### 🎯 Select Stakeholder Decision Lens")
-    lens = st.radio(
-        "Decision Lens",
-        ["🎨 Creative Strategy Director POV", "📡 Media Buyer / Planner POV", "💼 Brand CMO / CFO Risk POV"],
-        horizontal=True,
-        label_visibility="collapsed",
-        key="t6_lens_radio",
+    # Maintain or generate strategic memos
+    if st.session_state.get("t6_adk_scenario_key") == scenario_sig and "t6_adk_memos" in st.session_state:
+        memos = st.session_state["t6_adk_memos"]
+    else:
+        memos = generate_baseline_strategy_memos(scenario_text, sim, nearest_comps)
+
+    # ── 3. Executive Strategy Brief & Pre-Buy Decision Summary (TOP VIEW) ─────
+    st.markdown("---")
+    st.markdown("### 📋 Executive Strategy Brief & Pre-Buy Decision Summary")
+    st.caption("Synthesized cross-functional decision brief for executive leadership: core KPIs, strategic mandates, and governance clearance.")
+
+    # Headline 4-KPI Row
+    kpi1, kpi2, kpi3, kpi4 = st.columns(4)
+    with kpi1:
+        st.metric(
+            "Predicted YouTube Engagement",
+            f"{sim['pred_eng_pct']}%",
+            delta=f"80% CI: {sim['eng_ci_low']}% – {sim['eng_ci_high']}%",
+        )
+    with kpi2:
+        st.metric(
+            "Predicted Wikipedia Surge",
+            f"{sim['pred_wiki_mult']}x",
+            delta=f"80% CI: {sim['wiki_ci_low']}x – {sim['wiki_ci_high']}x",
+        )
+    with kpi3:
+        st.metric(
+            f"Effective Telecast Reach ({sel_quarter})",
+            f"{sim['effective_reach_m']}M",
+            delta=f"Retention: {sim['retention_pct']}% (${sim['effective_cpm_usd']} CPM)",
+        )
+    with kpi4:
+        st.metric(
+            "Downside Risk Floor (10th %ile)",
+            f"{sim['eng_ci_low']}%",
+            delta="Lower 80% Conformal Bound",
+            delta_color="off",
+        )
+
+    # Executive Consensus Brief Box
+    consensus_text = memos.get("consensus", "Executive strategy brief is being calibrated.")
+    st.markdown(
+        f"""
+        <div style="background: #1e1e2e; border: 1px solid #45475a; border-left: 5px solid #89b4fa; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1rem 0;">
+            <div style="font-size: 0.95rem; line-height: 1.6; color: #cdd6f4;">
+                {consensus_text.replace(chr(10), '<br/>')}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    if lens == "🎨 Creative Strategy Director POV":
-        st.caption("Focus: Maximizing viewer dialogue, second-screen search, and narrative buzz without losing brand recall.")
-        m1, m2, m3 = st.columns(3)
-        m1.metric(
+    # Action Buttons: Convene Live Board & Download Memo
+    btn_col1, btn_col2 = st.columns([1.3, 1.0])
+    with btn_col1:
+        if st.button("⚡ Convene Live AI Strategy Board (Gemini 3.8 Flash)", key="t6_convene_live_adk_btn"):
+            with st.spinner("Executing Google ADK Multi-Agent Boardroom debate on Vertex AI..."):
+                live_memos = run_strategy_board(scenario_text, sim, nearest_comps)
+                st.session_state["t6_adk_memos"] = live_memos
+                st.session_state["t6_adk_scenario_key"] = scenario_sig
+                st.toast("✅ AI Strategy Board convened! Executive brief & specialist memos updated.", icon="🏛️")
+                st.rerun()
+
+    with btn_col2:
+        full_memo_md = (
+            f"# Super Bowl Advertising Executive Strategy Brief\n\n"
+            f"**Scenario:** {scenario_text}\n\n"
+            f"{consensus_text}\n\n"
+            f"---\n\n"
+            f"## 🎨 Creative Strategy Memo (Creative Director Agent)\n{memos.get('creative', '')}\n\n"
+            f"---\n\n"
+            f"## 📡 Media Planning Memo (Media Buyer Agent)\n{memos.get('media', '')}\n\n"
+            f"---\n\n"
+            f"## 💼 CFO Governance Memo (CFO Risk Agent)\n{memos.get('cfo', '')}\n"
+        )
+        memo_buf = io.BytesIO(full_memo_md.encode("utf-8"))
+        st.download_button(
+            label="⬇️ Download Executive Decision Memo (.md)",
+            data=memo_buf,
+            file_name="SuperBowl_AI_Executive_Decision_Memo.md",
+            mime="text/markdown",
+            key="t6_dl_memo_btn",
+        )
+
+    # ── 4. Historical Precedents (Vector RAG Comps) (MIDDLE) ───────────────────
+    st.markdown("---")
+    st.markdown("### 🎞️ Historical Precedents (Vector RAG Comps)")
+    st.caption("Top 3 closest actual Super Bowl commercials retrieved via 3072-dimensional embedding similarity from 25 years of telecasts:")
+
+    comp_cols = st.columns(len(nearest_comps))
+    for col_idx, comp in enumerate(nearest_comps):
+        with comp_cols[col_idx]:
+            st.markdown(
+                f"""
+                <div style="background: #181825; border: 1px solid #313244; border-radius: 8px; padding: 1.1rem; height: 100%;">
+                    <div style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{comp['year']} · {comp['brand']}</div>
+                    <div style="font-size: 0.95rem; font-weight: 600; color: #cdd6f4; margin: 0.35rem 0 0.5rem 0; min-height: 2.8rem;">
+                        {comp['title'][:65]}
+                    </div>
+                    <div style="font-size: 0.83rem; color: #a6adc8; line-height: 1.55;">
+                        • YouTube Engagement: <b>{comp['engagement_rate']}%</b><br/>
+                        • Wikipedia Surge: <b>{comp.get('wiki_spike_display', str(comp.get('wiki_spike', '1.0')) + 'x')}</b><br/>
+                        • Match Similarity: <b>{int(comp['similarity'] * 100)}%</b>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            target_url = comp.get("url", "")
+            btn_label = "▶️ Watch on YouTube" if "youtube.com" in target_url else "🌐 View Spot Archive"
+            if target_url and target_url.startswith("http"):
+                st.link_button(btn_label, target_url, use_container_width=True)
+
+    # ── 5. Deep-Dive Stakeholder Perspectives & Specialist Audits (END) ────────
+    st.markdown("---")
+    st.markdown("### 🔍 Deep-Dive Stakeholder Perspectives & Specialist Audits")
+    st.caption("Granular domain analysis integrating Google ADK specialist agent memos directly with interactive statistical telemetry.")
+
+    lens_tab1, lens_tab2, lens_tab3 = st.tabs([
+        "🎨 Creative Strategy Director",
+        "📡 Media Buyer / Planner",
+        "💼 Brand CMO / CFO Risk",
+    ])
+
+    # ── Lens Tab 1: Creative Strategy Director ────────────────────────────────
+    with lens_tab1:
+        st.markdown("##### 🤖 Creative Strategy Memo (Google ADK Agent)")
+        st.info(memos.get("creative", "Creative strategy memo is calibrated to concept brief."))
+
+        st.markdown("##### 📊 Creative Performance Telemetry")
+        cm1, cm2, cm3 = st.columns(3)
+        cm1.metric(
             "Predicted YouTube Engagement Rate",
             f"{sim['pred_eng_pct']}%",
             delta=f"80% CI: {sim['eng_ci_low']}% – {sim['eng_ci_high']}%",
         )
-        m2.metric(
+        cm2.metric(
             "Predicted Wikipedia Search Surge",
             f"{sim['pred_wiki_mult']}x",
             delta=f"80% CI: {sim['wiki_ci_low']}x – {sim['wiki_ci_high']}x",
         )
-        m3.metric(
+        cm3.metric(
             "Brand Centrality Rating",
             f"{sel_brand_cent:.1f} / 10.0",
             delta="High Recall" if sel_brand_cent >= 7.0 else "Vulnerable to 'Loved Ad, Forgot Brand'",
@@ -280,20 +407,24 @@ def render_tab6():
             )
             st.plotly_chart(fig_wf, use_container_width=True)
 
-    elif lens == "📡 Media Buyer / Planner POV":
-        st.caption("Focus: Upfront airtime timing, living-room audience reach efficiency, and fourth-quarter blowout risks.")
-        m1, m2, m3 = st.columns(3)
-        m1.metric(
+    # ── Lens Tab 2: Media Buyer / Planner ──────────────────────────────────────
+    with lens_tab2:
+        st.markdown("##### 🤖 Media Planning Memo (Google ADK Agent)")
+        st.info(memos.get("media", "Media planning memo is calibrated to telecast parameters."))
+
+        st.markdown("##### 📊 Telecast Reach & Audience Decay Analysis")
+        mm1, mm2, mm3 = st.columns(3)
+        mm1.metric(
             f"Effective Living-Room Reach ({sel_quarter})",
             f"{sim['effective_reach_m']}M viewers",
             delta=f"Audience Retention: {sim['retention_pct']}%",
         )
-        m2.metric(
+        mm2.metric(
             "Effective Broadcast CPM",
             f"${sim['effective_cpm_usd']}",
             delta="Based on $7M baseline media spend",
         )
-        m3.metric(
+        mm3.metric(
             "Game Blowout Spread",
             f"{sel_spread} pts",
             delta="⚠️ High Q4 Decay Risk" if sel_spread > 12 and "Q4" in sel_quarter else "Normal Flow",
@@ -334,22 +465,26 @@ def render_tab6():
             })
         st.dataframe(opt_rows, hide_index=True, use_container_width=True)
 
-    else:
-        st.caption("Focus: Capital allocation governance on $7M+ buy, downside risk floors, and non-causal disclosures.")
-        m1, m2, m3 = st.columns(3)
-        m1.metric(
+    # ── Lens Tab 3: Brand CMO / CFO Risk ──────────────────────────────────────
+    with lens_tab3:
+        st.markdown("##### 🤖 CFO Governance Memo (Google ADK Agent)")
+        st.info(memos.get("cfo", "CFO governance memo is calibrated to risk constraints."))
+
+        st.markdown("##### 📊 Capital Risk Floors & Conformal Bounds")
+        rm1, rm2, rm3 = st.columns(3)
+        rm1.metric(
             "Downside Engagement Floor (10th %ile)",
             f"{sim['eng_ci_low']}%",
             delta="Lower 80% Conformal Bound",
             delta_color="off",
         )
-        m2.metric(
+        rm2.metric(
             "Downside Search Surge Floor (10th %ile)",
             f"{sim['wiki_ci_low']}x",
             delta="Lower 80% Conformal Bound",
             delta_color="off",
         )
-        m3.metric(
+        rm3.metric(
             "Media Capital at Risk",
             "$7,000,000",
             delta="Upfront 30s broadcast baseline",
@@ -363,70 +498,4 @@ def render_tab6():
             'not guaranteed retail sales revenue or causal stock return lift. Capital commitments must be vetted against '
             'issuer downside cash flow requirements.</div>',
             unsafe_allow_html=True,
-        )
-
-    # ── 4. Vector RAG Nearest Historical Commercials ──────────────────────────
-    st.markdown("---")
-    st.markdown("#### 🎞️ Historical Precedents (Vector RAG Comps)")
-    st.caption("Top 3 closest actual Super Bowl commercials retrieved via embedding similarity from the 567-spot dataset:")
-
-    comp_cols = st.columns(len(nearest_comps))
-    for col_idx, comp in enumerate(nearest_comps):
-        with comp_cols[col_idx]:
-            st.markdown(
-                f"""
-                <div style="background: #181825; border: 1px solid #313244; border-radius: 8px; padding: 1rem; height: 100%;">
-                    <div style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{comp['year']} · {comp['brand']}</div>
-                    <div style="font-size: 0.95rem; font-weight: 600; color: #cdd6f4; margin: 0.3rem 0;">{comp['title'][:55]}</div>
-                    <div style="font-size: 0.82rem; color: #a6adc8;">
-                        • YouTube Engagement: <b>{comp['engagement_rate']}%</b><br/>
-                        • Wikipedia Surge: <b>{comp['wiki_spike']}x</b><br/>
-                        • Match Similarity: <b>{int(comp['similarity'] * 100)}%</b>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            if comp.get("url"):
-                st.link_button("▶️ Watch Commercial", comp["url"], use_container_width=True)
-
-    # ── 5. Google ADK Multi-Agent Boardroom Debate ────────────────────────────
-    st.markdown("---")
-    st.markdown("#### 🏛️ Google ADK Strategy Board & Pitch Memo Generator")
-    st.caption(
-        "Convenes an adversarial 3-persona strategy board (Creative Director vs Media Planner vs CFO Risk) "
-        "orchestrated by Google ADK ParallelAgent on Vertex AI."
-    )
-
-    if st.button("⚡ Convene AI Strategy Board & Generate Executive Brief", key="t6_adk_btn"):
-        scenario_text = (
-            f"Brand Vertical: {sel_vertical}, Runtime: :{sel_runtime}s, Target Quarter: {sel_quarter}, "
-            f"Point Spread: {sel_spread} pts. Creative Traits: {', '.join(sel_traits) if sel_traits else 'None selected'}. "
-            f"Narrative Arc: {sel_arc}/10, Brand Centrality: {sel_brand_cent}/10."
-        )
-
-        with st.spinner("Executing Google ADK Multi-Agent Boardroom debate on Vertex AI..."):
-            memos = run_strategy_board(scenario_text, sim, nearest_comps)
-
-        b1, b2, b3 = st.columns(3)
-        with b1:
-            st.markdown("##### 🎨 Creative Strategy Memo")
-            st.info(memos.get("creative", "Creative memo generated."))
-        with b2:
-            st.markdown("##### 📡 Media Planning Memo")
-            st.info(memos.get("media", "Media memo generated."))
-        with b3:
-            st.markdown("##### 💼 CFO Governance Memo")
-            st.info(memos.get("cfo", "CFO memo generated."))
-
-        st.markdown("##### 📋 Executive Consensus Pre-Buy Brief")
-        consensus_text = memos.get("consensus", "Strategy board consensus brief.")
-        st.success(consensus_text)
-
-        memo_buf = io.BytesIO(consensus_text.encode("utf-8"))
-        st.download_button(
-            label="⬇️ Download Executive Decision Memo (.md)",
-            data=memo_buf,
-            file_name="SuperBowl_AI_Executive_Decision_Memo.md",
-            mime="text/markdown",
         )

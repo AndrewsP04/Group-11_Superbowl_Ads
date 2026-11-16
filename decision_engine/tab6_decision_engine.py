@@ -16,6 +16,7 @@ Renders Tab 6 in app.py:
 from __future__ import annotations
 
 import io
+import os
 from typing import Any, Dict, List
 
 import numpy as np
@@ -646,6 +647,11 @@ def render_tab6():
             help="When active, dynamically queries YouTube Data API v3 to pull real-world commercials for modern categories (e.g. Consumer Tech, AI, Crypto, Apps) unrepresented in the historical 2000-2020 archive.",
             key="t6_live_yt_toggle",
         )
+        if live_toggle_val:
+            if not os.getenv("YOUTUBE_API_KEY"):
+                st.caption("⚠️ `YOUTUBE_API_KEY` missing in `.env` (using offline archive)")
+            else:
+                st.caption("🟢 Live YouTube Data API v3 active")
 
     TRAIT_BADGE_CONFIG = {
         "Humor": {"icon": "😂", "bg": "rgba(249, 226, 175, 0.15)", "fg": "#f9e2af", "border": "#f9e2af55"},

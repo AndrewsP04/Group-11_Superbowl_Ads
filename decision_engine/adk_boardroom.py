@@ -195,6 +195,7 @@ def generate_baseline_strategy_memos(
     cv = exec_dec["channel_verdict"]
     fr = exec_dec["financial_roi"]
     cr = exec_dec["creative_recipe"]
+    qa = exec_dec.get("quarter_advisory", {})
 
     # Creative Strategy Memo
     creative_memo = (
@@ -216,7 +217,11 @@ def generate_baseline_strategy_memos(
     )
     media_memo = (
         f"**Airtime Allocation & Audience Delivery:**\n"
-        f"Telecast delivery is projected at **{reach}M living-room viewers** (**{retention}%** audience retention index) at an Effective Broadcast CPM of **${cpm}** against the upfront $7M capital baseline.\n\n"
+        f"Telecast delivery is projected at **{reach}M living-room viewers** (**{retention}%** audience retention index) at an Effective Broadcast CPM of **${cpm}** against the upfront ${fr['airtime_cost_m']}M airtime allocation.\n\n"
+        f"**Quarter Allotment & Scarcity Advisory ({qa.get('selected_quarter', 'Quarter')}):**\n"
+        f"• Status: {qa.get('scarcity_badge', '')}\n"
+        f"• Intelligence: {qa.get('warning', '')}\n"
+        f"• Strategic Pivot: {qa.get('smart_alt_summary', '')}\n\n"
         f"**Channel Verdict Assessment:**\n"
         f"• Recommendation: **{cv['badge']}** — {cv['summary']}\n"
         f"• Alternative Digital Scenario: {cv['social_comparison']}\n\n"
@@ -243,6 +248,7 @@ def generate_baseline_strategy_memos(
         f"**1. Strategic Channel Verdict: {cv['badge']}**\n"
         f"- **Primary Finding:** {cv['summary']}. {cv['headline']}\n"
         f"- **Broadcast Delivery:** {reach}M living-room viewers delivered at ${cpm} Effective CPM ({retention}% retention).\n"
+        f"- **Quarter Allotment Strategy:** {qa.get('headline', '')} — {qa.get('smart_alt_summary', '')}\n"
         f"- **Social Media Tradeoff:** {cv['social_comparison']}\n\n"
         f"**2. Financial ROI & Budget Cap (Total Capital: ${fr['total_capital_m']}M):**\n"
         f"- **Expected Commercial & Earned Value:** **${fr['expected_gross_value_m']}M** (Expected Net ROI: **+{fr['roi_pct']}%** | **{fr['roi_multiplier']}x** return).\n"

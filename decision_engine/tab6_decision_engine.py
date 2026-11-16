@@ -50,6 +50,12 @@ except ImportError:
     )
 
 
+def _on_switch_quarter_click(target_quarter: str):
+    st.session_state["t6_quarter_sel"] = target_quarter
+    if "t6_adk_scenario_key" in st.session_state:
+        del st.session_state["t6_adk_scenario_key"]
+
+
 def render_tab6():
     # Auto-train models on first launch if not already cached
     if not BUNDLE_PATH.exists():
@@ -172,6 +178,12 @@ def render_tab6():
         sel_quarter = st.selectbox(
             "Airtime Quarter",
             ["Game Q1", "Game Q2", "Game Q3", "Game Q4"],
+            format_func=lambda q: {
+                "Game Q1": "Game Q1 · Prime Launchpad ($6.8M | 92M Viewers)",
+                "Game Q2": "Game Q2 · Premium Scarcity ($7.8M | 104M Viewers)",
+                "Game Q3": "Game Q3 · Value Storytelling ($6.4M | 96M Viewers)",
+                "Game Q4": "Game Q4 · High-Beta Value ($5.8M | 101M Viewers)",
+            }.get(q, q),
             key="t6_quarter_sel",
         )
 
@@ -274,6 +286,7 @@ def render_tab6():
     cv = exec_dec["channel_verdict"]
     fr = exec_dec["financial_roi"]
     cr = exec_dec["creative_recipe"]
+    qa = exec_dec.get("quarter_advisory", {})
 
     with c_p1:
         st.markdown(
@@ -287,8 +300,19 @@ def render_tab6():
                     <div style="font-size: 1.05rem; font-weight: 700; color: #cdd6f4; margin-bottom: 0.4rem; line-height: 1.3;">
                         {cv['summary']}
                     </div>
-                    <div style="font-size: 0.83rem; color: #bac2de; line-height: 1.45; margin-bottom: 0.6rem;">
+                    <div style="font-size: 0.83rem; color: #bac2de; line-height: 1.45; margin-bottom: 0.5rem;">
                         {cv['detail']}
+                    </div>
+                    <div style="background: rgba(30, 30, 46, 0.9); border: 1px solid #313244; border-radius: 6px; padding: 0.5rem 0.65rem; margin-bottom: 0.5rem; font-size: 0.77rem; line-height: 1.4;">
+                        <div style="font-weight: 700; color: {qa.get('scarcity_color', '#fab387')}; margin-bottom: 0.15rem;">
+                            📍 {qa.get('selected_quarter', 'Quarter')}: {qa.get('headline', '')}
+                        </div>
+                        <div style="color: #a6adc8; margin-bottom: 0.35rem;">
+                            {qa.get('warning', '')}
+                        </div>
+                        <div style="background: rgba(137, 180, 250, 0.12); border-left: 3px solid #89b4fa; padding: 0.3rem 0.5rem; border-radius: 4px; color: #89b4fa; font-weight: 600;">
+                            💡 <b>Allotment Pivot:</b> {qa.get('smart_alt_summary', '')}
+                        </div>
                     </div>
                 </div>
                 <div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.55rem 0.7rem; font-size: 0.78rem; color: #a6adc8; line-height: 1.4;">
@@ -374,6 +398,56 @@ def render_tab6():
         """,
         unsafe_allow_html=True,
     )
+
+    # ── Intelligent Airtime Allotment & Quarter Feasibility Matrix ───────────
+    with st.expander("🧭 Intelligent Airtime Allotment & Quarter Feasibility Matrix (Compare All 4 Quarters)", expanded=True):
+        st.caption("Commercial inventory availability, upfront market pricing, and strategic positioning trade-offs across all 4 broadcast quarters:")
+        q_cols = st.columns(4)
+        for q_idx, q_row in enumerate(qa.get("matrix", [])):
+            with q_cols[q_idx]:
+                is_sel = q_row["is_selected"]
+                card_border = "2px solid #89b4fa" if is_sel else "1px solid #313244"
+                card_bg = "rgba(137, 180, 250, 0.08)" if is_sel else "#181825"
+                active_badge = '<span style="font-size: 0.68rem; background: #89b4fa; color: #11111b; font-weight: 800; padding: 1px 6px; border-radius: 4px; margin-left: 0.3rem;">ACTIVE</span>' if is_sel else ''
+
+                delta_str = f"+${q_row['cost_delta_vs_q2']}M" if q_row['cost_delta_vs_q2'] > 0 else (f"-${abs(q_row['cost_delta_vs_q2'])}M vs Q2" if q_row['cost_delta_vs_q2'] < 0 else "Peak Baseline")
+                delta_color = "#f38ba8" if q_row['cost_delta_vs_q2'] > 0 else ("#a6e3a1" if q_row['cost_delta_vs_q2'] < 0 else "#fab387")
+
+                st.markdown(
+                    f"""
+                    <div style="background: {card_bg}; border: {card_border}; border-radius: 8px; padding: 0.85rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                                <span style="font-size: 0.95rem; font-weight: 800; color: #cdd6f4;">{q_row['quarter']} {active_badge}</span>
+                                <span style="font-size: 0.72rem; font-weight: 700; color: {delta_color};">{delta_str}</span>
+                            </div>
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #89b4fa; margin-bottom: 0.2rem;">
+                                ${q_row['cost_m']}M <span style="font-size: 0.75rem; color: #a6adc8; font-weight: 500;">(:{sel_runtime}s)</span>
+                            </div>
+                            <div style="font-size: 0.76rem; color: #fab387; font-weight: 700; margin-bottom: 0.4rem;">
+                                {q_row['scarcity']}
+                            </div>
+                            <div style="font-size: 0.75rem; color: #a6adc8; line-height: 1.4; border-top: 1px solid #313244; padding-top: 0.4rem; margin-bottom: 0.5rem;">
+                                • <b>Reach:</b> {q_row['reach_m']}M ({q_row['retention_pct']}% ret)<br/>
+                                • <b>CPM:</b> ${q_row['cpm']}<br/>
+                                • <b>Allotment:</b> {q_row['allotment_status']}
+                            </div>
+                            <div style="font-size: 0.74rem; color: #bac2de; line-height: 1.35; background: rgba(30, 30, 46, 0.7); padding: 0.4rem; border-radius: 4px;">
+                                🎯 <b>Best For:</b> {q_row['ideal_for']}
+                            </div>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                if not is_sel:
+                    st.button(
+                        f"⚡ Switch to {q_row['quarter']}",
+                        key=f"t6_switch_q_{q_idx}",
+                        on_click=_on_switch_quarter_click,
+                        args=(q_row["quarter"],),
+                        use_container_width=True,
+                    )
 
     # Executive Consensus Brief Box
     consensus_text = memos.get("consensus", "Executive strategy brief is being calibrated.")

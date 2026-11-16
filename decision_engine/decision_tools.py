@@ -55,6 +55,52 @@ QUARTER_VIEWERS_M: Dict[str, float] = {
     "Game Q4": 101.1,
 }
 
+QUARTER_BASE_COST_M: Dict[str, float] = {
+    "Game Q1": 6.8,
+    "Game Q2": 7.8,
+    "Game Q3": 6.4,
+    "Game Q4": 5.8,
+}
+
+QUARTER_INVENTORY_METRICS: Dict[str, Dict[str, Any]] = {
+    "Game Q1": {
+        "cost_m": 6.8,
+        "viewers_m": 92.4,
+        "scarcity": "High Demand / Prime Launch",
+        "scarcity_color": "#89b4fa",
+        "allotment_status": "Competitive (Available via Upfronts)",
+        "ideal_for": "New product launches, cinematic trailers, clean undistracted recall",
+        "cpm": 73.59,
+    },
+    "Game Q2": {
+        "cost_m": 7.8,
+        "viewers_m": 103.9,
+        "scarcity": "Extreme Scarcity / Incumbent Lock",
+        "scarcity_color": "#f38ba8",
+        "allotment_status": "Severe Scarcity (~12-14 slots, locked months ahead)",
+        "ideal_for": "Incumbent category leaders, massive pop-culture spectacles, halftime lead-in",
+        "cpm": 75.07,
+    },
+    "Game Q3": {
+        "cost_m": 6.4,
+        "viewers_m": 96.3,
+        "scarcity": "High Efficiency / Best Challenger Value",
+        "scarcity_color": "#a6e3a1",
+        "allotment_status": "Moderate Availability (Best ROI Alternative)",
+        "ideal_for": "Challenger brands, extended :45s/:60s storytelling, emotional resonance",
+        "cpm": 66.46,
+    },
+    "Game Q4": {
+        "cost_m": 5.8,
+        "viewers_m": 101.1,
+        "scarcity": "Discount Arbitrage / Blowout Risk",
+        "scarcity_color": "#fab387",
+        "allotment_status": "Available (Discounted Upfronts)",
+        "ideal_for": "Value buyers, close-game high-beta upside (OT reach up to 120M+)",
+        "cpm": 57.37,
+    },
+}
+
 # Monotonic audience blowout decay sensitivity per point of spread
 QUARTER_SPREAD_SENSITIVITY: Dict[str, float] = {
     "Game Q1": 0.0015,
@@ -126,7 +172,8 @@ def simulate_multi_pov(
     trait_flags = {t: (t in traits or t.title() in traits) for t in TRAITS}
 
     eff_reach_m, retention_pct = compute_effective_reach(quarter, point_spread)
-    cpm_usd = round((7_000_000.0 / (eff_reach_m * 1_000_000.0)) * 1000.0, 2)
+    quarter_base_cost_usd = QUARTER_BASE_COST_M.get(quarter, 7.0) * 1_000_000.0
+    cpm_usd = round((quarter_base_cost_usd / (eff_reach_m * 1_000_000.0)) * 1000.0, 2)
 
     x_macro = np.array([[float(target_year), float(runtime_sec)]])
     is_60s = 1.0 if runtime_sec >= 50 else 0.0
@@ -1398,9 +1445,10 @@ def compute_executive_roi_and_decision(
         traits = []
 
     # 1. Financial Investment Model
-    # Broadcast Airtime Cost by runtime (:30s baseline = $7.0M)
-    airtime_map = {15: 3.5, 30: 7.0, 45: 10.5, 60: 14.0, 90: 21.0}
-    airtime_cost_m = airtime_map.get(runtime_sec, 7.0)
+    # Broadcast Airtime Cost by quarter and runtime (:30s baseline: Q1=$6.8M, Q2=$7.8M, Q3=$6.4M, Q4=$5.8M)
+    quarter_base_30s = QUARTER_BASE_COST_M.get(quarter, 7.0)
+    runtime_ratio = runtime_sec / 30.0
+    airtime_cost_m = round(quarter_base_30s * runtime_ratio, 2)
 
     # Production & Talent Budget
     prod_cost_m = 1.5  # Baseline Super Bowl production
@@ -1546,9 +1594,167 @@ def compute_executive_roi_and_decision(
     if brand_centrality < 7.0:
         suggestions.append(f"🎯 Increase Brand Centrality from {brand_centrality:.1f} to 8.0+ to prevent the 'Loved Ad, Forgot Brand' recall trap (-28% loss)")
     if "Q4" in quarter and point_spread > 10:
-        suggestions.append("📡 Shift airtime from Q4 to Q2 to hedge against blowout viewer decay (+12M reached viewers)")
+        suggestions.append("📡 Shift airtime from Q4 to Q3 or Q1 to rescue 35M+ lost blowout viewers")
 
     immediate_action = suggestions[0] if suggestions else "🔥 Creative formula is highly optimized for maximum commercial ROI!"
+
+    # 4. Intelligent Quarter Airtime & Inventory Advisory
+    q_info = QUARTER_INVENTORY_METRICS.get(quarter, QUARTER_INVENTORY_METRICS["Game Q2"])
+    q2_cost_cur = round(QUARTER_BASE_COST_M["Game Q2"] * runtime_ratio, 2)
+    q3_cost_cur = round(QUARTER_BASE_COST_M["Game Q3"] * runtime_ratio, 2)
+    q1_cost_cur = round(QUARTER_BASE_COST_M["Game Q1"] * runtime_ratio, 2)
+    q4_cost_cur = round(QUARTER_BASE_COST_M["Game Q4"] * runtime_ratio, 2)
+
+    alternatives = []
+    if quarter == "Game Q2":
+        q_scarcity_badge = "⚠️ Extreme Scarcity (Incumbent Locked)"
+        q_scarcity_color = "#f38ba8"
+        q_headline = "Q2 Allotment Bottleneck & Premium Surcharge"
+        q_warning = (
+            f"Game Q2 has only ~12–14 commercial slots, predominantly pre-empted by multi-year anchor sponsors "
+            f"(AB InBev, PepsiCo, movie studios) at peak rates (${q2_cost_cur}M for :{runtime_sec}s). "
+            "For challenger brands or advertisers with strict budget ceilings, competing for Q2 risks inventory lockout or paying inflated surcharges."
+        )
+        smart_alt_quarter = "Game Q3"
+        smart_alt_summary = f"Shift to Game Q3 — Save ${round(q2_cost_cur - q3_cost_cur, 1)}M or upgrade to a :{min(90, runtime_sec + 15)}s cut for the same total budget!"
+        alternatives.append({
+            "quarter": "Game Q3",
+            "badge": "💡 Best Value Alternative",
+            "color": "#a6e3a1",
+            "title": "The Extended Storytelling Upgrade (Game Q3)",
+            "savings": f"Saves ${round(q2_cost_cur - q3_cost_cur, 1)}M vs Q2",
+            "advantage": f"Post-halftime return delivers 96.3M viewers with 94–98% retention. Challenger brands can run an extended :{min(90, runtime_sec + 15)}s story in Q3 for less than a :{runtime_sec}s spot in Q2.",
+        })
+        alternatives.append({
+            "quarter": "Game Q1",
+            "badge": "⭐ Clean Attention Alternative",
+            "color": "#89b4fa",
+            "title": "First-Mover Fresh Attention (Game Q1)",
+            "savings": f"Saves ${round(q2_cost_cur - q1_cost_cur, 1)}M vs Q2",
+            "advantage": "Captures 92.4M viewers at peak mental alertness before party chatter and alcohol fatigue set in. 0% blowout risk.",
+        })
+        if point_spread <= 7:
+            alternatives.append({
+                "quarter": "Game Q4",
+                "badge": "🎯 Close-Game Value Arbitrage",
+                "color": "#fab387",
+                "title": "Close-Game Peak Ratings Gamble (Game Q4)",
+                "savings": f"Saves ${round(q2_cost_cur - q4_cost_cur, 1)}M vs Q2",
+                "advantage": f"Tight {point_spread}-pt spread creates late-game peak ratings (up to 115M–120M viewers if close/OT) at the lowest entry cost.",
+            })
+    elif quarter == "Game Q1":
+        q_scarcity_badge = "⭐ Prime Launchpad (First-Mover Focus)"
+        q_scarcity_color = "#89b4fa"
+        q_headline = "Clean Focus & Undistracted Viewer Retention"
+        q_warning = (
+            f"Game Q1 captures 92.4M viewers at maximum social focus and sobriety. Zero blowout risk, sets the cultural "
+            f"conversation early, and avoids the crowded, inflated Q2 bidding war while saving ${round(q2_cost_cur - q1_cost_cur, 1)}M."
+        )
+        smart_alt_quarter = "Game Q3"
+        smart_alt_summary = f"Game Q3 offers a high-efficiency alternative saving an additional ${round(q1_cost_cur - q3_cost_cur, 1)}M with 96.3M viewers."
+        alternatives.append({
+            "quarter": "Game Q3",
+            "badge": "💡 Value Storytelling",
+            "color": "#a6e3a1",
+            "title": "Post-Halftime Second Wave (Game Q3)",
+            "savings": f"Saves an additional ${round(q1_cost_cur - q3_cost_cur, 1)}M",
+            "advantage": "Delivers 96.3M post-halftime viewers with lower CPM ($66.46) for deep emotional storytelling.",
+        })
+    elif quarter == "Game Q3":
+        q_scarcity_badge = "💡 Highest Efficiency & Challenger Value"
+        q_scarcity_color = "#a6e3a1"
+        q_headline = "Optimal Challenger Brand Position"
+        q_warning = (
+            f"Game Q3 is the most capital-efficient slot in the telecast: 96.3M viewers at a ${round(q2_cost_cur - q3_cost_cur, 1)}M "
+            f"discount vs Q2. Perfect for non-incumbents wanting longer creative runtime (:{runtime_sec}s) without paying incumbent Q2 premiums."
+        )
+        smart_alt_quarter = "Game Q1"
+        smart_alt_summary = f"If you want to set the tone early before competitors air, Game Q1 is available for only ${round(q1_cost_cur - q3_cost_cur, 1)}M more."
+        alternatives.append({
+            "quarter": "Game Q1",
+            "badge": "⭐ First-Mover Buzz",
+            "color": "#89b4fa",
+            "title": "Early Telecast Launchpad (Game Q1)",
+            "savings": f"Modest +${round(q1_cost_cur - q3_cost_cur, 1)}M delta",
+            "advantage": "Captures first-mover social chatter on Twitter/TikTok before halftime ad clutter.",
+        })
+    else:  # Game Q4
+        if point_spread <= 7:
+            q_scarcity_badge = "🎯 High-Beta Value Arbitrage (Tight Game)"
+            q_scarcity_color = "#fab387"
+            q_headline = "Late-Game High-Conviction Value Play"
+            q_warning = (
+                f"With a tight {point_spread}-point spread, Q4 is the ultimate value arbitrage (${q4_cost_cur}M rate, saving "
+                f"${round(q2_cost_cur - q4_cost_cur, 1)}M vs Q2). Delivers historic ratings (110M–120M viewers in close games/OT)."
+            )
+            smart_alt_quarter = "Game Q3"
+            smart_alt_summary = f"To hedge against late-game blowout volatility, Game Q3 guarantees 96.3M viewers for only +${round(q3_cost_cur - q4_cost_cur, 1)}M."
+            alternatives.append({
+                "quarter": "Game Q3",
+                "badge": "🛡️ Volatility Hedge",
+                "color": "#a6e3a1",
+                "title": "Protected Delivery (Game Q3)",
+                "savings": f"Modest +${round(q3_cost_cur - q4_cost_cur, 1)}M delta",
+                "advantage": "Guarantees 96.3M viewers and 94–98% retention, immune to fourth-quarter runaway scores.",
+            })
+        else:
+            q_scarcity_badge = "⚠️ Severe Blowout Attrition Risk"
+            q_scarcity_color = "#f38ba8"
+            q_headline = "Blowout Audience Loss — Immediate Shift Recommended"
+            q_warning = (
+                f"A {point_spread}-point blowout causes severe audience channel surfing ({100-retention_pct:.1f}% viewer decay). "
+                f"Effective CPM spikes to ${cpm}. Reallocating to Game Q3 or Q1 is strongly advised."
+            )
+            smart_alt_quarter = "Game Q3"
+            smart_alt_summary = "CRITICAL: Shift to Game Q3 to rescue 35M+ lost viewers and lower Effective CPM."
+            alternatives.append({
+                "quarter": "Game Q3",
+                "badge": "💡 High-Yield Rescue",
+                "color": "#a6e3a1",
+                "title": "Move to Game Q3",
+                "savings": f"Only +${round(q3_cost_cur - q4_cost_cur, 1)}M delta",
+                "advantage": "Restores living-room audience to 96.3M viewers and cuts Effective CPM down from ${cpm} to $66.46.",
+            })
+            alternatives.append({
+                "quarter": "Game Q1",
+                "badge": "⭐ Zero-Risk Safe Haven",
+                "color": "#89b4fa",
+                "title": "Move to Game Q1",
+                "savings": f"+${round(q1_cost_cur - q4_cost_cur, 1)}M delta",
+                "advantage": "100% immune to game score dynamics with zero blowout attrition.",
+            })
+
+    # Comparative Quarter Matrix Table Data
+    quarter_comparison_matrix = []
+    for q_key in ["Game Q1", "Game Q2", "Game Q3", "Game Q4"]:
+        m_cost = round(QUARTER_BASE_COST_M[q_key] * runtime_ratio, 2)
+        q_reach, q_ret = compute_effective_reach(q_key, point_spread)
+        q_cpm = round((m_cost * 1_000_000 / (q_reach * 1_000_000)) * 1000, 2)
+        q_data = QUARTER_INVENTORY_METRICS[q_key]
+        quarter_comparison_matrix.append({
+            "quarter": q_key,
+            "cost_m": m_cost,
+            "cost_delta_vs_q2": round(m_cost - q2_cost_cur, 2),
+            "reach_m": q_reach,
+            "retention_pct": q_ret,
+            "cpm": q_cpm,
+            "scarcity": q_data["scarcity"],
+            "allotment_status": q_data["allotment_status"],
+            "ideal_for": q_data["ideal_for"],
+            "is_selected": q_key == quarter,
+        })
+
+    quarter_advisory = {
+        "selected_quarter": quarter,
+        "scarcity_badge": q_scarcity_badge,
+        "scarcity_color": q_scarcity_color,
+        "headline": q_headline,
+        "warning": q_warning,
+        "smart_alt_quarter": smart_alt_quarter,
+        "smart_alt_summary": smart_alt_summary,
+        "alternatives": alternatives,
+        "matrix": quarter_comparison_matrix,
+    }
 
     return {
         "channel_verdict": {
@@ -1580,4 +1786,5 @@ def compute_executive_roi_and_decision(
             "avoid_elements": avoid_elements,
             "immediate_action": immediate_action,
         },
+        "quarter_advisory": quarter_advisory,
     }

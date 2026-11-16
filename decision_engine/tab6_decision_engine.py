@@ -348,9 +348,41 @@ def render_tab6():
                 unsafe_allow_html=True,
             )
             target_url = comp.get("url", "")
-            btn_label = "▶️ Watch on YouTube" if "youtube.com" in target_url else "🌐 View Spot Archive"
             if target_url and target_url.startswith("http"):
-                st.link_button(btn_label, target_url, use_container_width=True)
+                if st.button("▶️ Play in App", key=f"t6_play_btn_{col_idx}", use_container_width=True):
+                    st.session_state["t6_active_video_url"] = target_url
+                    st.session_state["t6_active_video_title"] = f"{comp['year']} · {comp['brand']} — {comp['title']}"
+                    st.rerun()
+
+                with st.expander("🎬 Inline Preview", expanded=False):
+                    if "youtube.com" in target_url or "youtu.be" in target_url:
+                        st.video(target_url)
+                    else:
+                        st.components.v1.iframe(target_url, height=280)
+
+    # In-App Theater Video Player (when a spot is selected to play inside the app)
+    active_video_url = st.session_state.get("t6_active_video_url")
+    active_video_title = st.session_state.get("t6_active_video_title", "Commercial Spot")
+    if active_video_url:
+        st.markdown(
+            f"""
+            <div style="background: #181825; border: 1px solid #89b4fa; border-left: 5px solid #a6e3a1; border-radius: 8px; padding: 0.9rem 1.2rem; margin: 1.2rem 0 0.5rem 0;">
+                <div style="font-size: 1rem; font-weight: 700; color: #cdd6f4;">
+                    📺 In-App Commercial Player: <span style="color: #a6e3a1;">{active_video_title}</span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        if "youtube.com" in active_video_url or "youtu.be" in active_video_url:
+            st.video(active_video_url)
+        else:
+            st.components.v1.iframe(active_video_url, height=450)
+
+        if st.button("✖️ Close Video Player", key="t6_close_video_player"):
+            st.session_state["t6_active_video_url"] = None
+            st.session_state["t6_active_video_title"] = None
+            st.rerun()
 
     # ── 5. Deep-Dive Stakeholder Perspectives & Specialist Audits (END) ────────
     st.markdown("---")

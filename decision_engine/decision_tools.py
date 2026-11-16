@@ -494,7 +494,6 @@ def retrieve_nearest_historical_ads(
             query_vec /= norm
 
     sims = np.dot(embs, query_vec)
-    top_indices = np.argsort(sims)[::-1][:k]
 
     def _is_active(val) -> bool:
         if isinstance(val, bool):
@@ -504,6 +503,58 @@ def retrieve_nearest_historical_ads(
         if isinstance(val, str):
             return val.strip().lower() in ("true", "1", "1.0", "yes")
         return False
+
+    def _classify_brand_vertical(brand_str: str) -> str:
+        b = str(brand_str).lower()
+        if any(k in b for k in ["bud", "pepsi", "coca", "beer", "dew"]):
+            return "Beverage"
+        if any(k in b for k in ["toyota", "hyundai", "hynudai", "kia"]):
+            return "Automotive"
+        if any(k in b for k in ["etrade", "e-trade"]):
+            return "Consumer Tech"
+        return "Snacks & Food"
+
+    # Hybrid Retrieval: Combine 3072-dim semantic embeddings with trait congruence,
+    # vertical affinity, and NFL promo dampening so relevant creative comps are returned.
+    hybrid_scores = []
+    p_lower = str(pitch_text or "").lower()
+    active_traits_query = [t.lower() for t in (traits or [])]
+
+    for idx, r in enumerate(records):
+        score = float(sims[idx])
+        brand_name = str(r.get("brand", "")).lower()
+        title_str = str(r.get("yt_title", "")).lower()
+
+        # 1. NFL Promo Penalty: Unless user is pitching a football/NFL league ad,
+        # prevent generic NFL broadcast promos from acting as an accidental gravity well
+        if "nfl" in brand_name and "nfl" not in p_lower and "football" not in p_lower:
+            score -= 0.18
+
+        # 2. Vertical Alignment Bonus
+        r_vert = _classify_brand_vertical(brand_name)
+        if vertical and (vertical.lower() in r_vert.lower() or r_vert.lower() in vertical.lower()):
+            score += 0.06
+
+        # 3. Creative Trait Congruence Bonus
+        r_traits = [t for t in TRAITS if _is_active(r.get(t))]
+        overlap = len(set(active_traits_query) & set(r_traits))
+        score += 0.04 * overlap
+
+        # 4. Action / Chase / Thriller Trope Synergy
+        if any(w in p_lower for w in ["action", "chase", "thriller", "stunt", "danger"]):
+            if any(w in title_str for w in ["chase", "getaway", "action", "matrix", "bot", "stunt", "brosnan", "ninja"]):
+                score += 0.08
+
+        # 5. Glamour / Romance / Sex Appeal Synergy
+        if any(w in p_lower for w in ["glamour", "poolside", "sex", "model", "romance", "fashion"]):
+            if any(w in title_str for w in ["spears", "crawford", "moon", "bikini", "swim", "beach", "glamour"]):
+                score += 0.08
+
+        # Bound score cleanly
+        clamped_score = min(0.99, max(0.40, score))
+        hybrid_scores.append(clamped_score)
+
+    top_indices = np.argsort(hybrid_scores)[::-1][:k]
 
     results = []
     for idx in top_indices:
@@ -620,7 +671,7 @@ def retrieve_nearest_historical_ads(
             "wiki_spike": wiki_spike_num,
             "wiki_spike_display": wiki_display,
             "url": url_clean,
-            "similarity": round(float(sims[idx]), 2),
+            "similarity": round(float(hybrid_scores[idx]), 2),
         })
 
     return results

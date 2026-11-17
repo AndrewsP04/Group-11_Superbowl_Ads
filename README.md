@@ -38,9 +38,15 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 * **Host Platform:** Streamlit Community Cloud (Python 3.14 containerized environment)
 * **Continuous Deployment (CI/CD):** Automatically pulls, builds, and redeploys with zero downtime upon pushes to the `main` branch.
 * **Secrets & Credential Management:**
-  * Secrets are securely injected using Streamlit Cloud Secrets Manager rather than repository files.
+  * Secrets are securely injected using Streamlit Community Cloud Secrets Manager (`Settings > Secrets`) rather than repository files.
   * `decision_engine/config_auth.py` automatically bridges `st.secrets` into standard environment variables on container startup.
-  * Configured with `GOOGLE_API_KEY`, `GOOGLE_GENAI_USE_VERTEXAI = "TRUE"`, and `YOUTUBE_API_KEY`.
+  * **Configured Cloud Secrets:**
+    ```toml
+    GEMINI_API_KEY = "AQ..."                 # Google Agent Platform / Vertex AI API key
+    GOOGLE_GENAI_USE_VERTEXAI = "TRUE"      # Enforces Vertex AI routing
+    YOUTUBE_API_KEY = "AIza..."             # Optional: live YouTube commercial enrichment
+    ```
+  * *Authentication Bridge:* `config_auth.py` reads `GEMINI_API_KEY` directly from `st.secrets` and bridges it to `GOOGLE_API_KEY` in `os.environ` so both Vertex AI `genai.Client` and Google ADK boardroom agents authenticate seamlessly without manual mapping.
 * **Model Artifact Integrity:** The production container cryptographically validates the pre-trained `decision_engine_bundle.joblib` bundle against `decision_engine_bundle.sha256` before booting the UI.
 
 </details>
@@ -71,9 +77,9 @@ pip install -r requirements.txt
 ### **3. Configure Environment Variables (`.env`)**
 Create a `.env` file in the project root:
 ```ini
-# Provide either GOOGLE_API_KEY (Google AI Studio) or GEMINI_API_KEY (Vertex AI / Agent Platform)
-GOOGLE_API_KEY=your_google_ai_studio_api_key_here
-# GEMINI_API_KEY=your_agent_platform_api_key_here
+# Provide either GEMINI_API_KEY (Vertex AI / Agent Platform) or GOOGLE_API_KEY (Google AI Studio)
+GEMINI_API_KEY=your_gemini_api_key_here
+# GOOGLE_API_KEY=your_google_ai_studio_api_key_here
 GOOGLE_GENAI_USE_VERTEXAI=TRUE
 YOUTUBE_API_KEY=your_youtube_api_key_here  # Optional: for live YouTube commercial pulls (Tab 6)
 ```

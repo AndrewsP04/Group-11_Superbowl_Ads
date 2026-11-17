@@ -135,13 +135,19 @@ python3 -m decision_engine.enrich_and_train
 
 ### **Tab 6: Agentic Campaign Strategy Studio & Multi-POV Decision Engine**
 
-The decision engine unifies machine learning inference with an **Executive-First Decision Framework**, top-of-fold AI input, and multi-stakeholder governance:
+The decision engine unifies machine learning inference with an **Executive-First Decision Framework**, top-of-fold AI input, and multi-stakeholder governance across 8 modular capabilities:
 
-#### **1. Top-of-Fold AI Brief Parser & Input Modes**
+<details>
+<summary><b>1. Top-of-Fold AI Brief Parser & Input Modes</b></summary>
+
 * **Natural Language Storyboard / Concept Parser (Positioned at Very Top):** Located directly beneath the tab header so users can immediately interact with the AI without scrolling down. Paste a free-form creative pitch (e.g., *"A 30-second Doritos spot with a celebrity dance-off..."*). `gemini-3.5-flash-lite` parses the concept into structured parameters, applying regex security sanitization to reject code/SQL injection attempts, eliminating default trait bias, and synchronizing simulator controls.
 * **Granular Scenario Controls (Below Decision Cards):** Manual sliders and dropdowns for narrative depth, brand centrality, nostalgia hooks, runtime (:15s to :90s), brand capital tiers, and empirical game flow scenarios are docked below the executive hero cards to preserve a clean, executive-ready dashboard.
 
-#### **2. Executive Strategy Brief & Pre-Buy Decision Hero View (The 3 Pillars)**
+</details>
+
+<details>
+<summary><b>2. Executive Strategy Brief & Pre-Buy Decision Hero View (The 3 Pillars)</b></summary>
+
 Directly answers the three core questions required by executive leadership, rendered immediately below the AI brief parser:
 * **Pillar 1: Channel Allocation Verdict:**  
   * Actionable recommendation rendered with massive **`1.85rem / 900 weight`** typography on its own dedicated hero line (`🟢 RUN SUPER BOWL CAMPAIGN`, `🟡 PIVOT TO TARGETED SOCIAL MEDIA`, or `⚖️ HYBRID BROADCAST + SOCIAL BLITZ`).
@@ -156,35 +162,56 @@ Directly answers the three core questions required by executive leadership, rend
   * Vertical-specific winning creative formula (e.g., *Pop-Culture Celebrity Contrast*, *Product as Narrative Catalyst*, *Memorable Audio Hook*).
   * High-leverage execution tactics and critical traps to avoid (e.g., avoiding pure slapstick where the product is a forgotten prop).
 
-<details>
-<summary><b>🏛️ Corporate Scale Tiers, Empirical Game Flow & Specialist Audits (Click to expand)</b></summary>
+</details>
 
-#### **3. Brand Capital & Scale Tier Governance**
+<details>
+<summary><b>3. Brand Capital & Scale Tier Governance</b></summary>
+
 * **🏛️ Enterprise Megabrand ($15M+ Budget):** Unlocks full national broadcast inventory across all four quarters.
 * **🚀 Challenger / Growth Brand ($6M–$15M Budget):** Warns against Q2 inventory inflation ($7.8M rate) and guides advertisers to Game Q3 ($6.4M) to bank $1.4M in savings to fund a 60-day digital retargeting sprint.
 * **🌱 Emerging / Non-Mainstream (<$6M Budget):** Automatically triggers an executive Solvency Veto against national TV buys, redirecting capital into a **$500K Social Creator Sprint (4.8x ROAS / $2.4M GMV)** or a **$40K–$120K Local DMA Cable Interconnect** (saving $8.5M+ cash) and deploying the *Challenger Guerrilla Playbook*.
 
-#### **4. Empirical Football Ambiguity & Game Flow Model (2000–2024 Scores)**
+</details>
+
+<details>
+<summary><b>4. Empirical Football Ambiguity & Game Flow Model (2000–2024 Scores)</b></summary>
+
 Eliminates unrealistic manual point spread guessing. Acknowledges that Super Bowl commercial airtime is contracted **6 to 9 months in advance** during network Upfronts when playoff finalists and Las Vegas spreads do not exist. Directly models telecast living-room flow on the empirical score distribution of all 25 modern Super Bowls (2000–2024):
 * **⚡ One-Possession Nailbiter (56.0% Odds · 14 of 25 games):** $\le 7$ pts margin (median 3.0 pts). Glued viewership; Q4 audience surges up to 125M+ viewers (+6.7% over Q2) with 0% decay.
 * **⚖️ Competitive Two-Possession (28.0% Odds · 7 of 25 games):** 8–19 pts margin (median 11.0 pts). Steady, predictable living-room retention (94–98% index).
 * **🚨 Runaway Blowout (16.0% Odds · 4 of 25 games):** $\ge 20$ pts margin (median 24.0 pts). Downside tail risk: models -21.9% living-room audience drop in Q4 to 61.1M viewers with CPM spiking to $95+.
 * **🎲 Expected Game Flow (Default):** Statistically sound weighted blend ($0.56 \times \text{close} + 0.28 \times \text{comp} + 0.16 \times \text{blowout}$) eliminating speculative guesswork.
 
-#### **5. Intelligent Quarter Allotment & Feasibility Matrix**
+</details>
+
+<details>
+<summary><b>5. Intelligent Quarter Allotment & Feasibility Matrix</b></summary>
+
 Interactive comparative grid evaluating commercial inventory availability, upfront market pricing deltas vs Q2, living-room reach, CPM, and strategic archetypes across all 4 broadcast quarters with one-click quarter switching.
 
-#### **6. Historical Precedents (Vector RAG Comps with Live YouTube Search)**
+</details>
+
+<details>
+<summary><b>6. Historical Precedents (Vector RAG Comps with Live YouTube Search)</b></summary>
+
 * Dual-source historical retrieval: matches pitches against 25 years of Super Bowl commercials using **3072-dimensional `gemini-embedding-001` vectors**, augmented with live, real-time video results via YouTube Data API.
 * Enforces vertical and brand relevance (e.g. automotive pitches surface diverse car brand comps; tech prompts avoid food overlaps).
 * Displays playable YouTube cards with engagement rates, search surge multipliers, and visual thumbnails.
 
-#### **7. Deep-Dive Stakeholder Perspectives & Specialist Audits**
+</details>
+
+<details>
+<summary><b>7. Deep-Dive Stakeholder Perspectives & Specialist Audits</b></summary>
+
 * 🎨 **Creative Strategy Director POV:** Focuses on YouTube engagement rate % and Wikipedia search surge multipliers. Features interactive Plotly EBM waterfall charts showing exact additive feature contributions and non-linear pairwise interaction synergies.
 * 📡 **Media Buyer / Planner POV:** Living-room linear telecast delivery (calibrated from 2000–2026 Nielsen/SportsMediaWatch telecast ratings), game flow decay curves, and the **Prescriptive 512-Grid Vectorized Combinatorial Optimizer** (sweeps all $2^7 \times 4 = 512$ trait-by-quarter permutations in $<2\text{ ms}$).
 * 💼 **Brand CMO / CFO Risk POV:** Downside risk floors (80% conformal confidence bounds, 10th-percentile capital protection) and strict non-causal governance disclosures.
 
-#### **8. Google ADK Multi-Agent Strategy Boardroom**
+</details>
+
+<details>
+<summary><b>8. Google ADK Multi-Agent Strategy Boardroom</b></summary>
+
 * On-demand adversarial debate orchestrated via `gemini-3.8-flash`:
   * `CreativeDirectorAgent`: Champions cultural buzz, storytelling arc, and viral potential.
   * `MediaPlannerAgent`: Scrutinizes living-room reach, blowout tune-out risks, and Effective CPM.

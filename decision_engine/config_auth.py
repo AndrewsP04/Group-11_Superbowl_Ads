@@ -29,11 +29,22 @@ def init_vertex_env() -> Optional[str]:
     Initializes environment variables for Vertex AI and Google ADK.
     Loads GEMINI_API_KEY and enforces GOOGLE_GENAI_USE_VERTEXAI = 'TRUE'.
     Bridges GEMINI_API_KEY to GOOGLE_API_KEY for ADK internal operations.
+    Also bridges Streamlit Cloud Secrets (st.secrets) to os.environ when deployed.
     """
     if ENV_PATH.exists():
         load_dotenv(dotenv_path=ENV_PATH)
     else:
         load_dotenv()
+
+    # Bridge Streamlit Cloud Secrets (st.secrets) to os.environ if running on Streamlit Cloud
+    try:
+        import streamlit as st
+        if hasattr(st, "secrets"):
+            for k in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "YOUTUBE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"]:
+                if k in st.secrets and not os.getenv(k):
+                    os.environ[k] = str(st.secrets[k])
+    except Exception:
+        pass
 
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "TRUE"

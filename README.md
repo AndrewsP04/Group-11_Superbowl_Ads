@@ -58,19 +58,27 @@ streamlit run app.py
 ```
 > **Note:** The application automatically verifies model integrity via cryptographic SHA-256 digests on boot and binds to a hardened local network profile `http://127.0.0.1:8501` with CORS and XSRF protection enabled by default.
 
-*(Optional) Run offline model training & semantic enrichment independently:*
+<details>
+<summary><b>(Optional) Run offline model training independently</b></summary>
+
 ```bash
 python3 -m decision_engine.enrich_and_train
 ```
+</details>
 
 ---
 
 ## ⚙️ Environment Configuration (`.env`)
 
+<details open>
+<summary><b>🔑 Environment Variable Reference & Security Notice</b></summary>
+
 * **`GEMINI_API_KEY`**: Authenticates Google Agent Platform / Vertex AI calls (supports Agent Platform API keys starting with `AQ....` or Gemini API keys). Powers natural language brief parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom.
 * **`GOOGLE_GENAI_USE_VERTEXAI=TRUE`**: Directs SDK and Google ADK calls through Vertex AI Agent Platform endpoints.
 * **`YOUTUBE_API_KEY`**: Required to query the YouTube Data API v3 for live Big Game commercial pulls in Tab 6 (e.g. pulling modern Apple, Google Pixel, or OpenAI ads not found in the offline 2000–2020 dataset). If omitted, the application runs normally and falls back strictly to the static historical archive.
 * **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure production keys are securely rotated in your Google Cloud Console before distribution.
+
+</details>
 
 ---
 
@@ -112,12 +120,16 @@ python3 -m decision_engine.enrich_and_train
 
 ## 🖥️ Dashboard Architecture & Tab Guide
 
-### **Tabs 1–5: Descriptive & Diagnostic Analytics**
+<details>
+<summary><b>📊 Tabs 1–5: Descriptive & Diagnostic Analytics (Click to expand)</b></summary>
+
 * **T1 · Trait Engagement:** Compares average YouTube engagement rate, Google Trends commercial search lift (with longitudinal Financial Q1–Q4 decay), and average Wikipedia pageview spikes for ads using each selected creative trait.
 * **T2 · Trends Over Time:** Visualizes how the prevalence of selected creative traits evolves by year (2000–2026) across the full dataset.
 * **T3 · Brand Positioning:** Ranks selected brands by median YouTube engagement rate and views, with hover metrics detailing search lift and multi-quarter retention.
 * **T4 · Reach vs. Dialogue:** Models the power-law relationship between raw impressions and active viewer dialogue (comments).
 * **Phase 2 · Telecast Flow & Financial Return:** Analyzes live telecast ratings decay by Game Quarter (Game Q1–Game Q4), Effective CPM, and 7-day cumulative abnormal stock returns (CAR vs. S&P 500).
+
+</details>
 
 ---
 
@@ -143,6 +155,9 @@ Directly answers the three core questions required by executive leadership, rend
 * **Pillar 3: Creative Content Playbook (What to Put in the Ad):**  
   * Vertical-specific winning creative formula (e.g., *Pop-Culture Celebrity Contrast*, *Product as Narrative Catalyst*, *Memorable Audio Hook*).
   * High-leverage execution tactics and critical traps to avoid (e.g., avoiding pure slapstick where the product is a forgotten prop).
+
+<details>
+<summary><b>🏛️ Corporate Scale Tiers, Empirical Game Flow & Specialist Audits (Click to expand)</b></summary>
 
 #### **3. Brand Capital & Scale Tier Governance**
 * **🏛️ Enterprise Megabrand ($15M+ Budget):** Unlocks full national broadcast inventory across all four quarters.
@@ -176,13 +191,16 @@ Interactive comparative grid evaluating commercial inventory availability, upfro
   * `CFO_RiskAgent`: Audits downside risk floors and capital allocation governance.
   * `ConsensusChairAgent`: Synthesizes debates into a formal **Executive Consensus Decision Brief** with conditional verdicts, strategic mandates, and one-click Markdown export (`.md`).
 
+</details>
+
 ---
 
 ## 🪄 Example Concept Prompts for Tab 6 Testing
 
 Copy and paste any of the following concept pitches into the **"Campaign Concept Pitch / Storyboard Narrative"** text area located at the **very top of Tab 6** (inside the expander `✨ Have a creative brief or script draft? Paste it here to auto-fill controls`) and click **🪄 Parse Brief into Simulator Controls** to test the engine:
 
-### 1. Happy Path (Well-Calibrated Strategies)
+<details open>
+<summary><b>✅ 1. Happy Path Prompts (Well-Calibrated Strategies)</b></summary>
 
 #### **Enterprise Megabrand: Cinematic Snack Spectacle (:30s)**
 *(Tests Fortune 500 scale, Q2 anchor slot, pop-culture celebrity contrast, and maximum commercial ROI)*
@@ -200,9 +218,10 @@ Copy and paste any of the following concept pitches into the **"Campaign Concept
 *(Verifies that the parser does NOT hallucinate "Humor" or "Celebrity" when they aren't in the brief)*
 > A poignant, cinematic 60-second Audi brand film airing in Game Q1. A father and daughter take a cross-country winter road trip in an electric SUV over 20 years, focusing on enduring family bonds and quiet engineering reliability with classical orchestral music. No jokes, no celebrity cameos.
 
----
+</details>
 
-### 2. Bad Path (Defensive Guardrails & Risk Warnings)
+<details>
+<summary><b>⚠️ 2. Bad Path Prompts (Defensive Guardrails & Risk Warnings)</b></summary>
 
 #### **The Late-Game Blowout Blindspot (Q4 Buy with a Runaway Game)**
 *(Tests fourth-quarter channel-surfing decay when paired with high point margins)*
@@ -216,9 +235,10 @@ Copy and paste any of the following concept pitches into the **"Campaign Concept
 *(Triggers Q2 Scarcity and Challenger Budget Discipline warnings)*
 > A growing challenger tech brand with an $8M budget insisting on booking a prime 30-second spot in Game Q2 right before the halftime show, despite multi-year incumbent pre-emptions.
 
----
+</details>
 
-### 3. Breaks the System (Security Sanitization & Stress-Tests)
+<details>
+<summary><b>🛡️ 3. Security Stress-Test Prompts (Injection & Jailbreak Traps)</b></summary>
 
 #### **SQL & Code Injection Exploit Attempt**
 *(Tests security regex guardrails to block database injection or prompt execution)*
@@ -248,15 +268,22 @@ A 4-hour commercial airing during the 7th quarter of a tie-breaker overtime game
 ```
 * **Expected Response:** Flagged before token consumption: `⚠️ Invalid brief: Brief is too short or contains no words. Please provide a commercial storyboard concept.`
 
+</details>
+
 ---
 
 ## 🔬 Statistical Methodology & Governance
+
+<details>
+<summary><b>📊 Click to expand statistical validation & governance standards</b></summary>
 
 1. **Temporal Cross-Validation (`GroupKFold` on Year):** Models are evaluated using 5-fold temporal splitting by year to prevent chronological data leakage across multi-decade telecasts.
 2. **Empirical Wikipedia Surge Modeling:** Wikipedia search models train strictly on non-null empirical spike ratio observations (`df.dropna(subset=['spike_ratio'])`), avoiding variance collapse caused by naive global median imputation.
 3. **Conformal Prediction Intervals:** Dual-target heads generate 80% conformal bounds from out-of-fold residual distributions, providing defensible risk floors for media buyers and finance executives.
 4. **Non-Causal Reporting Disclaimer:** In compliance with empirical marketing science standards, modeled commercial lift metrics describe observed historical cohort patterns (2000–2026) across public advertisers and do not establish direct causal retail sales revenue or stock return guarantees.
 5. **System & Transport Security:** All external API communications use encrypted HTTP headers rather than URL query parameters, dynamic UI outputs are sanitized, and the application runtime enforces localhost isolation and origin checking.
+
+</details>
 
 ---
 

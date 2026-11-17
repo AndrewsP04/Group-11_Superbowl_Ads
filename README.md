@@ -1,7 +1,7 @@
 # 🏈 Super Bowl Ads Decision Engine
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://group-11superbowlads.streamlit.app/)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://python.org)
+[![Python 3.11 - 3.14](https://img.shields.io/badge/Python-3.11%20--%203.14-blue.svg)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg)](https://streamlit.io)
 [![Google GenAI](https://img.shields.io/badge/Google%20GenAI-Gemini%203.5%20%7C%203.8-4285F4.svg)](https://deepmind.google/technologies/gemini/)
 [![Explainable AI](https://img.shields.io/badge/EAI-InterpretML%20EBM-00A4EF.svg)](https://github.com/interpretml/interpret)
@@ -35,7 +35,7 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 <summary><b>🌐 Live Streamlit Cloud Deployment Overview</b></summary>
 
 * **Public Production URL:** [https://group-11superbowlads.streamlit.app/](https://group-11superbowlads.streamlit.app/)
-* **Host Platform:** Streamlit Community Cloud (Python 3.11 containerized environment)
+* **Host Platform:** Streamlit Community Cloud (Python 3.14 containerized environment)
 * **Continuous Deployment (CI/CD):** Automatically pulls, builds, and redeploys with zero downtime upon pushes to the `main` branch.
 * **Secrets & Credential Management:**
   * Secrets are securely injected using Streamlit Cloud Secrets Manager rather than repository files.
@@ -50,7 +50,7 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 ## ⚡ Quickstart & Local Installation
 
 ### **1. System Prerequisites**
-- **Python:** `Python 3.9` or higher (`Python 3.11+` recommended for Google ADK and InterpretML)
+- **Python:** `Python 3.9` or higher (`Python 3.11 – 3.14` tested; Streamlit Community Cloud runs Python 3.14)
 - **Memory:** Minimum 4 GB RAM (8 GB+ recommended for local EBM model fitting & 3072-d embeddings)
 - **OS:** macOS, Linux, or Windows (WSL recommended)
 

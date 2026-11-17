@@ -40,18 +40,55 @@ def init_vertex_env() -> Optional[str]:
     try:
         import streamlit as st
         if hasattr(st, "secrets"):
-            def _extract_secrets(mapping):
+            # 1. Direct section lookups: [gemini].api_key, [youtube].api_key, [google].api_key
+            try:
+                if "gemini" in st.secrets:
+                    g = st.secrets["gemini"]
+                    for k in ["api_key", "gemini_api_key", "key"]:
+                        if k in g and str(g[k]).strip():
+                            os.environ["GEMINI_API_KEY"] = str(g[k]).strip()
+                            break
+            except Exception:
+                pass
+
+            try:
+                if "youtube" in st.secrets:
+                    y = st.secrets["youtube"]
+                    for k in ["api_key", "youtube_api_key", "key"]:
+                        if k in y and str(y[k]).strip():
+                            os.environ["YOUTUBE_API_KEY"] = str(y[k]).strip()
+                            break
+            except Exception:
+                pass
+
+            try:
+                if "google" in st.secrets:
+                    gg = st.secrets["google"]
+                    for k in ["api_key", "google_api_key", "key"]:
+                        if k in gg and str(gg[k]).strip():
+                            os.environ["GOOGLE_API_KEY"] = str(gg[k]).strip()
+                            break
+            except Exception:
+                pass
+
+            # 2. Section prefix mapping and recursive scan for flat/nested keys
+            def _extract_secrets(mapping, prefix=""):
                 try:
                     items = mapping.items()
                 except Exception:
                     return
                 for k, v in items:
+                    full_key = f"{prefix}_{k}".strip("_").upper()
                     uk = str(k).upper().strip()
-                    if uk in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "YOUTUBE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"]:
-                        if not os.getenv(uk):
-                            os.environ[uk] = str(v).strip()
                     if hasattr(v, "items") or isinstance(v, dict):
-                        _extract_secrets(v)
+                        _extract_secrets(v, prefix=k)
+                    else:
+                        val_str = str(v).strip()
+                        if val_str:
+                            if uk in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "YOUTUBE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"]:
+                                os.environ[uk] = val_str
+                            elif full_key in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "YOUTUBE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"]:
+                                os.environ[full_key] = val_str
 
             _extract_secrets(st.secrets)
     except Exception:

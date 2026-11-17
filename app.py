@@ -38,6 +38,13 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Initialize environment and bridge Streamlit Cloud Secrets (st.secrets)
+try:
+    from decision_engine.config_auth import init_vertex_env
+    init_vertex_env()
+except Exception:
+    pass
+
 st.markdown(
     """
 <style>

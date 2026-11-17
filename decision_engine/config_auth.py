@@ -41,14 +41,23 @@ def init_vertex_env() -> Optional[str]:
         import streamlit as st
         if hasattr(st, "secrets"):
             for k in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "YOUTUBE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"]:
-                if k in st.secrets and not os.getenv(k):
-                    os.environ[k] = str(st.secrets[k])
+                val = None
+                try:
+                    val = st.secrets.get(k) or st.secrets.get(k.lower())
+                except Exception:
+                    if k in st.secrets:
+                        val = st.secrets[k]
+                    elif k.lower() in st.secrets:
+                        val = st.secrets[k.lower()]
+                if val and not os.getenv(k):
+                    os.environ[k] = str(val).strip()
     except Exception:
         pass
 
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "TRUE"
     if api_key:
+        os.environ["GEMINI_API_KEY"] = api_key
         os.environ["GOOGLE_API_KEY"] = api_key
     return api_key
 

@@ -84,37 +84,94 @@ python3 -m decision_engine.enrich_and_train
 
 ## 💡 Key Highlights & Innovations
 
-- **Executive-First Decision Framework (The 3 Business Pillars):** Rather than forcing decision-makers to interpret intermediate web telemetry (YouTube views, Wikipedia spikes), the platform organizes insights around the three fundamental business questions:
-  1. **Channel Allocation Verdict:** Whether to run a national Super Bowl commercial, pivot to targeted digital/social media, or execute a hybrid flight. Rendered with high-impact, large-scale typography (`1.85rem` / `900 weight`) on its own dedicated hero line with dynamic neon backlight glow to immediately command executive attention.
-  2. **Financial ROI & Budget Cap:** Expected commercial and earned brand value ($M), net ROI %, maximum viable spend ceiling, 10th-percentile downside capital safety floor, and unit efficiency ($/viewer reached).
-  3. **Creative Content Playbook:** Vertical-specific winning formula, primary lift drivers, and high-risk creative traps to avoid.
-- **Top-of-Fold AI Workflow & Uncluttered Executive Hierarchy:** Re-architected in response to executive UX review:
-  - **Hero AI Brief Parser (Top):** Mounted at the very top of Tab 6, allowing any user to immediately paste a campaign concept or script draft without having to scroll down through the dashboard.
-  - **Executive Strategy Brief Cards (Center):** The 3 core business pillars render directly beneath the AI prompt for immediate visual feedback.
-  - **Scenario Simulation Controls (Bottom):** Granular manual sliders, dropdowns, and empirical football ambiguity controls sit cleanly below the executive cards, keeping the primary decision view completely uncluttered while maintaining full parameter exploratory capabilities.
-- **Brand Capital & Scale Tier Governance:** Accounts for market capitalization and budget reality across three corporate scale tiers:
-  - **🏛️ Enterprise Megabrand ($15M+ Budget):** Unlocks full national broadcast inventory across all four quarters.
-  - **🚀 Challenger / Growth Brand ($6M–$15M Budget):** Warns against Q2 inventory inflation ($7.8M rate) and guides advertisers to Game Q3 ($6.4M) to bank $1.4M in savings to fund a 60-day digital retargeting sprint.
-  - **🌱 Emerging / Non-Mainstream (<$6M Budget):** Automatically triggers an executive Solvency Veto against national TV buys, redirecting capital into a **$500K Social Creator Sprint (4.8x ROAS / $2.4M GMV)** or a **$40K–$120K Local DMA Cable Interconnect** (saving $8.5M+ cash) and deploying the *Challenger Guerrilla Playbook*.
-- **Empirical Football Ambiguity & Game Flow Model (2000–2024 Scores):** Eliminates unrealistic manual point spread guessing. Acknowledges that Super Bowl commercial airtime is contracted **6 to 9 months in advance** during network Upfronts when playoff finalists and Las Vegas spreads do not exist. Directly models telecast living-room flow on the empirical score distribution of all 25 modern Super Bowls (2000–2024):
-  - **56.0% (14/25 games) One-Possession Nailbiter ($\le 7$ pts · median 3.0 pts):** Glued viewership; Q4 audience surges up to 125M+ viewers (+6.7% over Q2) with 0% decay.
-  - **28.0% (7/25 games) Competitive Two-Possession (8–19 pts · median 11.0 pts):** Steady, predictable living-room retention.
-  - **16.0% (4/25 games) Runaway Blowout ($\ge 20$ pts · median 24.0 pts):** Downside tail risk: models -21.9% living-room audience drop in Q4 to 61.1M viewers with CPM spiking to $95+.
-  - **🎲 Expected Game Flow (Default):** Statistically sound weighted blend ($0.56 \times \text{close} + 0.28 \times \text{comp} + 0.16 \times \text{blowout}$) eliminating speculative guesswork.
-- **Intelligent Airtime Allotment & Quarter Feasibility Matrix:** Compares commercial inventory availability, upfront market pricing deltas vs Q2, living-room reach, CPM, and strategic archetypes across all 4 broadcast quarters with one-click quarter switching.
-- **Rejection of Tree Ensembles (LightGBM/XGBoost):** Small sample sizes ($N=244\text{--}567$ spots over 25 years) cause standard tree models to overfit on viral outliers, flatline outside historical ranges, and create jagged step-function cliffs on interactive sliders. Our **Two-Stage RidgeCV + Monotonic EBM** (`interpret`) decouples macro temporal trends (Stage 1) from additive creative residuals and pairwise non-linear synergies (Stage 2).
-- **Active 2026 Google Cloud Models & Agentic Architecture:**
-  - **`gemini-3.5-flash-lite`:** Sub-second natural language concept brief parsing and offline semantic narrative extraction with built-in regex sanitization.
-  - **`gemini-embedding-001`:** Full 3072-dimensional vector RAG embeddings matching pitches against 25 years of historical commercials, augmented with real-time YouTube Data API pulls.
-  - **`gemini-3.8-flash`:** Multi-step reasoning and adversarial boardroom debates orchestrated via Google Agent Development Kit (ADK).
+<details>
+<summary><b>🏛️ Executive-First Decision Framework (The 3 Business Pillars)</b></summary>
+
+Rather than forcing decision-makers to interpret intermediate web telemetry (YouTube views, Wikipedia spikes), the platform organizes insights around the three fundamental business questions:
+1. **Channel Allocation Verdict:** Whether to run a national Super Bowl commercial, pivot to targeted digital/social media, or execute a hybrid flight. Rendered with high-impact, large-scale typography (`1.85rem` / `900 weight`) on its own dedicated hero line with dynamic neon backlight glow to immediately command executive attention.
+2. **Financial ROI & Budget Cap:** Expected commercial and earned brand value ($M), net ROI %, maximum viable spend ceiling, 10th-percentile downside capital safety floor, and unit efficiency ($/viewer reached).
+3. **Creative Content Playbook:** Vertical-specific winning formula, primary lift drivers, and high-risk creative traps to avoid.
+
+</details>
+
+<details>
+<summary><b>✨ Top-of-Fold AI Workflow & Uncluttered Executive Hierarchy</b></summary>
+
+Re-architected in response to executive UX review:
+- **Hero AI Brief Parser (Top):** Mounted at the very top of Tab 6, allowing any user to immediately paste a campaign concept or script draft without having to scroll down through the dashboard.
+- **Executive Strategy Brief Cards (Center):** The 3 core business pillars render directly beneath the AI prompt for immediate visual feedback.
+- **Scenario Simulation Controls (Bottom):** Granular manual sliders, dropdowns, and empirical football ambiguity controls sit cleanly below the executive cards, keeping the primary decision view completely uncluttered while maintaining full parameter exploratory capabilities.
+
+</details>
+
+<details>
+<summary><b>⚖️ Brand Capital & Scale Tier Governance</b></summary>
+
+Accounts for market capitalization and budget reality across three corporate scale tiers:
+- **🏛️ Enterprise Megabrand ($15M+ Budget):** Unlocks full national broadcast inventory across all four quarters.
+- **🚀 Challenger / Growth Brand ($6M–$15M Budget):** Warns against Q2 inventory inflation ($7.8M rate) and guides advertisers to Game Q3 ($6.4M) to bank $1.4M in savings to fund a 60-day digital retargeting sprint.
+- **🌱 Emerging / Non-Mainstream (<$6M Budget):** Automatically triggers an executive Solvency Veto against national TV buys, redirecting capital into a **$500K Social Creator Sprint (4.8x ROAS / $2.4M GMV)** or a **$40K–$120K Local DMA Cable Interconnect** (saving $8.5M+ cash) and deploying the *Challenger Guerrilla Playbook*.
+
+</details>
+
+<details>
+<summary><b>🏈 Empirical Football Ambiguity & Game Flow Model (2000–2024 Scores)</b></summary>
+
+Eliminates unrealistic manual point spread guessing. Acknowledges that Super Bowl commercial airtime is contracted **6 to 9 months in advance** during network Upfronts when playoff finalists and Las Vegas spreads do not exist. Directly models telecast living-room flow on the empirical score distribution of all 25 modern Super Bowls (2000–2024):
+- **56.0% (14/25 games) One-Possession Nailbiter ($\le 7$ pts · median 3.0 pts):** Glued viewership; Q4 audience surges up to 125M+ viewers (+6.7% over Q2) with 0% decay.
+- **28.0% (7/25 games) Competitive Two-Possession (8–19 pts · median 11.0 pts):** Steady, predictable living-room retention.
+- **16.0% (4/25 games) Runaway Blowout ($\ge 20$ pts · median 24.0 pts):** Downside tail risk: models -21.9% living-room audience drop in Q4 to 61.1M viewers with CPM spiking to $95+.
+- **🎲 Expected Game Flow (Default):** Statistically sound weighted blend ($0.56 \times \text{close} + 0.28 \times \text{comp} + 0.16 \times \text{blowout}$) eliminating speculative guesswork.
+
+</details>
+
+<details>
+<summary><b>📊 Intelligent Airtime Allotment & Quarter Feasibility Matrix</b></summary>
+
+Compares commercial inventory availability, upfront market pricing deltas vs Q2, living-room reach, CPM, and strategic archetypes across all 4 broadcast quarters with one-click quarter switching.
+
+</details>
+
+<details>
+<summary><b>🔬 Rejection of Tree Ensembles (Two-Stage RidgeCV + Monotonic EBM)</b></summary>
+
+Small sample sizes ($N=244\text{--}567$ spots over 25 years) cause standard tree models to overfit on viral outliers, flatline outside historical ranges, and create jagged step-function cliffs on interactive sliders. Our **Two-Stage RidgeCV + Monotonic EBM** (`interpret`) decouples macro temporal trends (Stage 1) from additive creative residuals and pairwise non-linear synergies (Stage 2).
+
+</details>
+
+<details>
+<summary><b>🤖 Active 2026 Google Cloud Models & Agentic Architecture</b></summary>
+
+- **`gemini-3.5-flash-lite`:** Sub-second natural language concept brief parsing and offline semantic narrative extraction with built-in regex sanitization.
+- **`gemini-embedding-001`:** Full 3072-dimensional vector RAG embeddings matching pitches against 25 years of historical commercials, augmented with real-time YouTube Data API pulls.
+- **`gemini-3.8-flash`:** Multi-step reasoning and adversarial boardroom debates orchestrated via Google Agent Development Kit (ADK).
+
+</details>
+
+<details>
+<summary><b>⚡ Sub-20ms Deterministic Simulation & 512-Grid Vectorized Prescriptive Optimizer</b></summary>
+
 - **Sub-20ms Deterministic Local Simulation:** Instant slider responsiveness (<20ms forward passes) without lag or redundant remote LLM calls.
 - **True 512-Grid Vectorized Prescriptive Optimizer:** Evaluates all $2^7 \times 4 = 512$ creative trait and broadcast quarter permutations in a single NumPy batch pass in under **`2 ms`**.
-- **CFO Governance & Conformal Prediction Bounds:** Enforces 80% conformal prediction intervals ($10^{\text{th}}$ percentile downside floors) and strict non-causal disclosures (modeled cohort interest vs. guaranteed retail revenue).
-- **Enterprise Reliability & Architecture Safeguards:** 
-  - **Cryptographic Model Verification:** All serialized machine learning bundles are verified against SHA-256 digests prior to runtime deserialization.
-  - **Structured Prompt Sandboxing:** User-provided campaign concepts are isolated within strict data schemas separate from model system instructions to prevent prompt override or persona hijacking.
-  - **Resource & Quota Governance:** In-memory request caching and session debouncing (5-second cooldown) ensure efficient, predictable compute and API utilization.
-  - **Safe Content Rendering & Transport:** Header-based authentication protects API credentials, dynamic web feeds are encoded with HTML entity escaping, and commercial video streaming is locked to verified providers.
+
+</details>
+
+<details>
+<summary><b>💼 CFO Governance & Conformal Prediction Bounds</b></summary>
+
+Enforces 80% conformal prediction intervals ($10^{\text{th}}$ percentile downside floors) and strict non-causal disclosures (modeled cohort interest vs. guaranteed retail revenue).
+
+</details>
+
+<details>
+<summary><b>🛡️ Enterprise Reliability & Architecture Safeguards</b></summary>
+
+- **Cryptographic Model Verification:** All serialized machine learning bundles are verified against SHA-256 digests prior to runtime deserialization.
+- **Structured Prompt Sandboxing:** User-provided campaign concepts are isolated within strict data schemas separate from model system instructions to prevent prompt override or persona hijacking.
+- **Resource & Quota Governance:** In-memory request caching and session debouncing (5-second cooldown) ensure efficient, predictable compute and API utilization.
+- **Safe Content Rendering & Transport:** Header-based authentication protects API credentials, dynamic web feeds are encoded with HTML entity escaping, and commercial video streaming is locked to verified providers.
+
+</details>
 
 ---
 

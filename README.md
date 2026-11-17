@@ -47,7 +47,9 @@ pip install -r requirements.txt
 ### **3. Configure Environment Variables (`.env`)**
 Create a `.env` file in the project root:
 ```ini
-GEMINI_API_KEY=your_agent_platform_api_key_here
+# Provide either GOOGLE_API_KEY (Google AI Studio) or GEMINI_API_KEY (Vertex AI / Agent Platform)
+GOOGLE_API_KEY=your_google_ai_studio_api_key_here
+# GEMINI_API_KEY=your_agent_platform_api_key_here
 GOOGLE_GENAI_USE_VERTEXAI=TRUE
 YOUTUBE_API_KEY=your_youtube_api_key_here  # Optional: for live YouTube commercial pulls (Tab 6)
 ```
@@ -73,7 +75,7 @@ python3 -m decision_engine.enrich_and_train
 <details open>
 <summary><b>🔑 Environment Variable Reference & Security Notice</b></summary>
 
-* **`GEMINI_API_KEY`**: Authenticates Google Agent Platform / Vertex AI calls (supports Agent Platform API keys starting with `AQ....` or Gemini API keys). Powers natural language brief parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom.
+* **`GOOGLE_API_KEY` / `GEMINI_API_KEY`**: Authenticates Google GenAI API calls. The centralized authentication handler (`config_auth.py`) supports standard Google AI Studio API keys (`AIza...`) via `GOOGLE_API_KEY` as well as Google Agent Platform / Vertex AI keys (`AQ...`) via `GEMINI_API_KEY`. Powers natural language brief parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom.
 * **`GOOGLE_GENAI_USE_VERTEXAI=TRUE`**: Directs SDK and Google ADK calls through Vertex AI Agent Platform endpoints.
 * **`YOUTUBE_API_KEY`**: Required to query the YouTube Data API v3 for live Big Game commercial pulls in Tab 6 (e.g. pulling modern Apple, Google Pixel, or OpenAI ads not found in the offline 2000–2020 dataset). If omitted, the application runs normally and falls back strictly to the static historical archive.
 * **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure production keys are securely rotated in your Google Cloud Console before distribution.
@@ -270,10 +272,13 @@ Interactive comparative grid evaluating commercial inventory availability, upfro
 <summary><b>8. Google ADK Multi-Agent Strategy Boardroom</b></summary>
 
 * On-demand adversarial debate orchestrated via `gemini-3.8-flash`:
-  * `CreativeDirectorAgent`: Champions cultural buzz, storytelling arc, and viral potential.
-  * `MediaPlannerAgent`: Scrutinizes living-room reach, blowout tune-out risks, and Effective CPM.
-  * `CFO_RiskAgent`: Audits downside risk floors and capital allocation governance.
-  * `ConsensusChairAgent`: Synthesizes debates into a formal **Executive Consensus Decision Brief** with conditional verdicts, strategic mandates, and one-click Markdown export (`.md`).
+  * **Dynamic Grounding on Active Simulation Controls:** Multi-agent personas are conditioned directly on active campaign parameters (Brand Tier, Total Capital Outlay $M, Airtime Quarter, Net ROI %, and Expected Commercial Value), eliminating generic assumptions or hallucinated budgets.
+  * **Calibrated Determinism (`temperature=0.2`):** Low-temperature sampling guarantees high analytical consistency, numerical precision, and reproducibility across repeated runs.
+  * **Specialist Stakeholder Personas:**
+    * `CreativeDirectorAgent`: Champions cultural buzz, storytelling arc, celebrity contrast, and benchmark comp precedents.
+    * `MediaPlannerAgent`: Scrutinizes living-room reach, telecast retention, and blowout tune-out risks for the selected quarter.
+    * `CFO_RiskAgent`: Audits downside risk floors, total capital solvency, and enforces non-causal governance disclosures.
+    * `ConsensusChairAgent`: Synthesizes conflicting memos into an **Executive Consensus Decision Brief** featuring color-coded determination banners (`APPROVAL (GREEN LIGHT)`, `CONDITIONAL APPROVAL`, or `CAPITAL CEILING VETO`), clean numbered strategic mandates, compliance sign-offs, and one-click Markdown export (`.md`).
 
 </details>
 
@@ -374,7 +379,7 @@ A 4-hour commercial airing during the 7th quarter of a tie-breaker overtime game
 ## 📁 Project Structure
 
 <details>
-<summary><b>Click to expand full repository file tree (41 verified files)</b></summary>
+<summary><b>Click to expand full repository file tree (43 tracked files)</b></summary>
 
 ```text
 Group-11_Superbowl_Ads/

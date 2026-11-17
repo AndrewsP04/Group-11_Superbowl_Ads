@@ -39,6 +39,7 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 * **Continuous Deployment (CI/CD):** Automatically pulls, builds, and redeploys with zero downtime upon pushes to the `main` branch.
 * **Secrets & Credential Management:**
   * Production credentials and API keys are securely managed via Streamlit Community Cloud Secrets Manager rather than committed repository files.
+  * Keys used: `GEMINI_API_KEY` (powers Vertex AI Gemini models and Google ADK Multi-Agent Boardroom), `GOOGLE_GENAI_USE_VERTEXAI` (enforces Vertex AI routing), and `YOUTUBE_API_KEY` (optional live commercial enrichment).
   * `decision_engine/config_auth.py` automatically bridges `st.secrets` into standard environment variables on container startup.
 * **Model Artifact Integrity:** The production container cryptographically validates the pre-trained `decision_engine_bundle.joblib` bundle against `decision_engine_bundle.sha256` before booting the UI.
 

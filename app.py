@@ -1,7 +1,7 @@
 """Super Bowl Ads Intelligence Dashboard - Group 11
 
 Touchdowns and Tactics: Decoding Super Bowl Ads
-Interactive Prototype for Presentation II (Due Oct 20, 2026)
+Executive Decision Platform - Group 11
 """
 
 import io
@@ -439,8 +439,8 @@ with st.expander("Data quality and join checks"):
 st.markdown(
     "<h1 style='text-align:center;color:#cdd6f4;font-size:2rem;'>🏈 Super Bowl"
     " Ads Decision Engine</h1><p"
-    " style='text-align:center;color:#89b4fa;margin-top:-0.5rem;'>Interactive"
-    " Prototype · Group 11 Decision Suite</p>",
+    " style='text-align:center;color:#89b4fa;margin-top:-0.5rem;'>Executive"
+    " Decision Platform · Group 11 Decision Suite</p>",
     unsafe_allow_html=True,
 )
 

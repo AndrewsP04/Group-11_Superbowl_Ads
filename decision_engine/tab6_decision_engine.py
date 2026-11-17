@@ -97,7 +97,16 @@ def render_tab6():
         "and the Google ADK Multi-Agent Boardroom on Vertex AI."
     )
 
-    # ── 1. Natural Language Pitch Parser ──────────────────────────────────────
+    # ── 1. PRIMARY EXECUTIVE HERO VIEW CONTAINER (TOP OF TAB 6) ──────────────
+    # Instantiated at the top so the Executive Decision & ROI cards render first
+    hero_decision_container = st.container()
+
+    # ── 2. SCENARIO SIMULATION & PARAMETER CONTROLS (BELOW EXECUTIVE VIEW) ───
+    st.markdown("---")
+    st.markdown("### 🎛️ Scenario Simulation & Creative Controls")
+    st.caption("Fine-tune creative attributes, brand scale tier, and game flow dynamics below to instantly test scenarios and update the Executive Decision & ROI above.")
+
+    # A. Natural Language Pitch Parser
     with st.expander("✨ Have a creative brief or script draft? Paste it here to auto-fill controls", expanded=False):
         pitch_input = st.text_area(
             "Campaign Concept Pitch / Storyboard Narrative",
@@ -407,133 +416,153 @@ def render_tab6():
             is_probabilistic_blend=is_probabilistic_blend,
         )
 
-    # ── 3. Executive Strategy Brief & Pre-Buy Decision Summary (TOP VIEW) ─────
-    st.markdown("---")
-    st.markdown("### 📋 Executive Strategy Brief & Pre-Buy Decision Summary")
-    st.caption("Synthesized cross-functional decision brief for executive leadership: channel choice, financial ROI & spending limits, and winning creative playbook.")
-
-    # 3 High-Impact Executive Pillar Cards (Replacing the previous 4 KPI row)
-    c_p1, c_p2, c_p3 = st.columns(3)
-
+    # Unpack executive decision components before rendering hero view
     cv = exec_dec["channel_verdict"]
     fr = exec_dec["financial_roi"]
     cr = exec_dec["creative_recipe"]
     qa = exec_dec.get("quarter_advisory", {})
     ta = exec_dec.get("tier_advisory", {})
 
-    with c_p1:
-        emerging_solvency_box = ""
-        if ta.get("is_emerging"):
-            emerging_solvency_box = (
-                f'<div style="background: rgba(250, 179, 135, 0.14); border-left: 3px solid #fab387; padding: 0.4rem 0.6rem; border-radius: 4px; color: #fab387; font-size: 0.76rem; margin-bottom: 0.5rem; line-height: 1.35;">'
-                f'⚠️ <b>Brand Solvency Ceiling (Under $6M Budget):</b> National broadcast (${fr["total_capital_m"]}M) exceeds viable corporate reserves. 100% digital reallocation or Local Cable DMA buy is recommended.'
+    # ── Populate Primary Executive Hero View (Renders at the very top of Tab 6) ──
+    with hero_decision_container:
+        st.markdown(
+            f"""
+            <div style="background: linear-gradient(135deg, rgba(30, 30, 46, 0.95), rgba(24, 24, 37, 0.95)); border: 1px solid #45475a; border-radius: 10px; padding: 0.9rem 1.25rem; margin: 0.4rem 0 0.9rem 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap;">
+                        <span style="font-size: 1.28rem; font-weight: 800; color: #cdd6f4; letter-spacing: 0.4px;">⭐ Executive Strategy Brief & Pre-Buy Decision</span>
+                        <span style="font-size: 0.70rem; padding: 2px 8px; border-radius: 10px; background: rgba(166, 227, 161, 0.15); color: #a6e3a1; font-weight: 800; border: 1px solid #a6e3a155;">PRIMARY DECISION VIEW</span>
+                    </div>
+                    <div style="font-size: 0.80rem; color: #a6adc8; margin-top: 0.2rem;">
+                        High-conviction executive synthesis: strategic channel choice, financial ROI return & budget ceilings, and winning creative playbook.
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                    <span style="font-size: 0.73rem; padding: 3px 9px; border-radius: 6px; background: rgba(137, 180, 250, 0.15); color: #89b4fa; font-weight: 700; border: 1px solid #89b4fa55;">{sel_vertical}</span>
+                    <span style="font-size: 0.73rem; padding: 3px 9px; border-radius: 6px; background: rgba(255, 255, 255, 0.08); color: {ta.get('tier_color', '#89b4fa')}; font-weight: 700; border: 1px solid {ta.get('tier_color', '#89b4fa')}44;">{ta.get('tier_badge', 'Scale')}</span>
+                    <span style="font-size: 0.73rem; padding: 3px 9px; border-radius: 6px; background: rgba(166, 227, 161, 0.15); color: #a6e3a1; font-weight: 700; border: 1px solid #a6e3a155;">:{sel_runtime}s · {sel_quarter}</span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        # 3 High-Impact Executive Pillar Cards (Replacing the previous 4 KPI row)
+        c_p1, c_p2, c_p3 = st.columns(3)
+
+        with c_p1:
+            emerging_solvency_box = ""
+            if ta.get("is_emerging"):
+                emerging_solvency_box = (
+                    f'<div style="background: rgba(250, 179, 135, 0.14); border-left: 3px solid #fab387; padding: 0.4rem 0.6rem; border-radius: 4px; color: #fab387; font-size: 0.76rem; margin-bottom: 0.5rem; line-height: 1.35;">'
+                    f'⚠️ <b>Brand Solvency Ceiling (Under $6M Budget):</b> National broadcast (${fr["total_capital_m"]}M) exceeds viable corporate reserves. 100% digital reallocation or Local Cable DMA buy is recommended.'
+                    f'</div>'
+                )
+
+            card1_html = (
+                f'<div style="background: #181825; border: 1px solid #313244; border-top: 4px solid {cv["color"]}; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">'
+                f'<div>'
+                f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.25rem;">'
+                f'<span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">1. Channel Choice</span>'
+                f'<div style="display: flex; gap: 0.3rem;">'
+                f'<span style="font-size: 0.70rem; padding: 2px 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); color: {ta.get("tier_color", "#89b4fa")}; font-weight: 700; border: 1px solid {ta.get("tier_color", "#89b4fa")}44;">{ta.get("tier_badge", "Scale")}</span>'
+                f'<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(166, 227, 161, 0.15); color: {cv["color"]}; font-weight: 700; border: 1px solid {cv["color"]}55;">{cv["badge"]}</span>'
+                f'</div>'
+                f'</div>'
+                f'{emerging_solvency_box}'
+                f'<div style="font-size: 1.12rem; font-weight: 800; color: #cdd6f4; margin-bottom: 0.4rem; line-height: 1.3;">{cv["summary"]}</div>'
+                f'<div style="font-size: 0.83rem; color: #bac2de; line-height: 1.45; margin-bottom: 0.5rem;">{cv["detail"]}</div>'
+                f'<div style="background: rgba(30, 30, 46, 0.9); border: 1px solid #313244; border-radius: 6px; padding: 0.5rem 0.65rem; margin-bottom: 0.5rem; font-size: 0.77rem; line-height: 1.4;">'
+                f'<div style="font-weight: 700; color: {qa.get("scarcity_color", "#fab387")}; margin-bottom: 0.15rem;">📍 {qa.get("selected_quarter", "Quarter")}: {qa.get("headline", "")}</div>'
+                f'<div style="color: #a6adc8; margin-bottom: 0.35rem;">{qa.get("warning", "")}</div>'
+                f'<div style="background: rgba(137, 180, 250, 0.12); border-left: 3px solid #89b4fa; padding: 0.3rem 0.5rem; border-radius: 4px; color: #89b4fa; font-weight: 600;">💡 <b>Allotment Pivot:</b> {qa.get("smart_alt_summary", "")}</div>'
+                f'</div>'
+                f'</div>'
+                f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.55rem 0.7rem; font-size: 0.78rem; color: #a6adc8; line-height: 1.4;">💡 <b>Social Media Tradeoff:</b> {cv["social_comparison"]}</div>'
                 f'</div>'
             )
+            st.markdown(card1_html, unsafe_allow_html=True)
 
-        card1_html = (
-            f'<div style="background: #181825; border: 1px solid #313244; border-top: 4px solid {cv["color"]}; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">'
-            f'<div>'
-            f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.25rem;">'
-            f'<span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">1. Channel Choice</span>'
-            f'<div style="display: flex; gap: 0.3rem;">'
-            f'<span style="font-size: 0.70rem; padding: 2px 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); color: {ta.get("tier_color", "#89b4fa")}; font-weight: 700; border: 1px solid {ta.get("tier_color", "#89b4fa")}44;">{ta.get("tier_badge", "Scale")}</span>'
-            f'<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(166, 227, 161, 0.15); color: {cv["color"]}; font-weight: 700; border: 1px solid {cv["color"]}55;">{cv["badge"]}</span>'
-            f'</div>'
-            f'</div>'
-            f'{emerging_solvency_box}'
-            f'<div style="font-size: 1.05rem; font-weight: 700; color: #cdd6f4; margin-bottom: 0.4rem; line-height: 1.3;">{cv["summary"]}</div>'
-            f'<div style="font-size: 0.83rem; color: #bac2de; line-height: 1.45; margin-bottom: 0.5rem;">{cv["detail"]}</div>'
-            f'<div style="background: rgba(30, 30, 46, 0.9); border: 1px solid #313244; border-radius: 6px; padding: 0.5rem 0.65rem; margin-bottom: 0.5rem; font-size: 0.77rem; line-height: 1.4;">'
-            f'<div style="font-weight: 700; color: {qa.get("scarcity_color", "#fab387")}; margin-bottom: 0.15rem;">📍 {qa.get("selected_quarter", "Quarter")}: {qa.get("headline", "")}</div>'
-            f'<div style="color: #a6adc8; margin-bottom: 0.35rem;">{qa.get("warning", "")}</div>'
-            f'<div style="background: rgba(137, 180, 250, 0.12); border-left: 3px solid #89b4fa; padding: 0.3rem 0.5rem; border-radius: 4px; color: #89b4fa; font-weight: 600;">💡 <b>Allotment Pivot:</b> {qa.get("smart_alt_summary", "")}</div>'
-            f'</div>'
-            f'</div>'
-            f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.55rem 0.7rem; font-size: 0.78rem; color: #a6adc8; line-height: 1.4;">💡 <b>Social Media Tradeoff:</b> {cv["social_comparison"]}</div>'
-            f'</div>'
-        )
-        st.markdown(card1_html, unsafe_allow_html=True)
+        with c_p2:
+            roi_sign = "+" if fr['net_profit_m'] >= 0 else ""
+            roi_color = "#a6e3a1" if fr['net_profit_m'] >= 0 else "#f38ba8"
 
-    with c_p2:
-        roi_sign = "+" if fr['net_profit_m'] >= 0 else ""
-        roi_color = "#a6e3a1" if fr['net_profit_m'] >= 0 else "#f38ba8"
+            tier_financial_note = ""
+            if ta.get("is_emerging"):
+                tier_financial_note = (
+                    f'<div style="background: rgba(166, 227, 161, 0.12); border: 1px solid #a6e3a155; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.77rem; color: #a6e3a1; margin-top: 0.4rem; line-height: 1.35;">'
+                    f'🎯 <b>Recommended Digital Allocation:</b> Reallocate <b>${ta.get("digital_budget_k", 500)}K</b> into social creator blitz → Expected <b>${ta.get("digital_expected_value_m", 2.4)}M GMV ({ta.get("digital_roas", "4.8x ROAS")})</b>. Saves <b>${ta.get("capital_saved_m", 8.5)}M cash</b> vs national broadcast!'
+                    f'</div>'
+                )
+            elif ta.get("is_challenger") and sel_quarter == "Game Q2":
+                q3_savings = round(fr['airtime_cost_m'] - QUARTER_BASE_COST_M['Game Q3'] * (sel_runtime / 30.0), 1)
+                tier_financial_note = (
+                    f'<div style="background: rgba(137, 180, 250, 0.12); border: 1px solid #89b4fa55; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.77rem; color: #89b4fa; margin-top: 0.4rem; line-height: 1.35;">'
+                    f'💡 <b>Challenger Value Move:</b> Shifting from Q2 to Q3 saves <b>${q3_savings}M</b> to fund your digital retargeting blitz!'
+                    f'</div>'
+                )
 
-        tier_financial_note = ""
-        if ta.get("is_emerging"):
-            tier_financial_note = (
-                f'<div style="background: rgba(166, 227, 161, 0.12); border: 1px solid #a6e3a155; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.77rem; color: #a6e3a1; margin-top: 0.4rem; line-height: 1.35;">'
-                f'🎯 <b>Recommended Digital Allocation:</b> Reallocate <b>${ta.get("digital_budget_k", 500)}K</b> into social creator blitz → Expected <b>${ta.get("digital_expected_value_m", 2.4)}M GMV ({ta.get("digital_roas", "4.8x ROAS")})</b>. Saves <b>${ta.get("capital_saved_m", 8.5)}M cash</b> vs national broadcast!'
+            card2_html = (
+                f'<div style="background: #181825; border: 1px solid #313244; border-top: 4px solid #89b4fa; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">'
+                f'<div>'
+                f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">'
+                f'<span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">2. Financial ROI & Budget Cap</span>'
+                f'<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(137, 180, 250, 0.15); color: #89b4fa; font-weight: 700; border: 1px solid #89b4fa55;">💰 {fr["roi_multiplier"]}x ROI Return</span>'
+                f'</div>'
+                f'<div style="display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.15rem;">'
+                f'<span style="font-size: 2.25rem; font-weight: 900; color: #a6e3a1; letter-spacing: -0.5px;">${fr["expected_gross_value_m"]}M</span>'
+                f'<span style="font-size: 1.0rem; color: {roi_color}; font-weight: 800;">({roi_sign}{fr["roi_pct"]}% Net ROI)</span>'
+                f'</div>'
+                f'<div style="font-size: 0.77rem; color: #a6adc8; margin-bottom: 0.6rem;">Expected Commercial & Earned Media Brand Value</div>'
+                f'<div style="font-size: 0.82rem; color: #cdd6f4; line-height: 1.5; border-top: 1px solid #313244; padding-top: 0.5rem;">'
+                f'• <b>Max Viable Budget:</b> <span style="color: #fab387; font-weight: 800;">${fr["max_viable_budget_m"]}M Spend Ceiling</span><br/>'
+                f'• <b>Capital Outlay:</b> ${fr["total_capital_m"]}M (${fr["airtime_cost_m"]}M Airtime + ${fr["prod_cost_m"]}M Prod)<br/>'
+                f'• <b>Downside Safety Floor:</b> ${fr["downside_floor_m"]}M (10th %ile Capital Protection)'
+                f'</div>'
+                f'</div>'
+                f'<div>'
+                f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.78rem; color: #a6adc8; margin-top: 0.4rem;">'
+                f'💵 <b>Breakeven Spend:</b> <b>${fr["cost_per_viewer"]} / viewer reached</b> (${sim["effective_cpm_usd"]} CPM)'
+                f'</div>'
+                f'{tier_financial_note}'
+                f'</div>'
                 f'</div>'
             )
-        elif ta.get("is_challenger") and sel_quarter == "Game Q2":
-            q3_savings = round(fr['airtime_cost_m'] - QUARTER_BASE_COST_M['Game Q3'] * (sel_runtime / 30.0), 1)
-            tier_financial_note = (
-                f'<div style="background: rgba(137, 180, 250, 0.12); border: 1px solid #89b4fa55; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.77rem; color: #89b4fa; margin-top: 0.4rem; line-height: 1.35;">'
-                f'💡 <b>Challenger Value Move:</b> Shifting from Q2 to Q3 saves <b>${q3_savings}M</b> to fund your digital retargeting blitz!'
+            st.markdown(card2_html, unsafe_allow_html=True)
+
+        with c_p3:
+            bullets_html = "".join([f"<li style='margin-bottom: 0.25rem;'><b>{title}:</b> <span style='color: #bac2de;'>{desc}</span></li>" for title, desc in cr['recipe_elements']])
+            card3_html = (
+                f'<div style="background: #181825; border: 1px solid #313244; border-top: 4px solid #fab387; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">'
+                f'<div>'
+                f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">'
+                f'<span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">3. Creative Content Recipe</span>'
+                f'<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(250, 179, 135, 0.15); color: #fab387; font-weight: 700; border: 1px solid #fab38755;">⚡ What to Put in Ad</span>'
+                f'</div>'
+                f'<div style="font-size: 0.92rem; font-weight: 800; color: #fab387; margin-bottom: 0.35rem;">{cr["formula_title"]}</div>'
+                f'<ul style="font-size: 0.78rem; color: #cdd6f4; padding-left: 1.1rem; margin-bottom: 0.5rem; line-height: 1.35;">{bullets_html}</ul>'
+                f'</div>'
+                f'<div>'
+                f'<div style="font-size: 0.77rem; color: #f38ba8; margin-bottom: 0.35rem; line-height: 1.3;">⚠️ <b>{cr["avoid_elements"]}</b></div>'
+                f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.76rem; color: #a6e3a1; font-weight: 600;">🚀 {cr["immediate_action"]}</div>'
+                f'</div>'
                 f'</div>'
             )
+            st.markdown(card3_html, unsafe_allow_html=True)
 
-        card2_html = (
-            f'<div style="background: #181825; border: 1px solid #313244; border-top: 4px solid #89b4fa; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">'
-            f'<div>'
-            f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">'
-            f'<span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">2. Financial ROI & Budget Cap</span>'
-            f'<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(137, 180, 250, 0.15); color: #89b4fa; font-weight: 700; border: 1px solid #89b4fa55;">💰 {fr["roi_multiplier"]}x ROI Return</span>'
-            f'</div>'
-            f'<div style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.2rem;">'
-            f'<span style="font-size: 1.65rem; font-weight: 800; color: #cdd6f4;">${fr["expected_gross_value_m"]}M</span>'
-            f'<span style="font-size: 0.85rem; color: {roi_color}; font-weight: 700;">({roi_sign}{fr["roi_pct"]}% Net ROI)</span>'
-            f'</div>'
-            f'<div style="font-size: 0.77rem; color: #a6adc8; margin-bottom: 0.6rem;">Expected Commercial & Earned Media Brand Value</div>'
-            f'<div style="font-size: 0.82rem; color: #cdd6f4; line-height: 1.5; border-top: 1px solid #313244; padding-top: 0.5rem;">'
-            f'• <b>Max Viable Budget:</b> <span style="color: #fab387; font-weight: 700;">${fr["max_viable_budget_m"]}M Spend Ceiling</span><br/>'
-            f'• <b>Capital Outlay:</b> ${fr["total_capital_m"]}M (${fr["airtime_cost_m"]}M Airtime + ${fr["prod_cost_m"]}M Prod)<br/>'
-            f'• <b>Downside Safety Floor:</b> ${fr["downside_floor_m"]}M (10th %ile Capital Protection)'
-            f'</div>'
-            f'</div>'
-            f'<div>'
-            f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.78rem; color: #a6adc8; margin-top: 0.4rem;">'
-            f'💵 <b>Breakeven Spend:</b> <b>${fr["cost_per_viewer"]} / viewer reached</b> (${sim["effective_cpm_usd"]} CPM)'
-            f'</div>'
-            f'{tier_financial_note}'
-            f'</div>'
-            f'</div>'
+        # Streamlined Supporting Telemetry Ribbon
+        st.markdown(
+            f"""
+            <div style="background: rgba(24, 24, 37, 0.6); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.9rem; margin: 0.75rem 0 1rem 0; font-size: 0.79rem; color: #a6adc8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <span>📡 <b>Telecast Delivery:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['effective_reach_m']}M viewers ({sim['retention_pct']}% retention)</span></span>
+                <span>💵 <b>Effective CPM:</b> <span style="color: #cdd6f4; font-weight: 600;">${sim['effective_cpm_usd']}</span></span>
+                <span>📈 <b>Predicted YouTube Engagement:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['pred_eng_pct']}% [CI: {sim['eng_ci_low']}%–{sim['eng_ci_high']}%]</span></span>
+                <span>🔍 <b>Search Surge:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['pred_wiki_mult']}x</span></span>
+                <span>🛡️ <b>Downside Risk Floor:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['eng_ci_low']}%</span></span>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-        st.markdown(card2_html, unsafe_allow_html=True)
-
-    with c_p3:
-        bullets_html = "".join([f"<li style='margin-bottom: 0.25rem;'><b>{title}:</b> <span style='color: #bac2de;'>{desc}</span></li>" for title, desc in cr['recipe_elements']])
-        card3_html = (
-            f'<div style="background: #181825; border: 1px solid #313244; border-top: 4px solid #fab387; border-radius: 8px; padding: 1.15rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">'
-            f'<div>'
-            f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">'
-            f'<span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: #a6adc8; font-weight: 700;">3. Creative Content Recipe</span>'
-            f'<span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 12px; background: rgba(250, 179, 135, 0.15); color: #fab387; font-weight: 700; border: 1px solid #fab38755;">⚡ What to Put in Ad</span>'
-            f'</div>'
-            f'<div style="font-size: 0.88rem; font-weight: 700; color: #fab387; margin-bottom: 0.35rem;">{cr["formula_title"]}</div>'
-            f'<ul style="font-size: 0.78rem; color: #cdd6f4; padding-left: 1.1rem; margin-bottom: 0.5rem; line-height: 1.35;">{bullets_html}</ul>'
-            f'</div>'
-            f'<div>'
-            f'<div style="font-size: 0.77rem; color: #f38ba8; margin-bottom: 0.35rem; line-height: 1.3;">⚠️ <b>{cr["avoid_elements"]}</b></div>'
-            f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.76rem; color: #a6e3a1; font-weight: 600;">🚀 {cr["immediate_action"]}</div>'
-            f'</div>'
-            f'</div>'
-        )
-        st.markdown(card3_html, unsafe_allow_html=True)
-
-    # Streamlined Supporting Telemetry Ribbon
-    st.markdown(
-        f"""
-        <div style="background: rgba(24, 24, 37, 0.6); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.9rem; margin: 0.75rem 0 1rem 0; font-size: 0.79rem; color: #a6adc8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-            <span>📡 <b>Telecast Delivery:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['effective_reach_m']}M viewers ({sim['retention_pct']}% retention)</span></span>
-            <span>💵 <b>Effective CPM:</b> <span style="color: #cdd6f4; font-weight: 600;">${sim['effective_cpm_usd']}</span></span>
-            <span>📈 <b>Predicted YouTube Engagement:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['pred_eng_pct']}% [CI: {sim['eng_ci_low']}%–{sim['eng_ci_high']}%]</span></span>
-            <span>🔍 <b>Search Surge:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['pred_wiki_mult']}x</span></span>
-            <span>🛡️ <b>Downside Risk Floor:</b> <span style="color: #cdd6f4; font-weight: 600;">{sim['eng_ci_low']}%</span></span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
     # ── Intelligent Airtime Allotment & Quarter Feasibility Matrix ───────────
     with st.expander("🧭 Intelligent Airtime Allotment & Quarter Feasibility Matrix (Compare All 4 Quarters)", expanded=True):

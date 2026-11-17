@@ -1487,6 +1487,82 @@ def optimize_creative_and_airtime(
     return results
 
 
+def _fallback_parse_brief(pitch_text: str) -> Dict[str, Any]:
+    """Deterministic keyword/NLP heuristic fallback when Gemini API is offline or rate-limited."""
+    text = pitch_text.lower()
+
+    # Vertical detection
+    if any(w in text for w in ["beer", "beverage", "drink", "soda", "cola", "water", "budweiser", "bud light", "pepsi", "coca", "coke", "coffee"]):
+        vertical = "Beverage / FMCG"
+    elif any(w in text for w in ["car", "truck", "auto", "vehicle", "drive", "toyota", "ford", "chevy", "kia", "audi", "bmw", "hyundai", "jeep", "suv"]):
+        vertical = "Automotive"
+    elif any(w in text for w in ["app", "tech", "phone", "ai", "crypto", "software", "google", "apple", "pixel", "amazon", "microsoft", "website"]):
+        vertical = "Consumer Tech"
+    else:
+        vertical = "Snacks / Food"
+
+    # Runtime detection
+    if "15s" in text or "15 second" in text or "15-second" in text or "fifteen" in text:
+        runtime_sec = 15
+    elif "45s" in text or "45 second" in text or "45-second" in text:
+        runtime_sec = 45
+    elif "60s" in text or "60 second" in text or "60-second" in text or "one minute" in text or "1 minute" in text or "minute" in text:
+        runtime_sec = 60
+    elif "90s" in text or "90 second" in text or "90-second" in text:
+        runtime_sec = 90
+    else:
+        runtime_sec = 30
+
+    # Quarter detection
+    if "q1" in text or "first quarter" in text or "1st quarter" in text or "kickoff" in text or "opening" in text:
+        quarter = "Game Q1"
+    elif "q3" in text or "third quarter" in text or "3rd quarter" in text or "halftime" in text:
+        quarter = "Game Q3"
+    elif "q4" in text or "fourth quarter" in text or "4th quarter" in text or "final quarter" in text or "overtime" in text:
+        quarter = "Game Q4"
+    else:
+        quarter = "Game Q2"
+
+    # Traits detection
+    traits = []
+    if any(w in text for w in ["funny", "humor", "comedy", "hilarious", "laugh", "joke", "prank", "silly"]):
+        traits.append("funny")
+    if any(w in text for w in ["celebrity", "star", "actor", "actress", "famous", "athlete", "cameo", "hollywood"]):
+        traits.append("celebrity")
+    if any(w in text for w in ["animal", "dog", "puppy", "horse", "clydesdale", "cat", "monkey", "bear", "lion"]):
+        traits.append("animals")
+    if any(w in text for w in ["danger", "action", "stunt", "explosion", "chase", "race", "extreme"]):
+        traits.append("danger")
+    if any(w in text for w in ["patriotic", "america", "usa", "flag", "veteran", "anthem", "heritage"]):
+        traits.append("patriotic")
+    if any(w in text for w in ["sexy", "sex appeal", "attractive", "swimsuit", "sensual", "lingerie"]):
+        traits.append("use_sex")
+    if any(w in text for w in ["product", "bottle", "bag", "logo", "show product", "reveal", "package"]):
+        traits.append("show_product_quickly")
+
+    # Brand tier detection
+    if any(w in text for w in ["startup", "indie", "local", "regional", "small", "bootstrapped", "seed"]):
+        brand_tier = "Emerging / Non-Mainstream (<$6M Budget)"
+    elif any(w in text for w in ["challenger", "growth", "mid-tier", "liquid death", "duolingo", "oatly", "celsius"]):
+        brand_tier = "Challenger / Growth Brand ($6M–$15M Budget)"
+    else:
+        brand_tier = "Enterprise Megabrand ($15M+ Budget)"
+
+    return {
+        "is_valid_brief": True,
+        "vertical": vertical,
+        "runtime_sec": runtime_sec,
+        "quarter": quarter,
+        "game_flow": "Historical Expected Flow",
+        "traits": traits,
+        "narrative_arc": 6.0,
+        "brand_centrality": 7.5,
+        "cultural_nostalgia": 5.0,
+        "brand_tier": brand_tier,
+        "is_heuristic_fallback": True,
+    }
+
+
 def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]:
     """
     Parses natural language ad pitch using Gemini structured output into slider controls.
@@ -1522,7 +1598,7 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
 
     client = get_genai_client()
     if not client:
-        return None
+        return _fallback_parse_brief(clean_pitch)
 
     system_instruction = (
         "You are an expert advertising campaign brief parser. Analyze the user's commercial storyboard pitch.\n"
@@ -1577,7 +1653,7 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
                 data["brand_tier"] = "Enterprise Megabrand ($15M+ Budget)"
             return data
         except Exception:
-            return None
+            return _fallback_parse_brief(clean_pitch)
 
 
 def compute_executive_roi_and_decision(

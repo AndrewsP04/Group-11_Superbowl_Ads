@@ -345,10 +345,13 @@ def render_tab6():
                         if "t6_adk_scenario_key" in st.session_state:
                             del st.session_state["t6_adk_scenario_key"]
 
-                        st.toast("✅ Synchronized simulator controls with creative brief!", icon="🪄")
+                        if parsed.get("is_heuristic_fallback"):
+                            st.toast("✅ Synchronized controls via NLP keyword extraction!", icon="🪄")
+                        else:
+                            st.toast("✅ Synchronized simulator controls with creative brief!", icon="🪄")
                         st.rerun()
                     else:
-                        st.warning("Could not parse brief. Please ensure GEMINI_API_KEY is configured in .env.")
+                        st.warning("Could not parse brief. Please ensure a valid commercial storyboard concept is provided.")
 
     # ── 2. PRIMARY EXECUTIVE HERO VIEW CONTAINER ──────────────────────────────
     # Instantiated directly after the AI brief parser so the Executive Decision & ROI cards render right underneath

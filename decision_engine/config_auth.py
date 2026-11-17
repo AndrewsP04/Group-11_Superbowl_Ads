@@ -40,17 +40,20 @@ def init_vertex_env() -> Optional[str]:
     try:
         import streamlit as st
         if hasattr(st, "secrets"):
-            for k in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "YOUTUBE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"]:
-                val = None
+            def _extract_secrets(mapping):
                 try:
-                    val = st.secrets.get(k) or st.secrets.get(k.lower())
+                    items = mapping.items()
                 except Exception:
-                    if k in st.secrets:
-                        val = st.secrets[k]
-                    elif k.lower() in st.secrets:
-                        val = st.secrets[k.lower()]
-                if val and not os.getenv(k):
-                    os.environ[k] = str(val).strip()
+                    return
+                for k, v in items:
+                    uk = str(k).upper().strip()
+                    if uk in ["GEMINI_API_KEY", "GOOGLE_API_KEY", "YOUTUBE_API_KEY", "GOOGLE_GENAI_USE_VERTEXAI"]:
+                        if not os.getenv(uk):
+                            os.environ[uk] = str(v).strip()
+                    if hasattr(v, "items") or isinstance(v, dict):
+                        _extract_secrets(v)
+
+            _extract_secrets(st.secrets)
     except Exception:
         pass
 

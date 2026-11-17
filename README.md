@@ -403,13 +403,15 @@ A 4-hour commercial airing during the 7th quarter of a tie-breaker overtime game
 ## 📁 Project Structure
 
 <details>
-<summary><b>Click to expand full repository file tree (43 tracked files)</b></summary>
+<summary><b>Click to expand full repository file tree (44 tracked files)</b></summary>
 
 ```text
 Group-11_Superbowl_Ads/
 ├── app.py                                          # Main Streamlit dashboard application (Tabs 1–6)
 ├── requirements.txt                                # Python dependencies (interpret, google-adk, plotly, etc.)
 ├── README.md                                       # Comprehensive project documentation
+├── .devcontainer/                                  # VS Code / GitHub Codespaces Dev Container config
+│   └── devcontainer.json                           # Container runtime and extension specifications
 ├── .env                                            # Local environment configuration (API keys & Vertex routing)
 ├── .gitignore                                      # Excludes .env, virtual environments, and caches
 ├── .streamlit/                                     # Streamlit runtime configuration

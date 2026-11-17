@@ -28,10 +28,14 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 
 ## Key Highlights & Innovations
 
-- **Executive-First Decision Framework (The 3 Business Pillars):** Rather than forcing decision-makers to interpret intermediate web telemetry (YouTube views, Wikipedia spikes), the top view of the platform directly answers the three fundamental business questions:
-  1. **Channel Allocation Verdict:** Whether to run a national Super Bowl commercial, pivot to targeted digital/social media, or execute a hybrid flight.
+- **Executive-First Decision Framework (The 3 Business Pillars):** Rather than forcing decision-makers to interpret intermediate web telemetry (YouTube views, Wikipedia spikes), the platform organizes insights around the three fundamental business questions:
+  1. **Channel Allocation Verdict:** Whether to run a national Super Bowl commercial, pivot to targeted digital/social media, or execute a hybrid flight. Rendered with high-impact, large-scale typography (`1.85rem` / `900 weight`) on its own dedicated hero line with dynamic neon backlight glow to immediately command executive attention.
   2. **Financial ROI & Budget Cap:** Expected commercial and earned brand value ($M), net ROI %, maximum viable spend ceiling, 10th-percentile downside capital safety floor, and unit efficiency ($/viewer reached).
   3. **Creative Content Playbook:** Vertical-specific winning formula, primary lift drivers, and high-risk creative traps to avoid.
+- **Top-of-Fold AI Workflow & Uncluttered Executive Hierarchy:** Re-architected in response to executive UX review:
+  - **Hero AI Brief Parser (Top):** Mounted at the very top of Tab 6, allowing any user to immediately paste a campaign concept or script draft without having to scroll down through the dashboard.
+  - **Executive Strategy Brief Cards (Center):** The 3 core business pillars render directly beneath the AI prompt for immediate visual feedback.
+  - **Scenario Simulation Controls (Bottom):** Granular manual sliders, dropdowns, and empirical football ambiguity controls sit cleanly below the executive cards, keeping the primary decision view completely uncluttered while maintaining full parameter exploratory capabilities.
 - **Brand Capital & Scale Tier Governance:** Accounts for market capitalization and budget reality across three corporate scale tiers:
   - **🏛️ Enterprise Megabrand ($15M+ Budget):** Unlocks full national broadcast inventory across all four quarters.
   - **🚀 Challenger / Growth Brand ($6M–$15M Budget):** Warns against Q2 inventory inflation ($7.8M rate) and guides advertisers to Game Q3 ($6.4M) to bank $1.4M in savings to fund a 60-day digital retargeting sprint.
@@ -181,23 +185,23 @@ YOUTUBE_API_KEY=your_youtube_api_key_here  # Required for real-time YouTube comm
 
 ### **Tab 6: Agentic Campaign Strategy Studio & Multi-POV Decision Engine**
 
-The decision engine unifies machine learning inference with an **Executive-First Decision Framework** and multi-stakeholder governance:
+The decision engine unifies machine learning inference with an **Executive-First Decision Framework**, top-of-fold AI input, and multi-stakeholder governance:
 
-#### **1. Dual Input Modes**
-* **Natural Language Storyboard / Concept Parser:** Paste a free-form creative pitch (e.g., *"A 30-second Doritos spot with a celebrity dance-off..."*). `gemini-3.5-flash-lite` parses the concept into structured parameters, applying regex security sanitization to reject code/SQL injection attempts, eliminating default trait bias, and synchronizing simulator controls.
-* **Interactive Control Sliders:** Granular manual tuning of narrative depth, brand centrality, nostalgia hooks, runtime (:15s to :90s), brand capital tiers, and empirical game flow scenarios.
+#### **1. Top-of-Fold AI Brief Parser & Input Modes**
+* **Natural Language Storyboard / Concept Parser (Positioned at Very Top):** Located directly beneath the tab header so users can immediately interact with the AI without scrolling down. Paste a free-form creative pitch (e.g., *"A 30-second Doritos spot with a celebrity dance-off..."*). `gemini-3.5-flash-lite` parses the concept into structured parameters, applying regex security sanitization to reject code/SQL injection attempts, eliminating default trait bias, and synchronizing simulator controls.
+* **Granular Scenario Controls (Below Decision Cards):** Manual sliders and dropdowns for narrative depth, brand centrality, nostalgia hooks, runtime (:15s to :90s), brand capital tiers, and empirical game flow scenarios are docked below the executive hero cards to preserve a clean, executive-ready dashboard.
 
-#### **2. Executive Strategy Brief & Pre-Buy Decision Summary (The 3 Pillars)**
-Directly answers the three core questions required by executive leadership:
+#### **2. Executive Strategy Brief & Pre-Buy Decision Hero View (The 3 Pillars)**
+Directly answers the three core questions required by executive leadership, rendered immediately below the AI brief parser:
 * **Pillar 1: Channel Allocation Verdict:**  
-  * Actionable recommendation (`🟢 RUN SUPER BOWL CAMPAIGN`, `🟡 PIVOT TO TARGETED SOCIAL MEDIA`, or `⚖️ HYBRID BROADCAST + SOCIAL BLITZ`).
+  * Actionable recommendation rendered with massive **`1.85rem / 900 weight`** typography on its own dedicated hero line (`🟢 RUN SUPER BOWL CAMPAIGN`, `🟡 PIVOT TO TARGETED SOCIAL MEDIA`, or `⚖️ HYBRID BROADCAST + SOCIAL BLITZ`).
   * Direct comparison of linear broadcast reach (e.g. 97.7M simultaneous viewers with zero ad-skipping) vs. targeted social impressions (536M impressions with 65%+ skip rate).
   * Brand Solvency Audit and Game Q2 Scarcity Warnings.
 * **Pillar 2: Financial ROI & Budget Cap (The Money):**  
-  * **Expected Commercial & Earned Value:** Modeled dollar return (e.g., **$20.59M / +74.5% Net ROI**).
-  * **Max Viable Budget Ceiling:** Spend limit (e.g., **$16.9M spend ceiling**) to ensure a positive net return.
-  * **Downside Safety Floor:** 10th-percentile capital protection floor (e.g., **$9.0M**).
-  * **Unit Efficiency:** Cost per reached viewer (e.g., **$0.121 / viewer** at $79.86 Effective CPM).
+  * **Expected Commercial & Earned Value:** Modeled dollar return (e.g., **$21.44M / +81.7% Net ROI** or **1.82x ROI Return**).
+  * **Max Viable Budget Ceiling:** Spend limit (e.g., **$17.6M spend ceiling**) to ensure a positive net return.
+  * **Downside Safety Floor:** 10th-percentile capital protection floor (e.g., **$9.37M**).
+  * **Unit Efficiency:** Cost per reached viewer (e.g., **$0.116 / viewer** at $76.72 Effective CPM).
 * **Pillar 3: Creative Content Playbook (What to Put in the Ad):**  
   * Vertical-specific winning creative formula (e.g., *Pop-Culture Celebrity Contrast*, *Product as Narrative Catalyst*, *Memorable Audio Hook*).
   * High-leverage execution tactics and critical traps to avoid (e.g., avoiding pure slapstick where the product is a forgotten prop).
@@ -238,7 +242,7 @@ Interactive comparative grid evaluating commercial inventory availability, upfro
 
 ## Example Concept Prompts for Tab 6 Testing
 
-Copy and paste any of the following concept pitches into the **"Campaign Concept Pitch / Storyboard Narrative"** text area in **Tab 6** and click **🪄 Parse Brief into Simulator Controls** to test the engine:
+Copy and paste any of the following concept pitches into the **"Campaign Concept Pitch / Storyboard Narrative"** text area located at the **very top of Tab 6** (inside the expander `✨ Have a creative brief or script draft? Paste it here to auto-fill controls`) and click **🪄 Parse Brief into Simulator Controls** to test the engine:
 
 ### 1. Happy Path (Well-Calibrated Strategies)
 

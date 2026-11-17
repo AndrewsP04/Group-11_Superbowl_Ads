@@ -97,17 +97,9 @@ def render_tab6():
         "and the Google ADK Multi-Agent Boardroom on Vertex AI."
     )
 
-    # ── 1. PRIMARY EXECUTIVE HERO VIEW CONTAINER (TOP OF TAB 6) ──────────────
-    # Instantiated at the top so the Executive Decision & ROI cards render first
-    hero_decision_container = st.container()
-
-    # ── 2. SCENARIO SIMULATION & PARAMETER CONTROLS (BELOW EXECUTIVE VIEW) ───
-    st.markdown("---")
-    st.markdown("### 🎛️ Scenario Simulation & Creative Controls")
-    st.caption("Fine-tune creative attributes, brand scale tier, and game flow dynamics below to instantly test scenarios and update the Executive Decision & ROI above.")
-
-    # A. Natural Language Pitch Parser
-    with st.expander("✨ Have a creative brief or script draft? Paste it here to auto-fill controls", expanded=False):
+    # ── 1. AI INTEGRATION: NATURAL LANGUAGE BRIEF PARSER (AT THE VERY TOP) ────
+    # Placed at the very top so users immediately see where to enter or paste creative briefs
+    with st.expander("✨ Have a creative brief or script draft? Paste it here to auto-fill controls", expanded=True):
         pitch_input = st.text_area(
             "Campaign Concept Pitch / Storyboard Narrative",
             placeholder="e.g. A high-energy 30-second Doritos commercial featuring a humorous dance-off with a top celebrity, airing during the second half of a tight game...",
@@ -201,6 +193,15 @@ def render_tab6():
                         st.rerun()
                     else:
                         st.warning("Could not parse brief. Please ensure GEMINI_API_KEY is configured in .env.")
+
+    # ── 2. PRIMARY EXECUTIVE HERO VIEW CONTAINER ──────────────────────────────
+    # Instantiated directly after the AI brief parser so the Executive Decision & ROI cards render right underneath
+    hero_decision_container = st.container()
+
+    # ── 3. SCENARIO SIMULATION & PARAMETER CONTROLS (BELOW EXECUTIVE VIEW) ───
+    st.markdown("---")
+    st.markdown("### 🎛️ Scenario Simulation & Creative Controls")
+    st.caption("Fine-tune creative attributes, brand scale tier, and game flow dynamics below to instantly test scenarios and update the Executive Decision & ROI above.")
 
     # ── 2. Interactive Simulation Controls ────────────────────────────────────
     c1, c2, c3 = st.columns([1.1, 1.1, 1.2])

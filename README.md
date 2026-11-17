@@ -54,7 +54,11 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 - **Sub-20ms Deterministic Local Simulation:** Instant slider responsiveness (<20ms forward passes) without lag or redundant remote LLM calls.
 - **True 512-Grid Vectorized Prescriptive Optimizer:** Evaluates all $2^7 \times 4 = 512$ creative trait and broadcast quarter permutations in a single NumPy batch pass in under **`2 ms`**.
 - **CFO Governance & Conformal Prediction Bounds:** Enforces 80% conformal prediction intervals ($10^{\text{th}}$ percentile downside floors) and strict non-causal disclosures (modeled cohort interest vs. guaranteed retail revenue).
-- **Security Sanitization, XSS Protection & Artifact Verification:** Hardened regex layer filters SQL injection (`' OR '1'='1' --`), script tags, and code exploits before LLM parsing with a strict 2,000-character ceiling to prevent prompt injection and API resource exhaustion. Features full HTML entity escaping (`html.escape`) on third-party YouTube metadata and consensus outputs, cryptographic SHA-256 integrity verification on `decision_engine_bundle.joblib` before deserialization, and strict domain allowlisting on commercial video players to eliminate arbitrary iframe embedding.
+- **Enterprise Reliability & Architecture Safeguards:** 
+  - **Cryptographic Model Verification:** All serialized machine learning bundles are verified against SHA-256 digests prior to runtime deserialization.
+  - **Structured Prompt Sandboxing:** User-provided campaign concepts are isolated within strict data schemas separate from model system instructions to prevent prompt override or persona hijacking.
+  - **Resource & Quota Governance:** In-memory request caching and session debouncing ensure efficient, predictable compute and API utilization.
+  - **Safe Content Rendering & Transport:** Header-based authentication protects API credentials, dynamic web feeds are encoded with HTML entity escaping, and commercial video streaming is locked to verified providers.
 
 ---
 
@@ -67,6 +71,8 @@ Group-11_Superbowl_Ads/
 ├── README.md                                       # Comprehensive project documentation
 ├── .env                                            # Local environment configuration (API keys & Vertex routing)
 ├── .gitignore                                      # Excludes .env, virtual environments, and caches
+├── .streamlit/                                     # Streamlit runtime configuration
+│   └── config.toml                                 # Security profile (127.0.0.1 binding, CORS, XSRF protection)
 │
 ├── decision_engine/                                # Core AI & Multi-Agent Decision Engine Package
 │   ├── __init__.py                                 # Package initializer & public exports
@@ -78,6 +84,7 @@ Group-11_Superbowl_Ads/
 │
 ├── artifacts/                                      # Serialized models & semantic embedding caches
 │   ├── decision_engine_bundle.joblib               # Fitted RidgeCV + EBM models, conformal bounds & RAG matrix
+│   ├── decision_engine_bundle.sha256               # Cryptographic SHA-256 integrity digest for model verification
 │   └── gemini_semantic_cache.json                  # Cached 3072-d embeddings & continuous semantic scores
 │
 ├── data/
@@ -163,7 +170,7 @@ YOUTUBE_API_KEY=your_youtube_api_key_here  # Required for real-time YouTube comm
    ```bash
    streamlit run app.py
    ```
-   *(Note: The engine automatically checks for artifacts on launch. If the bundle is missing, it auto-trains and serializes all models on first run with zero manual intervention).*
+   *(Note: The application automatically verifies model integrity via SHA-256 on boot and binds to a hardened local network profile `http://127.0.0.1:8501` with CORS and XSRF protection enabled by default).*
 
 4. **(Optional) Run offline model training independently:**
    ```bash
@@ -318,3 +325,4 @@ A 4-hour commercial airing during the 7th quarter of a tie-breaker overtime game
 2. **Empirical Wikipedia Surge Modeling:** Wikipedia search models train strictly on non-null empirical spike ratio observations (`df.dropna(subset=['spike_ratio'])`), avoiding variance collapse caused by naive global median imputation.
 3. **Conformal Prediction Intervals:** Dual-target heads generate 80% conformal bounds from out-of-fold residual distributions, providing defensible risk floors for media buyers and finance executives.
 4. **Non-Causal Reporting Disclaimer:** In compliance with empirical marketing science standards, modeled commercial lift metrics describe observed historical cohort patterns (2000–2026) across public advertisers and do not establish direct causal retail sales revenue or stock return guarantees.
+5. **System & Transport Security:** All external API communications use encrypted HTTP headers rather than URL query parameters, dynamic UI outputs are sanitized, and the application runtime enforces localhost isolation and origin checking.

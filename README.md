@@ -40,7 +40,7 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 * **Secrets & Credential Management:**
   * Production credentials and API keys are securely managed via Streamlit Community Cloud Secrets Manager rather than committed repository files.
   * Keys used: `GEMINI_API_KEY` (powers Vertex AI Gemini models and Google ADK Multi-Agent Boardroom), `GOOGLE_GENAI_USE_VERTEXAI` (enforces Vertex AI routing), and `YOUTUBE_API_KEY` (optional live commercial enrichment).
-  * `decision_engine/config_auth.py` automatically bridges `st.secrets` into standard environment variables on container startup.
+  * `decision_engine/config_auth.py` automatically bridges `st.secrets` into standard environment variables on container startup, supporting both flat keys (`GEMINI_API_KEY = "..."`) and TOML table formats (`[gemini] api_key = "..."` and `[youtube] api_key = "..."`).
 * **Model Artifact Integrity:** The production container cryptographically validates the pre-trained `decision_engine_bundle.joblib` bundle against `decision_engine_bundle.sha256` before booting the UI.
 
 </details>
@@ -223,7 +223,7 @@ The decision engine unifies machine learning inference with an **Executive-First
 <details>
 <summary><b>1. Top-of-Fold AI Brief Parser & Input Modes</b></summary>
 
-* **Natural Language Storyboard / Concept Parser (Positioned at Very Top):** Located directly beneath the tab header so users can immediately interact with the AI without scrolling down. Paste a free-form creative pitch (e.g., *"A 30-second Doritos spot with a celebrity dance-off..."*). `gemini-3.5-flash-lite` parses the concept into structured parameters, applying regex security sanitization to reject code/SQL injection attempts, eliminating default trait bias, and synchronizing simulator controls.
+* **Dual-Mode Natural Language Brief Parser (Positioned at Very Top):** Located directly beneath the tab header so users can immediately interact with the AI without scrolling down. Paste a free-form creative pitch (e.g., *"A 30-second Doritos spot with a celebrity dance-off..."*). Powered by `gemini-3.5-flash-lite` with structured output, backed by an automatic **deterministic NLP keyword fallback engine** that ensures 100% operational uptime even under API rate limits or network latency. Applies regex security sanitization to reject code/SQL injection attempts, eliminates default trait bias, and synchronizes simulator controls in real time.
 * **Granular Scenario Controls (Below Decision Cards):** Manual sliders and dropdowns for narrative depth, brand centrality, nostalgia hooks, runtime (:15s to :90s), brand capital tiers, and empirical game flow scenarios are docked below the executive hero cards to preserve a clean, executive-ready dashboard.
 
 </details>

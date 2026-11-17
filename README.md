@@ -147,7 +147,7 @@ YOUTUBE_API_KEY=your_youtube_api_key_here  # Required for real-time YouTube comm
 * **`GEMINI_API_KEY`**: Authenticates Google Agent Platform / Vertex AI calls (supports Agent Platform API keys starting with `AQ....` or Gemini API keys).
 * **`GOOGLE_GENAI_USE_VERTEXAI=TRUE`**: Directs SDK and Google ADK calls through Vertex AI Agent Platform endpoints.
 * **`YOUTUBE_API_KEY`**: Required to query the YouTube Data API v3 for live Big Game commercial pulls in Tab 6 (e.g. pulling modern Apple, Google Pixel, or OpenAI ads not found in the offline 2000–2020 dataset). If omitted, the application runs normally but falls back to the static historical archive.
-* **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure keys are rotated in Google Cloud Console (`itcs-5122-513114`) before public distribution.
+* **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure production keys are securely rotated in your Google Cloud Console before distribution.
 
 ---
 

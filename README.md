@@ -1,4 +1,10 @@
-# Super Bowl Ads Decision Engine
+# 🏈 Super Bowl Ads Decision Engine
+
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg)](https://streamlit.io)
+[![Google GenAI](https://img.shields.io/badge/Google%20GenAI-Gemini%203.5%20%7C%203.8-4285F4.svg)](https://deepmind.google/technologies/gemini/)
+[![Explainable AI](https://img.shields.io/badge/EAI-InterpretML%20EBM-00A4EF.svg)](https://github.com/interpretml/interpret)
+[![Security Hardened](https://img.shields.io/badge/Security-SHA--256%20Verified-success.svg)](#)
 
 An enterprise-grade interactive Streamlit decision engine and analytics suite for comparing Super Bowl advertising creative traits, telecast audience flow, YouTube engagement, Wikipedia pageview surges, and equity market impact. 
 
@@ -6,27 +12,69 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 
 ---
 
-## Requirements
-
-### **1. System & Runtime Environment**
-- **Python:** `Python 3.9` or higher (`Python 3.11+` recommended for Google ADK and InterpretML)
-- **Operating System:** macOS, Linux, or Windows (WSL recommended)
-- **Memory:** Minimum 4 GB RAM (8 GB+ recommended for local EBM model fitting & 3072-d embeddings)
-
-### **2. Cloud & API Keys**
-- **Google Agent Platform / Vertex AI / Gemini:** `GEMINI_API_KEY` (Required for natural language storyboard parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom; supports Google Agent Platform keys `AQ....` or Gemini API keys)
-- **YouTube Data API v3:** `YOUTUBE_API_KEY` (Required for real-time live YouTube search augmentation in Tab 6 and raw extraction notebooks; if omitted, the platform falls back strictly to the offline 2000–2020 archive)
-
-### **3. Key Python Dependencies (`requirements.txt`)**
-- **App & Visualization:** `streamlit>=1.30.0`, `plotly>=5.18.0`, `matplotlib>=3.8.0`, `seaborn>=0.13.0`
-- **Data & Statistical Modeling:** `pandas>=2.0.0`, `numpy>=1.24.0`, `scikit-learn>=1.4.0`, `statsmodels>=0.14.0`, `scipy>=1.12.0`, `joblib>=1.3.0`
-- **Explainable AI (EAI):** `interpret>=0.6.0` (Microsoft Explainable Boosting Machine / EBM)
-- **Agentic AI & LLMs:** `google-genai>=1.0.0`, `google-adk>=0.1.0`, `pydantic>=2.0.0`
-- **Market & Financial Analysis:** `yfinance>=0.2.38`, `pyarrow>=15.0.0`
+## 📑 Quick Links
+- [⚡ Quickstart & Installation](#-quickstart--installation)
+- [⚙️ Environment Configuration (`.env`)](#%EF%B8%8F-environment-configuration-env)
+- [💡 Key Highlights & Innovations](#-key-highlights--innovations)
+- [🖥️ Dashboard Architecture & Tab Guide](#%EF%B8%8F-dashboard-architecture--tab-guide)
+- [🪄 Example Concept Prompts for Tab 6 Testing](#-example-concept-prompts-for-tab-6-testing)
+- [🔬 Statistical Methodology & Governance](#-statistical-methodology--governance)
+- [📁 Project Directory Tree](#-project-structure)
 
 ---
 
-## Key Highlights & Innovations
+## ⚡ Quickstart & Installation
+
+### **1. System Prerequisites**
+- **Python:** `Python 3.9` or higher (`Python 3.11+` recommended for Google ADK and InterpretML)
+- **Memory:** Minimum 4 GB RAM (8 GB+ recommended for local EBM model fitting & 3072-d embeddings)
+- **OS:** macOS, Linux, or Windows (WSL recommended)
+
+### **2. Clone and Setup Environment**
+```bash
+# Clone the repository
+git clone https://github.com/AndrewsP04/Group-11_Superbowl_Ads.git
+cd Group-11_Superbowl_Ads
+
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### **3. Configure Environment Variables (`.env`)**
+Create a `.env` file in the project root:
+```ini
+GEMINI_API_KEY=your_agent_platform_api_key_here
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+YOUTUBE_API_KEY=your_youtube_api_key_here  # Optional: for live YouTube commercial pulls (Tab 6)
+```
+
+### **4. Launch the Application**
+```bash
+streamlit run app.py
+```
+> **Note:** The application automatically verifies model integrity via cryptographic SHA-256 digests on boot and binds to a hardened local network profile `http://127.0.0.1:8501` with CORS and XSRF protection enabled by default.
+
+*(Optional) Run offline model training & semantic enrichment independently:*
+```bash
+python3 -m decision_engine.enrich_and_train
+```
+
+---
+
+## ⚙️ Environment Configuration (`.env`)
+
+* **`GEMINI_API_KEY`**: Authenticates Google Agent Platform / Vertex AI calls (supports Agent Platform API keys starting with `AQ....` or Gemini API keys). Powers natural language brief parsing, semantic scoring, 3072-d vector RAG, and the Google ADK Multi-Agent Boardroom.
+* **`GOOGLE_GENAI_USE_VERTEXAI=TRUE`**: Directs SDK and Google ADK calls through Vertex AI Agent Platform endpoints.
+* **`YOUTUBE_API_KEY`**: Required to query the YouTube Data API v3 for live Big Game commercial pulls in Tab 6 (e.g. pulling modern Apple, Google Pixel, or OpenAI ads not found in the offline 2000–2020 dataset). If omitted, the application runs normally and falls back strictly to the static historical archive.
+* **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure production keys are securely rotated in your Google Cloud Console before distribution.
+
+---
+
+## 💡 Key Highlights & Innovations
 
 - **Executive-First Decision Framework (The 3 Business Pillars):** Rather than forcing decision-makers to interpret intermediate web telemetry (YouTube views, Wikipedia spikes), the platform organizes insights around the three fundamental business questions:
   1. **Channel Allocation Verdict:** Whether to run a national Super Bowl commercial, pivot to targeted digital/social media, or execute a hybrid flight. Rendered with high-impact, large-scale typography (`1.85rem` / `900 weight`) on its own dedicated hero line with dynamic neon backlight glow to immediately command executive attention.
@@ -57,129 +105,12 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 - **Enterprise Reliability & Architecture Safeguards:** 
   - **Cryptographic Model Verification:** All serialized machine learning bundles are verified against SHA-256 digests prior to runtime deserialization.
   - **Structured Prompt Sandboxing:** User-provided campaign concepts are isolated within strict data schemas separate from model system instructions to prevent prompt override or persona hijacking.
-  - **Resource & Quota Governance:** In-memory request caching and session debouncing ensure efficient, predictable compute and API utilization.
+  - **Resource & Quota Governance:** In-memory request caching and session debouncing (5-second cooldown) ensure efficient, predictable compute and API utilization.
   - **Safe Content Rendering & Transport:** Header-based authentication protects API credentials, dynamic web feeds are encoded with HTML entity escaping, and commercial video streaming is locked to verified providers.
 
 ---
 
-## Project Structure
-
-```text
-Group-11_Superbowl_Ads/
-├── app.py                                          # Main Streamlit dashboard application (Tabs 1–6)
-├── requirements.txt                                # Python dependencies (interpret, google-adk, plotly, etc.)
-├── README.md                                       # Comprehensive project documentation
-├── .env                                            # Local environment configuration (API keys & Vertex routing)
-├── .gitignore                                      # Excludes .env, virtual environments, and caches
-├── .streamlit/                                     # Streamlit runtime configuration
-│   └── config.toml                                 # Security profile (127.0.0.1 binding, CORS, XSRF protection)
-│
-├── decision_engine/                                # Core AI & Multi-Agent Decision Engine Package
-│   ├── __init__.py                                 # Package initializer & public exports
-│   ├── tab6_decision_engine.py                     # Tab 6: Agentic Strategy Studio & Multi-POV UI
-│   ├── decision_tools.py                           # Sub-20ms local deterministic inference & 3072-d Vector RAG
-│   ├── adk_boardroom.py                            # Google ADK Multi-Agent Boardroom Engine (gemini-3.8-flash)
-│   ├── enrich_and_train.py                         # Two-Stage RidgeCV + EBM trainer & semantic enricher
-│   └── config_auth.py                              # Centralized Vertex AI & Gemini SDK authentication
-│
-├── artifacts/                                      # Serialized models & semantic embedding caches
-│   ├── decision_engine_bundle.joblib               # Fitted RidgeCV + EBM models, conformal bounds & RAG matrix
-│   ├── decision_engine_bundle.sha256               # Cryptographic SHA-256 integrity digest for model verification
-│   └── gemini_semantic_cache.json                  # Cached 3072-d embeddings & continuous semantic scores
-│
-├── data/
-│   ├── raw/                                        # Source & scraped initial inputs
-│   │   ├── superbowl-ads.csv                       # Baseline ad creative attributes
-│   │   ├── superbowl_telecast_macro_ratings_2000_2026.csv
-│   │   └── instagram_posts.csv
-│   │
-│   ├── processed/                                  # Cleaned & joined datasets powering app.py
-│   │   ├── superbowl_ads_combined_master.csv       # Unified master ad traits & social metrics
-│   │   ├── superbowl_ads_with_linear_ratings_flow.csv
-│   │   ├── superbowl_ads_with_car.csv
-│   │   ├── superbowl_quarter_audience_flow_2000_2026.csv
-│   │   ├── superbowl_ads_enriched.csv
-│   │   ├── superbowl-ads-admeter-sales-impact-expanded.csv
-│   │   ├── google_trends_spikes.csv
-│   │   ├── google_trends_quarterly_decay.csv
-│   │   ├── wiki_spikes.csv
-│   │   └── wiki_daily.csv
-│   │
-│   └── market/                                     # Historical equity and advertiser daily returns
-│       ├── superbowl_advertisers_daily_returns_2000_2026.parquet
-│       ├── superbowl_advertisers_daily_returns_2000_2026.csv
-│       ├── equity_daily_returns_2000_2026.parquet
-│       └── equity_daily_returns_2000_2026.csv
-│
-├── scripts/                                        # Data extraction, modeling & calculation engines
-│   ├── event_study.py                              # CAR[-1, +5] cumulative abnormal return model
-│   ├── fetch_google_trends.py                      # Google Trends spike & longitudinal decay extractor
-│   └── fetch_wikipedia.py                          # Wikimedia pageviews API extractor
-│
-├── notebooks/                                      # Exploratory analysis & scrapers
-│   ├── data.ipynb                                  # YouTube API enrichment & visual analysis
-│   ├── datascrape.ipynb                            # Apify Instagram scraping workflow
-│   ├── sports_media_watch_scrape.ipynb             # SportsMediaWatch ratings & audience flow
-│   └── yfinance.ipynb                              # Yahoo Finance market return puller
-│
-├── docs/                                           # Research documentation
-│   └── GOOGLE_TRENDS_SUPERBOWL_RESEARCH.md         # 4-quarter search decay findings
-│
-└── assets/                                         # Exported figures & dashboard previews
-    ├── superbowl_dashboard_combined.png
-    ├── superbowl_performance_dashboard.png
-    ├── superbowl_preliminary_visuals.png
-    └── superbowl_real_dashboard.png
-```
-
----
-
-## Environment Configuration (`.env`)
-
-Create or update a `.env` file in the project root:
-
-```ini
-GEMINI_API_KEY=your_agent_platform_api_key_here
-GOOGLE_GENAI_USE_VERTEXAI=TRUE
-YOUTUBE_API_KEY=your_youtube_api_key_here  # Required for real-time YouTube commercial pulls (Tab 6) & scraping
-```
-
-* **`GEMINI_API_KEY`**: Authenticates Google Agent Platform / Vertex AI calls (supports Agent Platform API keys starting with `AQ....` or Gemini API keys).
-* **`GOOGLE_GENAI_USE_VERTEXAI=TRUE`**: Directs SDK and Google ADK calls through Vertex AI Agent Platform endpoints.
-* **`YOUTUBE_API_KEY`**: Required to query the YouTube Data API v3 for live Big Game commercial pulls in Tab 6 (e.g. pulling modern Apple, Google Pixel, or OpenAI ads not found in the offline 2000–2020 dataset). If omitted, the application runs normally but falls back to the static historical archive.
-* **Security Notice**: `.gitignore` explicitly excludes `.env` and `.env.*`. Ensure production keys are securely rotated in your Google Cloud Console before distribution.
-
----
-
-## Installation and Quickstart
-
-1. **Clone the repository and set up a virtual environment:**
-   ```bash
-   git clone <repo_url>
-   cd Group-11_Superbowl_Ads
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Launch the Streamlit app:**
-   ```bash
-   streamlit run app.py
-   ```
-   *(Note: The application automatically verifies model integrity via SHA-256 on boot and binds to a hardened local network profile `http://127.0.0.1:8501` with CORS and XSRF protection enabled by default).*
-
-4. **(Optional) Run offline model training independently:**
-   ```bash
-   python3 -m decision_engine.enrich_and_train
-   ```
-
----
-
-## Dashboard Navigation & Tab Architecture
+## 🖥️ Dashboard Architecture & Tab Guide
 
 ### **Tabs 1–5: Descriptive & Diagnostic Analytics**
 * **T1 · Trait Engagement:** Compares average YouTube engagement rate, Google Trends commercial search lift (with longitudinal Financial Q1–Q4 decay), and average Wikipedia pageview spikes for ads using each selected creative trait.
@@ -247,7 +178,7 @@ Interactive comparative grid evaluating commercial inventory availability, upfro
 
 ---
 
-## Example Concept Prompts for Tab 6 Testing
+## 🪄 Example Concept Prompts for Tab 6 Testing
 
 Copy and paste any of the following concept pitches into the **"Campaign Concept Pitch / Storyboard Narrative"** text area located at the **very top of Tab 6** (inside the expander `✨ Have a creative brief or script draft? Paste it here to auto-fill controls`) and click **🪄 Parse Brief into Simulator Controls** to test the engine:
 
@@ -319,10 +250,86 @@ A 4-hour commercial airing during the 7th quarter of a tie-breaker overtime game
 
 ---
 
-## Statistical Methodology & Governance
+## 🔬 Statistical Methodology & Governance
 
 1. **Temporal Cross-Validation (`GroupKFold` on Year):** Models are evaluated using 5-fold temporal splitting by year to prevent chronological data leakage across multi-decade telecasts.
 2. **Empirical Wikipedia Surge Modeling:** Wikipedia search models train strictly on non-null empirical spike ratio observations (`df.dropna(subset=['spike_ratio'])`), avoiding variance collapse caused by naive global median imputation.
 3. **Conformal Prediction Intervals:** Dual-target heads generate 80% conformal bounds from out-of-fold residual distributions, providing defensible risk floors for media buyers and finance executives.
 4. **Non-Causal Reporting Disclaimer:** In compliance with empirical marketing science standards, modeled commercial lift metrics describe observed historical cohort patterns (2000–2026) across public advertisers and do not establish direct causal retail sales revenue or stock return guarantees.
 5. **System & Transport Security:** All external API communications use encrypted HTTP headers rather than URL query parameters, dynamic UI outputs are sanitized, and the application runtime enforces localhost isolation and origin checking.
+
+---
+
+## 📁 Project Structure
+
+<details>
+<summary><b>Click to expand full repository file tree (41 verified files)</b></summary>
+
+```text
+Group-11_Superbowl_Ads/
+├── app.py                                          # Main Streamlit dashboard application (Tabs 1–6)
+├── requirements.txt                                # Python dependencies (interpret, google-adk, plotly, etc.)
+├── README.md                                       # Comprehensive project documentation
+├── .env                                            # Local environment configuration (API keys & Vertex routing)
+├── .gitignore                                      # Excludes .env, virtual environments, and caches
+├── .streamlit/                                     # Streamlit runtime configuration
+│   └── config.toml                                 # Security profile (127.0.0.1 binding, CORS, XSRF protection)
+│
+├── decision_engine/                                # Core AI & Multi-Agent Decision Engine Package
+│   ├── __init__.py                                 # Package initializer & public exports
+│   ├── tab6_decision_engine.py                     # Tab 6: Agentic Strategy Studio & Multi-POV UI
+│   ├── decision_tools.py                           # Sub-20ms local deterministic inference & 3072-d Vector RAG
+│   ├── adk_boardroom.py                            # Google ADK Multi-Agent Boardroom Engine (gemini-3.8-flash)
+│   ├── enrich_and_train.py                         # Two-Stage RidgeCV + EBM trainer & semantic enricher
+│   └── config_auth.py                              # Centralized Vertex AI & Gemini SDK authentication
+│
+├── artifacts/                                      # Serialized models & semantic embedding caches
+│   ├── decision_engine_bundle.joblib               # Fitted RidgeCV + EBM models, conformal bounds & RAG matrix
+│   ├── decision_engine_bundle.sha256               # Cryptographic SHA-256 integrity digest for model verification
+│   └── gemini_semantic_cache.json                  # Cached 3072-d embeddings & continuous semantic scores
+│
+├── data/
+│   ├── raw/                                        # Source & scraped initial inputs
+│   │   ├── superbowl-ads.csv                       # Baseline ad creative attributes
+│   │   ├── superbowl_telecast_macro_ratings_2000_2026.csv
+│   │   └── instagram_posts.csv
+│   │
+│   ├── processed/                                  # Cleaned & joined datasets powering app.py
+│   │   ├── superbowl_ads_combined_master.csv       # Unified master ad traits & social metrics
+│   │   ├── superbowl_ads_with_linear_ratings_flow.csv
+│   │   ├── superbowl_ads_with_car.csv
+│   │   ├── superbowl_quarter_audience_flow_2000_2026.csv
+│   │   ├── superbowl_ads_enriched.csv
+│   │   ├── superbowl-ads-admeter-sales-impact-expanded.csv
+│   │   ├── google_trends_spikes.csv
+│   │   ├── google_trends_quarterly_decay.csv
+│   │   ├── wiki_spikes.csv
+│   │   └── wiki_daily.csv
+│   │
+│   └── market/                                     # Historical equity and advertiser daily returns
+│       ├── superbowl_advertisers_daily_returns_2000_2026.parquet
+│       ├── superbowl_advertisers_daily_returns_2000_2026.csv
+│       ├── equity_daily_returns_2000_2026.parquet
+│       └── equity_daily_returns_2000_2026.csv
+│
+├── scripts/                                        # Data extraction, modeling & calculation engines
+│   ├── event_study.py                              # CAR[-1, +5] cumulative abnormal return model
+│   ├── fetch_google_trends.py                      # Google Trends spike & longitudinal decay extractor
+│   └── fetch_wikipedia.py                          # Wikimedia pageviews API extractor
+│
+├── notebooks/                                      # Exploratory analysis & scrapers
+│   ├── data.ipynb                                  # YouTube API enrichment & visual analysis
+│   ├── datascrape.ipynb                            # Apify Instagram scraping workflow
+│   ├── sports_media_watch_scrape.ipynb             # SportsMediaWatch ratings & audience flow
+│   └── yfinance.ipynb                              # Yahoo Finance market return puller
+│
+├── docs/                                           # Research documentation
+│   └── GOOGLE_TRENDS_SUPERBOWL_RESEARCH.md         # 4-quarter search decay findings
+│
+└── assets/                                         # Exported figures & dashboard previews
+    ├── superbowl_dashboard_combined.png
+    ├── superbowl_performance_dashboard.png
+    ├── superbowl_preliminary_visuals.png
+    └── superbowl_real_dashboard.png
+```
+</details>

@@ -12,6 +12,7 @@ Provides high-speed local evaluation for Streamlit Tab 6:
 
 from __future__ import annotations
 
+import hashlib
 import itertools
 import json
 import os
@@ -172,6 +173,22 @@ GAME_FLOW_SCENARIOS: Dict[str, Dict[str, Any]] = {
 }
 
 _BUNDLE_CACHE: Optional[Dict[str, Any]] = None
+BUNDLE_SHA_PATH = BASE_DIR / "artifacts/decision_engine_bundle.sha256"
+
+
+def _verify_bundle_integrity(file_path: Path) -> bool:
+    """Verifies SHA-256 hash of the model bundle against decision_engine_bundle.sha256 if present."""
+    if not BUNDLE_SHA_PATH.exists():
+        return True
+    try:
+        expected_sha = BUNDLE_SHA_PATH.read_text(encoding="utf-8").strip().split()[0]
+        sha256 = hashlib.sha256()
+        with open(file_path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                sha256.update(chunk)
+        return sha256.hexdigest().lower() == expected_sha.lower()
+    except Exception:
+        return False
 
 
 def load_bundle(auto_train: bool = False) -> Optional[Dict[str, Any]]:
@@ -179,6 +196,9 @@ def load_bundle(auto_train: bool = False) -> Optional[Dict[str, Any]]:
     if _BUNDLE_CACHE is not None:
         return _BUNDLE_CACHE
     if HAS_JOBLIB and BUNDLE_PATH.exists():
+        if not _verify_bundle_integrity(BUNDLE_PATH):
+            print("⚠️ WARNING: decision_engine_bundle.joblib checksum verification failed! Refusing to deserialize potentially untrusted file.")
+            return None
         try:
             _BUNDLE_CACHE = joblib.load(BUNDLE_PATH)
             return _BUNDLE_CACHE
@@ -193,6 +213,9 @@ def load_bundle(auto_train: bool = False) -> Optional[Dict[str, Any]]:
                 from enrich_and_train import run_pipeline
             run_pipeline()
             if HAS_JOBLIB and BUNDLE_PATH.exists():
+                if not _verify_bundle_integrity(BUNDLE_PATH):
+                    print("⚠️ WARNING: Newly trained bundle failed SHA-256 integrity check.")
+                    return None
                 _BUNDLE_CACHE = joblib.load(BUNDLE_PATH)
                 return _BUNDLE_CACHE
         except Exception as e:
@@ -1450,6 +1473,10 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
     if not clean_pitch:
         return None
 
+    # Length ceiling: clamp to 2,000 characters to prevent resource exhaustion / token abuse
+    if len(clean_pitch) > 2000:
+        clean_pitch = clean_pitch[:2000]
+
     # Detect obvious code/SQL injection attempts, prompt hacks, or pure symbol strings
     sql_patterns = [
         "' or '", "or 1=1", "or '1'='1'", "--", "/*", "*/",
@@ -1501,8 +1528,11 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
     try:
         response = client.models.generate_content(
             model="gemini-3.5-flash-lite",
-            contents=f"{system_instruction}\n\nClient Pitch: {clean_pitch}",
-            config={"response_mime_type": "application/json"},
+            contents=f"Client Pitch: {clean_pitch}",
+            config={
+                "response_mime_type": "application/json",
+                "system_instruction": system_instruction,
+            },
         )
         data = json.loads(response.text)
         if "is_valid_brief" not in data:
@@ -1511,7 +1541,20 @@ def parse_concept_pitch_to_controls(pitch_text: str) -> Optional[Dict[str, Any]]
             data["brand_tier"] = "Enterprise Megabrand ($15M+ Budget)"
         return data
     except Exception:
-        return None
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.5-flash-lite",
+                contents=f"{system_instruction}\n\nClient Pitch: {clean_pitch}",
+                config={"response_mime_type": "application/json"},
+            )
+            data = json.loads(response.text)
+            if "is_valid_brief" not in data:
+                data["is_valid_brief"] = True
+            if "brand_tier" not in data or not data["brand_tier"]:
+                data["brand_tier"] = "Enterprise Megabrand ($15M+ Budget)"
+            return data
+        except Exception:
+            return None
 
 
 def compute_executive_roi_and_decision(

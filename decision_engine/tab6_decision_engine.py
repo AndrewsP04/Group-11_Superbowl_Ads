@@ -15,9 +15,13 @@ Renders Tab 6 in app.py:
 
 from __future__ import annotations
 
+import html
 import io
 import os
+from pathlib import Path
+import re
 from typing import Any, Dict, List
+import urllib.parse
 
 import numpy as np
 import plotly.graph_objects as go
@@ -105,6 +109,8 @@ def render_tab6():
             placeholder="e.g. A high-energy 30-second Doritos commercial featuring a humorous dance-off with a top celebrity, airing during the second half of a tight game...",
             key="tab6_pitch_input",
             height=90,
+            max_chars=2000,
+            help="Maximum 2,000 characters. Paste concept pitches, script drafts, or campaign briefs.",
         )
         if st.button("🪄 Parse Brief into Simulator Controls", key="tab6_parse_btn"):
             if pitch_input.strip():
@@ -624,11 +630,14 @@ def render_tab6():
 
     # Executive Consensus Brief Box
     consensus_text = memos.get("consensus", "Executive strategy brief is being calibrated.")
+    safe_consensus_text = html.escape(consensus_text)
+    safe_consensus_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", safe_consensus_text)
+    safe_consensus_html = safe_consensus_text.replace("\n", "<br/>")
     st.markdown(
         f"""
         <div style="background: #1e1e2e; border: 1px solid #45475a; border-left: 5px solid #89b4fa; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1rem 0;">
             <div style="font-size: 0.95rem; line-height: 1.6; color: #cdd6f4;">
-                {consensus_text.replace(chr(10), '<br/>')}
+                {safe_consensus_html}
             </div>
         </div>
         """,
@@ -723,24 +732,33 @@ def render_tab6():
             metric_2_label = "Live Video Telemetry" if is_live else "Wikipedia Surge"
             metric_2_val = comp.get("views_display") if (is_live and comp.get("views_display")) else comp.get("wiki_spike_display", str(comp.get("wiki_spike", "1.0")) + "x")
 
+            # XSS sanitization for all external/third-party metadata
+            safe_year = int(comp.get("year", 2024))
+            safe_brand = html.escape(str(comp.get("brand", ""))[:18])
+            safe_title = html.escape(str(comp.get("title", ""))[:65])
+            safe_spot_fmt = html.escape(str(spot_fmt))
+            safe_approach = html.escape(str(approach_desc))
+            safe_metric_label = html.escape(str(metric_2_label))
+            safe_metric_val = html.escape(str(metric_2_val))
+
             st.markdown(
                 f"""
                 <div style="background: #181825; border: 1px solid #313244; border-radius: 8px; padding: 1.1rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
                             <div style="display: flex; align-items: center; gap: 0.4rem;">
-                                <span style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{comp['year']} · {comp['brand'][:18]}</span>
+                                <span style="font-size: 0.8rem; color: #89b4fa; font-weight: 700;">{safe_year} · {safe_brand}</span>
                                 {source_badge}
                             </div>
-                            <span style="font-size: 0.73rem; color: #a6adc8; background: #313244; padding: 2px 7px; border-radius: 4px; font-weight: 600;">{spot_fmt}</span>
+                            <span style="font-size: 0.73rem; color: #a6adc8; background: #313244; padding: 2px 7px; border-radius: 4px; font-weight: 600;">{safe_spot_fmt}</span>
                         </div>
                         <div style="font-size: 0.95rem; font-weight: 600; color: #cdd6f4; margin: 0.35rem 0 0.5rem 0; min-height: 2.8rem; line-height: 1.35;">
-                            {comp['title'][:65]}
+                            {safe_title}
                         </div>
                         <div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.45rem 0.65rem; margin-bottom: 0.6rem;">
                             <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #a6adc8; font-weight: 600;">Creative Approach</div>
                             <div style="font-size: 0.82rem; font-weight: 600; color: #fab387; margin-top: 0.15rem; line-height: 1.3;">
-                                🎯 {approach_desc}
+                                🎯 {safe_approach}
                             </div>
                         </div>
                         <div style="margin-bottom: 0.7rem;">
@@ -752,7 +770,7 @@ def render_tab6():
                     </div>
                     <div style="font-size: 0.82rem; color: #a6adc8; line-height: 1.55; border-top: 1px solid #313244; padding-top: 0.55rem; margin-top: 0.3rem;">
                         • YouTube Engagement: <b>{comp['engagement_rate']}%</b><br/>
-                        • {metric_2_label}: <b>{metric_2_val}</b><br/>
+                        • {safe_metric_label}: <b>{safe_metric_val}</b><br/>
                         • Match Similarity: <b>{int(comp['similarity'] * 100)}%</b>
                     </div>
                 </div>
@@ -770,20 +788,27 @@ def render_tab6():
     active_video_url = st.session_state.get("t6_active_video_url")
     active_video_title = st.session_state.get("t6_active_video_title", "Commercial Spot")
     if active_video_url:
+        safe_active_title = html.escape(str(active_video_title))
         st.markdown(
             f"""
             <div style="background: #181825; border: 1px solid #89b4fa; border-left: 5px solid #a6e3a1; border-radius: 8px; padding: 0.9rem 1.2rem; margin: 1.2rem 0 0.5rem 0;">
                 <div style="font-size: 1rem; font-weight: 700; color: #cdd6f4;">
-                    📺 In-App Commercial Player: <span style="color: #a6e3a1;">{active_video_title}</span>
+                    📺 In-App Commercial Player: <span style="color: #a6e3a1;">{safe_active_title}</span>
                 </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
-        if "youtube.com" in active_video_url or "youtu.be" in active_video_url:
+        parsed_url = urllib.parse.urlparse(active_video_url)
+        is_safe_yt = (
+            parsed_url.scheme in ("http", "https")
+            and any(yt_host in parsed_url.netloc.lower() for yt_host in ("youtube.com", "youtu.be", "youtube-nocookie.com"))
+        )
+        if is_safe_yt:
             st.video(active_video_url)
         else:
-            st.components.v1.iframe(active_video_url, height=450)
+            st.warning("⚠️ For security, external non-YouTube URLs cannot be embedded directly in an iframe.")
+            st.link_button("🌐 Open Commercial Source in New Tab", active_video_url)
 
         if st.button("✖️ Close Video Player", key="t6_close_video_player"):
             st.session_state["t6_active_video_url"] = None

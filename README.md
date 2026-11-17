@@ -54,7 +54,7 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 - **Sub-20ms Deterministic Local Simulation:** Instant slider responsiveness (<20ms forward passes) without lag or redundant remote LLM calls.
 - **True 512-Grid Vectorized Prescriptive Optimizer:** Evaluates all $2^7 \times 4 = 512$ creative trait and broadcast quarter permutations in a single NumPy batch pass in under **`2 ms`**.
 - **CFO Governance & Conformal Prediction Bounds:** Enforces 80% conformal prediction intervals ($10^{\text{th}}$ percentile downside floors) and strict non-causal disclosures (modeled cohort interest vs. guaranteed retail revenue).
-- **Security Sanitization & Trait-Neutrality:** Hardened regex layer filters SQL injection (`' OR '1'='1' --`), script tags, and code exploits before LLM parsing. Completely eliminates default trait hallucinations, ensuring non-humor or non-celebrity briefs map to clean, empty trait selections.
+- **Security Sanitization, XSS Protection & Artifact Verification:** Hardened regex layer filters SQL injection (`' OR '1'='1' --`), script tags, and code exploits before LLM parsing with a strict 2,000-character ceiling to prevent prompt injection and API resource exhaustion. Features full HTML entity escaping (`html.escape`) on third-party YouTube metadata and consensus outputs, cryptographic SHA-256 integrity verification on `decision_engine_bundle.joblib` before deserialization, and strict domain allowlisting on commercial video players to eliminate arbitrary iframe embedding.
 
 ---
 

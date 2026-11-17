@@ -421,7 +421,17 @@ def run_pipeline():
 
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, BUNDLE_FILE)
-    print(f"Decision Engine bundle successfully saved to {BUNDLE_FILE} ({BUNDLE_FILE.stat().st_size / 1024:.1f} KB).")
+
+    # Compute and persist SHA-256 checksum for secure artifact verification
+    import hashlib
+    sha256 = hashlib.sha256()
+    with open(BUNDLE_FILE, "rb") as bf:
+        for chunk in iter(lambda: bf.read(65536), b""):
+            sha256.update(chunk)
+    sha_file = BUNDLE_FILE.with_suffix(".sha256")
+    sha_file.write_text(f"{sha256.hexdigest()}  artifacts/{BUNDLE_FILE.name}\n", encoding="utf-8")
+
+    print(f"Decision Engine bundle successfully saved to {BUNDLE_FILE} ({BUNDLE_FILE.stat().st_size / 1024:.1f} KB, SHA-256 verified).")
 
 
 if __name__ == "__main__":

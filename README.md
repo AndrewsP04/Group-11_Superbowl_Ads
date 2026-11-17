@@ -1,10 +1,14 @@
 # 🏈 Super Bowl Ads Decision Engine
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://group-11superbowlads.streamlit.app/)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg)](https://streamlit.io)
 [![Google GenAI](https://img.shields.io/badge/Google%20GenAI-Gemini%203.5%20%7C%203.8-4285F4.svg)](https://deepmind.google/technologies/gemini/)
 [![Explainable AI](https://img.shields.io/badge/EAI-InterpretML%20EBM-00A4EF.svg)](https://github.com/interpretml/interpret)
 [![Security Hardened](https://img.shields.io/badge/Security-SHA--256%20Verified-success.svg)](#)
+
+> 🚀 **Live Production Application:** [https://group-11superbowlads.streamlit.app/](https://group-11superbowlads.streamlit.app/)  
+> *Experience the live decision engine, EBM waterfall visualizers, and Google ADK Multi-Agent Boardroom deployed on Streamlit Community Cloud.*
 
 An enterprise-grade interactive Streamlit decision engine and analytics suite for comparing Super Bowl advertising creative traits, telecast audience flow, YouTube engagement, Wikipedia pageview surges, and equity market impact. 
 
@@ -13,7 +17,9 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 ---
 
 ## 📑 Quick Links
-- [⚡ Quickstart & Installation](#-quickstart--installation)
+- [🚀 Live Streamlit Application](https://group-11superbowlads.streamlit.app/)
+- [☁️ Cloud Deployment & Production Hosting](#%EF%B8%8F-cloud-deployment--production-hosting)
+- [⚡ Quickstart & Local Installation](#-quickstart--local-installation)
 - [⚙️ Environment Configuration (`.env`)](#%EF%B8%8F-environment-configuration-env)
 - [💡 Key Highlights & Innovations](#-key-highlights--innovations)
 - [🖥️ Dashboard Architecture & Tab Guide](#%EF%B8%8F-dashboard-architecture--tab-guide)
@@ -23,7 +29,25 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 
 ---
 
-## ⚡ Quickstart & Installation
+## ☁️ Cloud Deployment & Production Hosting
+
+<details open>
+<summary><b>🌐 Live Streamlit Cloud Deployment Overview</b></summary>
+
+* **Public Production URL:** [https://group-11superbowlads.streamlit.app/](https://group-11superbowlads.streamlit.app/)
+* **Host Platform:** Streamlit Community Cloud (Python 3.11 containerized environment)
+* **Continuous Deployment (CI/CD):** Automatically pulls, builds, and redeploys with zero downtime upon pushes to the `main` branch.
+* **Secrets & Credential Management:**
+  * Secrets are securely injected using Streamlit Cloud Secrets Manager rather than repository files.
+  * `decision_engine/config_auth.py` automatically bridges `st.secrets` into standard environment variables on container startup.
+  * Configured with `GOOGLE_API_KEY`, `GOOGLE_GENAI_USE_VERTEXAI = "TRUE"`, and `YOUTUBE_API_KEY`.
+* **Model Artifact Integrity:** The production container cryptographically validates the pre-trained `decision_engine_bundle.joblib` bundle against `decision_engine_bundle.sha256` before booting the UI.
+
+</details>
+
+---
+
+## ⚡ Quickstart & Local Installation
 
 ### **1. System Prerequisites**
 - **Python:** `Python 3.9` or higher (`Python 3.11+` recommended for Google ADK and InterpretML)

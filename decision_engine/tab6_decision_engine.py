@@ -67,11 +67,21 @@ def _on_switch_quarter_click(target_quarter: str):
 
 
 def _clean_markdown_delimiters(text: str) -> str:
-    """Ensures markdown delimiters like ~ and ** have spacing so CommonMark parsers don't fail."""
+    """Ensures markdown delimiters like ~ and ** have spacing and strips header artifacts."""
     if not text:
         return ""
+    # Strip leading [TAG], TAG], [TAG]:
+    cleaned = re.sub(
+        r"^(?:\s*(?:(?:\d+\.|\*|#+)\s*)?\[?\s*(?:creative memo|media memo|media planning memo|cfo memo|cfo governance memo|consensus brief|executive consensus brief)\s*\]?:?\s*)+",
+        "",
+        str(text),
+        flags=re.IGNORECASE,
+    ).strip()
     # Space between ~ and bold/italic asterisks
-    return re.sub(r"~(\*\*|\*)", r"~ \1", str(text))
+    cleaned = re.sub(r"~(\*\*|\*)", r"~ \1", cleaned)
+    # Ensure unescaped <$6M or similar doesn't break HTML parsing
+    cleaned = re.sub(r"<(\$[0-9])", r"under \1", cleaned)
+    return cleaned
 
 
 def _md_to_html_bold(text: str) -> str:
@@ -86,9 +96,19 @@ def _md_to_html_bold(text: str) -> str:
 
 
 def _format_consensus_brief(text: str) -> str:
-    """Safely formats the Executive Consensus Brief with bolding, headers, and bullet lists."""
+    """Safely formats the Executive Consensus Brief with bolding, headers, determination badges, and lists."""
     if not text:
         return ""
+    # Strip residual header tags like CONSENSUS BRIEF] or [CONSENSUS BRIEF]
+    text = re.sub(
+        r"^(?:\s*(?:(?:\d+\.|\*|#+)\s*)?\[?\s*(?:consensus brief|executive consensus brief)\s*\]?:?\s*)+",
+        "",
+        str(text),
+        flags=re.IGNORECASE,
+    ).strip()
+
+    has_main_header = bool(re.search(r"Executive\s+Consensus\s+Decision\s+Brief", text, flags=re.IGNORECASE))
+
     # Normalize <br/> or <br> to newlines first so escaping won't produce literal &lt;br/&gt;
     norm_text = re.sub(r"<br\s*/?>", "\n", str(text), flags=re.IGNORECASE)
     # Escape HTML to prevent injection
@@ -99,39 +119,90 @@ def _format_consensus_brief(text: str) -> str:
 
     lines = safe_text.splitlines()
     formatted_lines = []
+
+    if not has_main_header:
+        formatted_lines.append(
+            '<div style="font-size: 1.15rem; font-weight: 800; color: #89b4fa; margin: 0 0 0.75rem 0; padding-bottom: 0.4rem; border-bottom: 1px solid #313244; display: flex; align-items: center; gap: 0.4rem;">📋 Executive Consensus Decision Brief</div>'
+        )
+
     for line in lines:
         stripped = line.strip()
         if not stripped:
             formatted_lines.append('<div style="height: 0.45rem;"></div>')
             continue
 
-        # Header 3: ### 📋 Title
-        if stripped.startswith("### "):
-            header_content = stripped[4:].strip()
+        # Horizontal rule
+        if stripped in ("---", "***", "___", "--"):
+            formatted_lines.append('<hr style="border: none; border-top: 1px solid #313244; margin: 0.65rem 0;">')
+            continue
+
+        # Determination banner: Executive [Strategy] Board Determination: ...
+        if re.search(r"Executive\s+(?:Strategy\s+)?Board\s+Determination\s*:", stripped, flags=re.IGNORECASE):
+            is_green = any(w in stripped.upper() for w in ["GREENLIGHT", "GREEN LIGHT", "APPROVED", "APPROVAL"]) and "VETO" not in stripped.upper()
+            is_amber = "CONDITIONAL" in stripped.upper() or "MODIFY" in stripped.upper()
+
+            border_c = "#f9e2af" if is_amber else ("#a6e3a1" if is_green else "#f38ba8")
+            bg_c = "rgba(249, 226, 175, 0.12)" if is_amber else ("rgba(166, 227, 161, 0.12)" if is_green else "rgba(243, 139, 168, 0.12)")
+            text_c = "#f9e2af" if is_amber else ("#a6e3a1" if is_green else "#f38ba8")
+            icon = "⚖️" if is_amber else ("🟢" if is_green else "🔴")
+
             formatted_lines.append(
-                f'<div style="font-size: 1.15rem; font-weight: 800; color: #89b4fa; margin: 0.2rem 0 0.75rem 0; padding-bottom: 0.4rem; border-bottom: 1px solid #313244; display: flex; align-items: center; gap: 0.4rem;">{header_content}</div>'
+                f'<div style="background: {bg_c}; border: 1px solid {border_c}55; border-left: 4px solid {border_c}; border-radius: 6px; padding: 0.55rem 0.8rem; margin: 0.4rem 0 0.6rem 0; font-size: 0.95rem; font-weight: 700; color: {text_c}; display: flex; align-items: center; gap: 0.45rem;">'
+                f'{icon} {stripped}'
+                f'</div>'
             )
-        # Header 2: ## Title
-        elif stripped.startswith("## "):
-            header_content = stripped[3:].strip()
-            formatted_lines.append(
-                f'<div style="font-size: 1.08rem; font-weight: 800; color: #89b4fa; margin: 0.5rem 0 0.4rem 0;">{header_content}</div>'
-            )
-        # Section Header: <b>0. Brand Capital...</b> or similar standalone bold section titles
-        elif (stripped.startswith("<b>") and stripped.endswith("</b>")) or (stripped.startswith("<b>") and ":" in stripped and not stripped.startswith(("-", "*", "•"))):
+            continue
+
+        # Markdown Headers: # .. ######
+        header_match = re.match(r"^(#{1,6})\s+(.*)$", stripped)
+        if header_match:
+            hashes, header_content = header_match.groups()
+            level = len(hashes)
+            if level <= 3:
+                formatted_lines.append(
+                    f'<div style="font-size: 1.12rem; font-weight: 800; color: #89b4fa; margin: 0.6rem 0 0.5rem 0; padding-bottom: 0.35rem; border-bottom: 1px solid #313244;">{header_content}</div>'
+                )
+            else:
+                formatted_lines.append(
+                    f'<div style="font-size: 0.98rem; font-weight: 700; color: #89b4fa; margin: 0.7rem 0 0.35rem 0; text-transform: uppercase; letter-spacing: 0.5px;">📌 {header_content}</div>'
+                )
+            continue
+
+        # Standalone bold section header: <b>0. Brand Capital...</b>
+        if (stripped.startswith("<b>") and stripped.endswith("</b>")) or (stripped.startswith("<b>") and ":" in stripped and not stripped.startswith(("-", "*", "•"))):
             formatted_lines.append(
                 f'<div style="font-size: 0.96rem; font-weight: 800; color: #cdd6f4; margin: 0.7rem 0 0.3rem 0;">{stripped}</div>'
             )
+            continue
+
+        # Numbered item: 1. Title: Description OR 1. Title:
+        num_match = re.match(r"^(\d+)\.\s+(.*)$", stripped)
+        if num_match:
+            num, rest = num_match.groups()
+            if ":" in rest and not rest.strip().endswith(":"):
+                title, body = rest.split(":", 1)
+                formatted_lines.append(
+                    f'<div style="margin-left: 0.5rem; margin-bottom: 0.35rem; line-height: 1.5; color: #bac2de;"><b style="color: #cdd6f4;">{num}. {title.strip()}:</b> {body.strip()}</div>'
+                )
+            else:
+                title = rest.rstrip(":")
+                formatted_lines.append(
+                    f'<div style="font-size: 0.94rem; font-weight: 700; color: #cdd6f4; margin: 0.6rem 0 0.2rem 0.5rem;"><span style="color: #89b4fa; font-weight: 800;">{num}.</span> {title}:</div>'
+                )
+            continue
+
         # Bullet item: - or * or •
-        elif stripped.startswith(("- ", "* ", "• ")) or re.match(r"^\s*[•\-\*]\s+", line):
+        if stripped.startswith(("- ", "* ", "• ")) or re.match(r"^\s*[•\-\*]\s+", line):
             content = re.sub(r"^\s*[•\-\*]\s+", "", line)
             formatted_lines.append(
                 f'<div style="margin-left: 0.9rem; margin-bottom: 0.25rem; line-height: 1.5; color: #bac2de;">• {content}</div>'
             )
-        else:
-            formatted_lines.append(
-                f'<div style="margin-bottom: 0.25rem; line-height: 1.5; color: #bac2de;">{stripped}</div>'
-            )
+            continue
+
+        # Standard line
+        formatted_lines.append(
+            f'<div style="margin-bottom: 0.25rem; line-height: 1.5; color: #bac2de;">{stripped}</div>'
+        )
 
     return "\n".join(formatted_lines)
 
@@ -726,7 +797,13 @@ def render_tab6():
     with btn_col1:
         if st.button("⚡ Convene Live AI Strategy Board (Gemini 3.8 Flash)", key="t6_convene_live_adk_btn"):
             with st.spinner("Executing Google ADK Multi-Agent Boardroom debate on Vertex AI..."):
-                live_memos = run_strategy_board(scenario_text, sim, nearest_comps)
+                live_memos = run_strategy_board(
+                    scenario_text,
+                    sim,
+                    nearest_comps,
+                    exec_dec=exec_dec,
+                    brand_tier=sel_tier,
+                )
                 st.session_state["t6_adk_memos"] = live_memos
                 st.session_state["t6_adk_scenario_key"] = scenario_sig
                 st.toast("✅ AI Strategy Board convened! Executive brief & specialist memos updated.", icon="🏛️")

@@ -831,13 +831,19 @@ def search_live_superbowl_ads(
     else:
         query_phrase = f"Super Bowl commercial {brand_or_topic} {' '.join(qualifiers)}".strip()
 
+    # Secure request headers: pass API key via X-Goog-Api-Key header to avoid URL leakage (CWE-200)
+    api_headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "X-Goog-Api-Key": api_key,
+    }
+
     search_url = (
         f"https://www.googleapis.com/youtube/v3/search?"
         f"part=snippet&q={urllib.parse.quote(query_phrase)}"
-        f"&type=video&videoDuration=short&maxResults={max_results * 3}&key={api_key}"
+        f"&type=video&videoDuration=short&maxResults={max_results * 3}"
     )
 
-    req = urllib.request.Request(search_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+    req = urllib.request.Request(search_url, headers=api_headers)
     try:
         with urllib.request.urlopen(req, timeout=5) as resp:
             s_data = json.loads(resp.read().decode())
@@ -869,11 +875,11 @@ def search_live_superbowl_ads(
 
     detail_url = (
         f"https://www.googleapis.com/youtube/v3/videos?"
-        f"part=snippet,contentDetails,statistics&id={','.join(v_ids[:max_results * 2])}&key={api_key}"
+        f"part=snippet,contentDetails,statistics&id={','.join(v_ids[:max_results * 2])}"
     )
 
     try:
-        with urllib.request.urlopen(urllib.request.Request(detail_url, headers={"User-Agent": "Mozilla/5.0"}), timeout=5) as resp:
+        with urllib.request.urlopen(urllib.request.Request(detail_url, headers=api_headers), timeout=5) as resp:
             det_data = json.loads(resp.read().decode())
     except Exception:
         brand_key = brand_or_topic.lower()
@@ -1009,6 +1015,11 @@ def search_live_superbowl_ads(
     return results
 
 
+# Bounded in-memory embedding cache to throttle and limit API/memory consumption (CWE-770)
+_QUERY_EMBEDDING_CACHE: Dict[str, np.ndarray] = {}
+_MAX_EMBEDDING_CACHE_SIZE = 128
+
+
 def retrieve_nearest_historical_ads(
     traits: Optional[List[str]] = None,
     vertical: str = "Snacks / Food",
@@ -1109,31 +1120,43 @@ def retrieve_nearest_historical_ads(
 
     query_vec = None
     if pitch_text and str(pitch_text).strip():
-        client = get_genai_client()
-        if client:
-            try:
-                emb_resp = client.models.embed_content(
-                    model="gemini-embedding-001",
-                    contents=str(pitch_text).strip(),
-                )
-                if hasattr(emb_resp, "embeddings") and emb_resp.embeddings:
-                    raw_emb = np.array(emb_resp.embeddings[0].values, dtype=np.float32)
-                elif hasattr(emb_resp, "embedding"):
-                    raw_emb = np.array(emb_resp.embedding.values, dtype=np.float32)
-                else:
-                    raw_emb = None
+        # Bound input length to 1,000 chars to avoid uncontrolled allocation / API exhaustion (CWE-770)
+        clean_pitch_query = str(pitch_text).strip()[:1000]
 
-                if raw_emb is not None:
-                    if len(raw_emb) >= target_dim:
-                        query_vec = raw_emb[:target_dim]
+        # Use in-memory cache to throttle and limit redundant external API calls (CWE-770)
+        if clean_pitch_query in _QUERY_EMBEDDING_CACHE:
+            query_vec = _QUERY_EMBEDDING_CACHE[clean_pitch_query].copy()
+        else:
+            client = get_genai_client()
+            if client:
+                try:
+                    emb_resp = client.models.embed_content(
+                        model="gemini-embedding-001",
+                        contents=clean_pitch_query,
+                    )
+                    if hasattr(emb_resp, "embeddings") and emb_resp.embeddings:
+                        raw_emb = np.array(emb_resp.embeddings[0].values, dtype=np.float32)
+                    elif hasattr(emb_resp, "embedding"):
+                        raw_emb = np.array(emb_resp.embedding.values, dtype=np.float32)
                     else:
-                        reps = int(np.ceil(target_dim / len(raw_emb)))
-                        query_vec = np.tile(raw_emb, reps)[:target_dim]
-                    norm = np.linalg.norm(query_vec)
-                    if norm > 0:
-                        query_vec = query_vec / norm
-            except Exception:
-                query_vec = None
+                        raw_emb = None
+
+                    if raw_emb is not None:
+                        if len(raw_emb) >= target_dim:
+                            query_vec = raw_emb[:target_dim]
+                        else:
+                            reps = int(np.ceil(target_dim / len(raw_emb)))
+                            query_vec = np.tile(raw_emb, reps)[:target_dim]
+                        norm = np.linalg.norm(query_vec)
+                        if norm > 0:
+                            query_vec = query_vec / norm
+
+                        # Bounded cache update (evict oldest entry if size exceeds threshold)
+                        if len(_QUERY_EMBEDDING_CACHE) >= _MAX_EMBEDDING_CACHE_SIZE:
+                            _QUERY_EMBEDDING_CACHE.pop(next(iter(_QUERY_EMBEDDING_CACHE)))
+                        _QUERY_EMBEDDING_CACHE[clean_pitch_query] = query_vec.copy()
+                except Exception:
+                    query_vec = None
 
     if query_vec is None:
         query_traits = np.array([float(t in traits or t.title() in traits) for t in TRAITS])

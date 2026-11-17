@@ -20,6 +20,7 @@ import io
 import os
 from pathlib import Path
 import re
+import time
 from typing import Any, Dict, List
 import urllib.parse
 
@@ -114,8 +115,15 @@ def render_tab6():
         )
         if st.button("🪄 Parse Brief into Simulator Controls", key="tab6_parse_btn"):
             if pitch_input.strip():
-                with st.spinner("Extracting parameters with Gemini 3.5 Flash Lite..."):
-                    parsed = parse_concept_pitch_to_controls(pitch_input)
+                # Rate limiting & throttling to prevent uncontrolled API/resource consumption (CWE-400)
+                now_ts = time.time()
+                last_parse_ts = st.session_state.get("t6_last_parse_ts", 0.0)
+                if now_ts - last_parse_ts < 2.0:
+                    st.warning("⏳ Throttling in effect: Please wait 2 seconds between parsing requests.")
+                else:
+                    st.session_state["t6_last_parse_ts"] = now_ts
+                    with st.spinner("Extracting parameters with Gemini 3.5 Flash Lite..."):
+                        parsed = parse_concept_pitch_to_controls(pitch_input)
                     if parsed and not parsed.get("is_valid_brief", True):
                         st.error(f"⚠️ {parsed.get('error_message', 'Invalid brief. Please enter a valid commercial storyboard concept.')}")
                     elif parsed:

@@ -66,6 +66,76 @@ def _on_switch_quarter_click(target_quarter: str):
         del st.session_state["t6_adk_scenario_key"]
 
 
+def _clean_markdown_delimiters(text: str) -> str:
+    """Ensures markdown delimiters like ~ and ** have spacing so CommonMark parsers don't fail."""
+    if not text:
+        return ""
+    # Space between ~ and bold/italic asterisks
+    return re.sub(r"~(\*\*|\*)", r"~ \1", str(text))
+
+
+def _md_to_html_bold(text: str) -> str:
+    """Converts markdown bold syntax to HTML bold tags for safe rendering inside raw HTML blocks."""
+    if not text:
+        return ""
+    # Convert ~**text** or ~ **text** to ~<b>text</b>
+    cleaned = re.sub(r"~\s*\*\*([^*]+?)\*\*", r"~<b>\1</b>", str(text))
+    # Convert **text** to <b>text</b> (handling potential multiline)
+    cleaned = re.sub(r"\*\*([^*]+?)\*\*", r"<b>\1</b>", cleaned, flags=re.DOTALL)
+    return cleaned
+
+
+def _format_consensus_brief(text: str) -> str:
+    """Safely formats the Executive Consensus Brief with bolding, headers, and bullet lists."""
+    if not text:
+        return ""
+    # Normalize <br/> or <br> to newlines first so escaping won't produce literal &lt;br/&gt;
+    norm_text = re.sub(r"<br\s*/?>", "\n", str(text), flags=re.IGNORECASE)
+    # Escape HTML to prevent injection
+    safe_text = html.escape(norm_text)
+    # Convert bold syntax **text** to <b>text</b> (handling potential ~ prefix and multiline)
+    safe_text = re.sub(r"~\s*\*\*([^*]+?)\*\*", r"~<b>\1</b>", safe_text, flags=re.DOTALL)
+    safe_text = re.sub(r"\*\*([^*]+?)\*\*", r"<b>\1</b>", safe_text, flags=re.DOTALL)
+
+    lines = safe_text.splitlines()
+    formatted_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            formatted_lines.append('<div style="height: 0.45rem;"></div>')
+            continue
+
+        # Header 3: ### 📋 Title
+        if stripped.startswith("### "):
+            header_content = stripped[4:].strip()
+            formatted_lines.append(
+                f'<div style="font-size: 1.15rem; font-weight: 800; color: #89b4fa; margin: 0.2rem 0 0.75rem 0; padding-bottom: 0.4rem; border-bottom: 1px solid #313244; display: flex; align-items: center; gap: 0.4rem;">{header_content}</div>'
+            )
+        # Header 2: ## Title
+        elif stripped.startswith("## "):
+            header_content = stripped[3:].strip()
+            formatted_lines.append(
+                f'<div style="font-size: 1.08rem; font-weight: 800; color: #89b4fa; margin: 0.5rem 0 0.4rem 0;">{header_content}</div>'
+            )
+        # Section Header: <b>0. Brand Capital...</b> or similar standalone bold section titles
+        elif (stripped.startswith("<b>") and stripped.endswith("</b>")) or (stripped.startswith("<b>") and ":" in stripped and not stripped.startswith(("-", "*", "•"))):
+            formatted_lines.append(
+                f'<div style="font-size: 0.96rem; font-weight: 800; color: #cdd6f4; margin: 0.7rem 0 0.3rem 0;">{stripped}</div>'
+            )
+        # Bullet item: - or * or •
+        elif stripped.startswith(("- ", "* ", "• ")) or re.match(r"^\s*[•\-\*]\s+", line):
+            content = re.sub(r"^\s*[•\-\*]\s+", "", line)
+            formatted_lines.append(
+                f'<div style="margin-left: 0.9rem; margin-bottom: 0.25rem; line-height: 1.5; color: #bac2de;">• {content}</div>'
+            )
+        else:
+            formatted_lines.append(
+                f'<div style="margin-bottom: 0.25rem; line-height: 1.5; color: #bac2de;">{stripped}</div>'
+            )
+
+    return "\n".join(formatted_lines)
+
+
 def render_tab6():
     # Auto-train models on first launch if not already cached
     if not BUNDLE_PATH.exists():
@@ -487,14 +557,14 @@ def render_tab6():
                 f'<span style="font-size: 1.85rem; font-weight: 900; color: {cv["color"]}; letter-spacing: -0.4px; line-height: 1.15; text-shadow: 0 0 24px {cv["color"]}33;">{cv["badge"]}</span>'
                 f'</div>'
                 f'<div style="font-size: 0.88rem; font-weight: 700; color: #cdd6f4; margin-bottom: 0.45rem; line-height: 1.35;">{cv["summary"]}</div>'
-                f'<div style="font-size: 0.82rem; color: #bac2de; line-height: 1.45; margin-bottom: 0.5rem;">{cv["detail"]}</div>'
+                f'<div style="font-size: 0.82rem; color: #bac2de; line-height: 1.45; margin-bottom: 0.5rem;">{_md_to_html_bold(cv["detail"])}</div>'
                 f'<div style="background: rgba(30, 30, 46, 0.9); border: 1px solid #313244; border-radius: 6px; padding: 0.5rem 0.65rem; margin-bottom: 0.5rem; font-size: 0.77rem; line-height: 1.4;">'
                 f'<div style="font-weight: 700; color: {qa.get("scarcity_color", "#fab387")}; margin-bottom: 0.15rem;">📍 {qa.get("selected_quarter", "Quarter")}: {qa.get("headline", "")}</div>'
                 f'<div style="color: #a6adc8; margin-bottom: 0.35rem;">{qa.get("warning", "")}</div>'
                 f'<div style="background: rgba(137, 180, 250, 0.12); border-left: 3px solid #89b4fa; padding: 0.3rem 0.5rem; border-radius: 4px; color: #89b4fa; font-weight: 600;">💡 <b>Allotment Pivot:</b> {qa.get("smart_alt_summary", "")}</div>'
                 f'</div>'
                 f'</div>'
-                f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.55rem 0.7rem; font-size: 0.78rem; color: #a6adc8; line-height: 1.4;">💡 <b>Social Media Tradeoff:</b> {cv["social_comparison"]}</div>'
+                f'<div style="background: rgba(30, 30, 46, 0.85); border: 1px solid #313244; border-radius: 6px; padding: 0.55rem 0.7rem; font-size: 0.78rem; color: #a6adc8; line-height: 1.4;">💡 <b>Social Media Tradeoff:</b> {_md_to_html_bold(cv["social_comparison"])}</div>'
                 f'</div>'
             )
             st.markdown(card1_html, unsafe_allow_html=True)
@@ -639,9 +709,7 @@ def render_tab6():
 
     # Executive Consensus Brief Box
     consensus_text = memos.get("consensus", "Executive strategy brief is being calibrated.")
-    safe_consensus_text = html.escape(consensus_text)
-    safe_consensus_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", safe_consensus_text)
-    safe_consensus_html = safe_consensus_text.replace("\n", "<br/>")
+    safe_consensus_html = _format_consensus_brief(consensus_text)
     st.markdown(
         f"""
         <div style="background: #1e1e2e; border: 1px solid #45475a; border-left: 5px solid #89b4fa; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1rem 0;">
@@ -838,7 +906,7 @@ def render_tab6():
     # ── Lens Tab 1: Creative Strategy Director ────────────────────────────────
     with lens_tab1:
         st.markdown("##### 🤖 Creative Strategy Memo (Google ADK Agent)")
-        st.info(memos.get("creative", "Creative strategy memo is calibrated to concept brief."))
+        st.info(_clean_markdown_delimiters(memos.get("creative", "Creative strategy memo is calibrated to concept brief.")))
 
         st.markdown("##### 📊 Creative Performance Telemetry")
         cm1, cm2, cm3 = st.columns(3)
@@ -882,7 +950,7 @@ def render_tab6():
     # ── Lens Tab 2: Media Buyer / Planner ──────────────────────────────────────
     with lens_tab2:
         st.markdown("##### 🤖 Media Planning Memo (Google ADK Agent)")
-        st.info(memos.get("media", "Media planning memo is calibrated to telecast parameters."))
+        st.info(_clean_markdown_delimiters(memos.get("media", "Media planning memo is calibrated to telecast parameters.")))
 
         st.markdown("##### 📊 Telecast Reach & Audience Decay Analysis")
         mm1, mm2, mm3 = st.columns(3)
@@ -940,7 +1008,7 @@ def render_tab6():
     # ── Lens Tab 3: Brand CMO / CFO Risk ──────────────────────────────────────
     with lens_tab3:
         st.markdown("##### 🤖 CFO Governance Memo (Google ADK Agent)")
-        st.info(memos.get("cfo", "CFO governance memo is calibrated to risk constraints."))
+        st.info(_clean_markdown_delimiters(memos.get("cfo", "CFO governance memo is calibrated to risk constraints.")))
 
         st.markdown("##### 📊 Capital Risk Floors & Conformal Bounds")
         rm1, rm2, rm3 = st.columns(3)

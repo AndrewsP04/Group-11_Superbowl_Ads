@@ -1689,7 +1689,7 @@ def compute_executive_roi_and_decision(
         social_comparison = (
             f"**Recommended Digital Blueprint:** Reallocate **${digital_budget_k}K–$1.2M** into a high-velocity Social Creator Blitz across TikTok, "
             f"Instagram Reels, and YouTube Shorts targeting game-day hashtags (#SuperBowl, #BigGame) and halftime meme drops (when 110M viewers check phones). "
-            f"Delivers an estimated **${digital_expected_value_m}M** in trackable e-commerce/DTC GMV (**{digital_roas}**) with zero blowout risk.<br/>"
+            f"Delivers an estimated **${digital_expected_value_m}M** in trackable e-commerce/DTC GMV (**{digital_roas}**) with zero blowout risk.\n\n"
             f"**Local DMA Alternative:** If television presence is essential, buy a **Local Cable Interconnect spot in 1–2 target DMAs** "
             f"(e.g., Austin, Los Angeles, or Miami) for **{local_dma_cost_range}**, putting your ad on Super Bowl living-room screens locally without paying the $7M national rate."
         )
@@ -1721,7 +1721,7 @@ def compute_executive_roi_and_decision(
         )
         social_comparison = (
             f"Deploying this **${total_capital_m}M** across social channels (Meta, TikTok, YouTube) would buy "
-            f"~**{int(total_capital_m * 1000 / 22)}M** fragmented digital impressions, but suffers 65%+ ad-skipping, "
+            f"~ **{int(total_capital_m * 1000 / 22)}M** fragmented digital impressions, but suffers 65%+ ad-skipping, "
             f"zero shared cultural momentum, and negligible national PR coverage."
         )
     elif retention_pct < 90.0 or roi_pct < 10.0 or brand_centrality < 4.5:

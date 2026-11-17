@@ -273,9 +273,12 @@ def generate_baseline_strategy_memos(
     )
 
     # CFO Governance Memo with Brand Capital Solvency Audit
+    roi_sign = "+" if fr.get("roi_pct", 0) >= 0 else ""
+    profit_sign = "+" if fr.get("net_profit_m", 0) >= 0 else ""
+
     if is_emerging:
         cfo_solvency_text = (
-            f"🔴 **CAPITAL CEILING VETO:** Total broadcast outlay of **${fr['total_capital_m']}M** exceeds total brand solvency (<$6M budget ceiling). "
+            f"🔴 **CAPITAL CEILING VETO:** Total broadcast outlay of **${fr['total_capital_m']}M** exceeds total brand solvency (under $6M budget ceiling). "
             f"Direct CFO directive: Veto national telecast commitment. Authorize **${ta.get('digital_budget_k', 500)}K Social Creator Sprint** "
             f"(projected **${ta.get('digital_expected_value_m', 2.4)}M** GMV / **{ta.get('digital_roas', '4.8x ROAS')}**) and/or a "
             f"**{ta.get('local_dma_cost_range', '$40K–$120K')} Local DMA Interconnect spot** in top target metro market. "
@@ -289,14 +292,14 @@ def generate_baseline_strategy_memos(
     else:
         cfo_solvency_text = (
             f"🟢 **CAPITAL ALLOCATION CLEARED:** Total upfront exposure of **${fr['total_capital_m']}M** is well within corporate treasury risk boundaries. "
-            f"Expected Net Commercial Value is positive (**+${fr['net_profit_m']}M** / **+{fr['roi_pct']}%** net ROI)."
+            f"Expected Net Commercial Value is positive (**{profit_sign}${abs(fr['net_profit_m'])}M** / **{roi_sign}{fr['roi_pct']}%** net ROI)."
         )
 
     cfo_memo = (
         f"**Downside Floor & Capital Governance Audit ({tier_badge}):**\n"
         f"{cfo_solvency_text}\n\n"
         f"• Total Upfront Capital Exposure: **${fr['total_capital_m']}M** (${fr['airtime_cost_m']}M airtime + ${fr['prod_cost_m']}M production).\n"
-        f"• Expected Gross Commercial Value: **${fr['expected_gross_value_m']}M** (Expected Net ROI: **+{fr['roi_pct']}%** / **{fr['roi_multiplier']}x** multiple).\n"
+        f"• Expected Gross Commercial Value: **${fr['expected_gross_value_m']}M** (Expected Net ROI: **{roi_sign}{fr['roi_pct']}%** / **{fr['roi_multiplier']}x** multiple).\n"
         f"• Maximum Viable Budget Cap: **${fr['max_viable_budget_m']}M**.\n"
         f"• Downside Capital Safety Floor: **${fr['downside_floor_m']}M** (10th percentile worst-case protection floor).\n\n"
         f"**Mandatory Governance Disclosure:**\n"
@@ -317,7 +320,7 @@ def generate_baseline_strategy_memos(
         f"- **Quarter Allotment Strategy:** {qa.get('headline', '')} — {qa.get('smart_alt_summary', '')}\n"
         f"- **Social Media Tradeoff:** {cv['social_comparison']}\n\n"
         f"**2. Financial ROI & Budget Cap (Total Capital: ${fr['total_capital_m']}M):**\n"
-        f"- **Expected Commercial & Earned Value:** **${fr['expected_gross_value_m']}M** (Expected Net ROI: **+{fr['roi_pct']}%** | **{fr['roi_multiplier']}x** return).\n"
+        f"- **Expected Commercial & Earned Value:** **${fr['expected_gross_value_m']}M** (Expected Net ROI: **{roi_sign}{fr['roi_pct']}%** | **{fr['roi_multiplier']}x** return).\n"
         f"- **Maximum Viable Budget:** **${fr['max_viable_budget_m']}M Spend Ceiling** (preserve positive net commercial return).\n"
         f"- **Downside Capital Safety Floor:** **${fr['downside_floor_m']}M** value protected at 10th percentile.\n"
         f"- **Unit Efficiency:** **${fr['cost_per_viewer']} per reached viewer**.\n\n"

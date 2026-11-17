@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "group-11-superbowl-ads"
+version = "1.0.0"
+description = "Touchdowns & Tactics: Super Bowl Advertising Decision Engine & Multi-Agent Strategy Studio"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Group 11", email = "andyjakep22@gmail.com" }
+]
+dependencies = [
+    "streamlit>=1.30.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "plotly>=5.18.0",
+    "statsmodels>=0.14.0",
+    "scikit-learn>=1.4.0",
+    "shap>=0.45.0",
+    "pyarrow>=15.0.0",
+    "scipy>=1.12.0",
+    "requests>=2.31.0",
+    "ipykernel>=6.29.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "python-dotenv>=1.0.0",
+    "yfinance>=0.2.38",
+    "google-api-python-client>=2.120.0",
+    "apify-client>=1.6.0",
+    "beautifulsoup4>=4.12.0",
+    "httpx>=0.27.0",
+    "google-genai>=1.0.0",
+    "google-adk>=0.1.0",
+    "interpret>=0.6.0",
+    "pydantic>=2.0.0",
+    "joblib>=1.3.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["decision_engine"]

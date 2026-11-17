@@ -1,25 +1,69 @@
 # 🏈 Super Bowl Ads Decision Engine
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://group-11superbowlads.streamlit.app/)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Python 3.11 - 3.14](https://img.shields.io/badge/Python-3.11%20--%203.14-blue.svg)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg)](https://streamlit.io)
 [![Google GenAI](https://img.shields.io/badge/Google%20GenAI-Gemini%203.5%20%7C%203.8-4285F4.svg)](https://deepmind.google/technologies/gemini/)
 [![Explainable AI](https://img.shields.io/badge/EAI-InterpretML%20EBM-00A4EF.svg)](https://github.com/interpretml/interpret)
 [![Security Hardened](https://img.shields.io/badge/Security-SHA--256%20Verified-success.svg)](#)
 
-> 🚀 **Live Production Application:** [https://group-11superbowlads.streamlit.app/](https://group-11superbowlads.streamlit.app/)  
-> *Experience the live decision engine, EBM waterfall visualizers, and Google ADK Multi-Agent Boardroom deployed on Streamlit Community Cloud.*
+---
 
-An enterprise-grade interactive Streamlit decision engine and analytics suite for comparing Super Bowl advertising creative traits, telecast audience flow, YouTube engagement, Wikipedia pageview surges, and equity market impact. 
+## Project Description
+
+An enterprise-grade interactive Streamlit decision engine and visual analytics suite for analyzing 25 years of Super Bowl advertising (2000–2026). The platform models creative trait efficacy, telecast audience flow, YouTube engagement velocity, Wikipedia search surges, and equity market impact (Cumulative Abnormal Returns).
 
 Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)** predictive architecture, **3072-dimensional Vector RAG historical retrieval**, and an on-demand **Google ADK Multi-Agent Strategy Boardroom** on Vertex AI.
+
+---
+
+## App Deployment URL
+
+* 🚀 **Live Production Application:** [https://group-11superbowlads.streamlit.app/](https://group-11superbowlads.streamlit.app/)
+
+> *Hosted on Streamlit Community Cloud (Python 3.14 container environment) with continuous deployment auto-synced from GitHub `main`.*
+
+---
+
+## Local Setup Instructions
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/AndrewsP04/Group-11_Superbowl_Ads.git
+cd Group-11_Superbowl_Ads
+
+# 2. Install dependencies & synchronize environment via uv
+uv sync
+
+# 3. Launch the Streamlit application
+uv run streamlit run app.py
+```
+
+### **(Optional) Configure Environment Variables (`.env`)**
+The application runs offline out of the box with cached models and heuristic fallbacks. To enable live Gemini AI brief parsing, live 3072-d embeddings, and YouTube commercial pulls, create a `.env` file in the project root:
+```ini
+GEMINI_API_KEY=your_gemini_api_key_here
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+YOUTUBE_API_KEY=your_youtube_api_key_here  # Optional: for live YouTube commercial pulls (Tab 6)
+```
+
+<details>
+<summary><b>Alternative: Standard pip / virtualenv installation</b></summary>
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+</details>
 
 ---
 
 ## 📑 Quick Links
 - [🚀 Live Streamlit Application](https://group-11superbowlads.streamlit.app/)
 - [☁️ Cloud Deployment & Production Hosting](#%EF%B8%8F-cloud-deployment--production-hosting)
-- [⚡ Quickstart & Local Installation](#-quickstart--local-installation)
 - [⚙️ Environment Configuration (`.env`)](#%EF%B8%8F-environment-configuration-env)
 - [💡 Key Highlights & Innovations](#-key-highlights--innovations)
 - [🖥️ Dashboard Architecture & Tab Guide](#%EF%B8%8F-dashboard-architecture--tab-guide)
@@ -47,48 +91,13 @@ Powered by a **Two-Stage RidgeCV + Monotonic Explainable Boosting Machine (EBM)*
 
 ---
 
-## ⚡ Quickstart & Local Installation
-
-### **1. System Prerequisites**
-- **Python:** `Python 3.9` or higher (`Python 3.11 – 3.14` tested; Streamlit Community Cloud runs Python 3.14)
-- **Memory:** Minimum 4 GB RAM (8 GB+ recommended for local EBM model fitting & 3072-d embeddings)
-- **OS:** macOS, Linux, or Windows (WSL recommended)
-
-### **2. Clone and Setup Environment**
-```bash
-# Clone the repository
-git clone https://github.com/AndrewsP04/Group-11_Superbowl_Ads.git
-cd Group-11_Superbowl_Ads
-
-# Create and activate virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### **3. Configure Environment Variables (`.env`)**
-Create a `.env` file in the project root:
-```ini
-# Provide either GEMINI_API_KEY (Vertex AI / Agent Platform) or GOOGLE_API_KEY (Google AI Studio)
-GEMINI_API_KEY=your_gemini_api_key_here
-# GOOGLE_API_KEY=your_google_ai_studio_api_key_here
-GOOGLE_GENAI_USE_VERTEXAI=TRUE
-YOUTUBE_API_KEY=your_youtube_api_key_here  # Optional: for live YouTube commercial pulls (Tab 6)
-```
-
-### **4. Launch the Application**
-```bash
-streamlit run app.py
-```
 > **Note:** The application automatically verifies model integrity via cryptographic SHA-256 digests on boot and binds to a hardened local network profile `http://127.0.0.1:8501` with CORS and XSRF protection enabled by default.
 
 <details>
 <summary><b>(Optional) Run offline model training independently</b></summary>
 
 ```bash
-python3 -m decision_engine.enrich_and_train
+uv run python -m decision_engine.enrich_and_train
 ```
 </details>
 
@@ -403,11 +412,13 @@ A 4-hour commercial airing during the 7th quarter of a tie-breaker overtime game
 ## 📁 Project Structure
 
 <details>
-<summary><b>Click to expand full repository file tree (44 tracked files)</b></summary>
+<summary><b>Click to expand full repository file tree (46 tracked files)</b></summary>
 
 ```text
 Group-11_Superbowl_Ads/
 ├── app.py                                          # Main Streamlit dashboard application (Tabs 1–6)
+├── pyproject.toml                                  # Modern uv/PEP 621 project configuration & build metadata
+├── uv.lock                                         # Deterministic dependency lockfile generated by uv
 ├── requirements.txt                                # Python dependencies (interpret, google-adk, plotly, etc.)
 ├── README.md                                       # Comprehensive project documentation
 ├── .devcontainer/                                  # VS Code / GitHub Codespaces Dev Container config

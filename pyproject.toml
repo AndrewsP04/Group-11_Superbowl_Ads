@@ -7,7 +7,7 @@ name = "group-11-superbowl-ads"
 version = "1.0.0"
 description = "Touchdowns & Tactics: Super Bowl Advertising Decision Engine & Multi-Agent Strategy Studio"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11.5"
 authors = [
     { name = "Group 11", email = "andyjakep22@gmail.com" }
 ]

@@ -2,7 +2,7 @@
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://group-11superbowlads.streamlit.app/)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
-[![Python 3.11 - 3.14](https://img.shields.io/badge/Python-3.11%20--%203.14-blue.svg)](https://python.org)
+[![Python 3.11.5 - 3.14](https://img.shields.io/badge/Python-3.11.5%20--%203.14-blue.svg)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg)](https://streamlit.io)
 [![Google GenAI](https://img.shields.io/badge/Google%20GenAI-Gemini%203.5%20%7C%203.8-4285F4.svg)](https://deepmind.google/technologies/gemini/)
 [![Explainable AI](https://img.shields.io/badge/EAI-InterpretML%20EBM-00A4EF.svg)](https://github.com/interpretml/interpret)
@@ -202,6 +202,8 @@ Enforces 80% conformal prediction intervals ($10^{\text{th}}$ percentile downsid
 <summary><b>🛡️ Enterprise Reliability & Architecture Safeguards</b></summary>
 
 - **Cryptographic Model Verification:** All serialized machine learning bundles are verified against SHA-256 digests prior to runtime deserialization.
+- **Vulnerability Remediation & Dependency Integrity:** Dependency lockfile (`uv.lock`) pins `soupsieve >= 4.1.2`, completely eliminating known parser denial-of-service and recursion vulnerabilities (GHSA-6655-6qjp-jx7x, GHSA-7g44-g9rc-x53w, GHSA-mmhr-3c5m-f64f).
+- **Hardened HTTP Transport:** Live video retrieval and metadata enrichment standardize on `httpx` with 5-second timeouts and schema validation, passing Bandit AST security scans with zero medium/high vulnerabilities.
 - **Structured Prompt Sandboxing:** User-provided campaign concepts are isolated within strict data schemas separate from model system instructions to prevent prompt override or persona hijacking.
 - **Resource & Quota Governance:** In-memory request caching and session debouncing (5-second cooldown) ensure efficient, predictable compute and API utilization.
 - **Safe Content Rendering & Transport:** Header-based authentication protects API credentials, dynamic web feeds are encoded with HTML entity escaping, and commercial video streaming is locked to verified providers.
@@ -324,6 +326,10 @@ Copy and paste any of the following concept pitches into the **"Campaign Concept
 <details open>
 <summary><b>✅ 1. Happy Path Prompts (Well-Calibrated Strategies)</b></summary>
 
+#### **Consumer Tech: Celebrity Pop-Culture Comedy (:30s)**
+*(Tests consumer tech classification, pop-culture comedy synergy, 88% Amazon Alexa comp retrieval, and +49.7% Net ROI)*
+> A hilarious tech spot where a humanoid AI robot tries spicy buffalo wings at a Super Bowl watch party, featuring Ryan Reynolds giving advice, 90s hip-hop music, and funny physical comedy.
+
 #### **Enterprise Megabrand: Cinematic Snack Spectacle (:30s)**
 *(Tests Fortune 500 scale, Q2 anchor slot, pop-culture celebrity contrast, and maximum commercial ROI)*
 > A high-energy 30-second Doritos commercial airing in Game Q2. It features an absurd, humorous dance-off between a major pop celebrity and an everyday fan fighting over the last bag of spicy chips, with the product actively driving the comedic resolution and an earworm 90s retro hip-hop soundtrack.
@@ -344,6 +350,10 @@ Copy and paste any of the following concept pitches into the **"Campaign Concept
 
 <details>
 <summary><b>⚠️ 2. Bad Path Prompts (Defensive Guardrails & Risk Warnings)</b></summary>
+
+#### **Bootstrapped Startup Fiduciary Veto (Overspending & Low Brand Recall)**
+*(Tests early-stage startup solvency veto, Brand Centrality penalty to 2.0/10, negative -21.8% Net ROI, and prescriptive $500K social creator sprint)*
+> A bootstrapped DTC sparkling water startup wants to bet their entire $2M seed round on a 30s Super Bowl ad with a chaotic parkour stunt on rooftops, but the brand logo only flashes for 1 second at the end.
 
 #### **The Late-Game Blowout Blindspot (Q4 Buy with a Runaway Game)**
 *(Tests fourth-quarter channel-surfing decay when paired with high point margins)*
@@ -401,7 +411,7 @@ A 4-hour commercial airing during the 7th quarter of a tie-breaker overtime game
 
 1. **Temporal Cross-Validation (`GroupKFold` on Year):** Models are evaluated using 5-fold temporal splitting by year to prevent chronological data leakage across multi-decade telecasts.
 2. **Empirical Wikipedia Surge Modeling:** Wikipedia search models train strictly on non-null empirical spike ratio observations (`df.dropna(subset=['spike_ratio'])`), avoiding variance collapse caused by naive global median imputation.
-3. **Conformal Prediction Intervals:** Dual-target heads generate 80% conformal bounds from out-of-fold residual distributions, providing defensible risk floors for media buyers and finance executives.
+3. **Dual-Target Conformal Prediction Intervals:** Out-of-fold temporal `GroupKFold` cross-validation generates separate 80% conformal bounds for engagement log-residuals (`[10th: -0.320, 90th: +0.392]`, RMSE: `0.269`) and empirical Wikipedia search spike residuals (`[10th: -0.964, 90th: +1.216]`, RMSE: `0.817`). These distributions power explicit 10th-percentile downside capital safety floors for media buyers and finance executives.
 4. **Non-Causal Reporting Disclaimer:** In compliance with empirical marketing science standards, modeled commercial lift metrics describe observed historical cohort patterns (2000–2026) across public advertisers and do not establish direct causal retail sales revenue or stock return guarantees.
 5. **System & Transport Security:** All external API communications use encrypted HTTP headers rather than URL query parameters, dynamic UI outputs are sanitized, and the application runtime enforces localhost isolation and origin checking.
 

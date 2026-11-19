@@ -4,12 +4,10 @@ Touchdowns and Tactics: Decoding Super Bowl Ads
 Executive Decision Platform - Group 11
 """
 
-import io
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -22,14 +20,6 @@ def get_data_path(filename: str) -> Path:
         if candidate.exists():
             return candidate
     return DATA_PROCESSED_DIR / name
-
-try:
-    from sklearn.linear_model import Ridge
-    from sklearn.metrics import mean_absolute_error, mean_squared_error
-    import shap
-    _ML_AVAILABLE = True
-except ImportError:
-    _ML_AVAILABLE = False
 
 st.set_page_config(
     page_title="Super Bowl Ads Intelligence",

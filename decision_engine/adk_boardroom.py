@@ -13,7 +13,6 @@ Runs natively via ParallelAgent and SequentialAgent on the Google Agent Platform
 from __future__ import annotations
 
 import asyncio
-import os
 import re
 from typing import Any, Dict, List, Optional
 
@@ -61,7 +60,7 @@ def build_adk_pipeline():
         name="CreativeDirectorAgent",
         model=MODEL_NAME,
         instruction=(
-            "You are the Agency Creative Strategy Director pitching a high-stakes $7M Super Bowl ad. "
+            "You are the Agency Creative Strategy Director pitching a high-stakes Super Bowl ad. "
             "Your objective is maximizing viewer buzz, YouTube engagement, and cultural conversation. "
             "Use the provided quantitative simulations and historical commercial comps to champion creative boldness, "
             "humor setups, celebrity integration, and narrative memorability. "
@@ -74,7 +73,7 @@ def build_adk_pipeline():
         name="MediaPlannerAgent",
         model=MODEL_NAME,
         instruction=(
-            "You are the Senior Media Buyer & Telecast Planner managing a $7M upfront airtime commitment. "
+            "You are the Senior Media Buyer & Telecast Planner managing the upfront airtime commitment specified in <scenario_data>. "
             "Your objective is maximizing living-room audience reach efficiency and mitigating blowout risk. "
             "Aggressively scrutinize Game Q4 placement if point spread > 10 pts due to fourth-quarter audience decay. "
             "Recommend optimal quarter timing (Q1 vs Q2 vs Q3 vs Q4) using the optimizer tool. "

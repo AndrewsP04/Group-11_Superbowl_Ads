@@ -21,6 +21,7 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 import urllib.parse
 import urllib.request
+import httpx
 
 import numpy as np
 
@@ -311,6 +312,8 @@ def simulate_multi_pov(
 
         q10_err = bundle.get("q10_eng", -0.4)
         q90_err = bundle.get("q90_eng", +0.4)
+        q10_wiki_err = bundle.get("q10_wiki", q10_err)
+        q90_wiki_err = bundle.get("q90_wiki", q90_err)
 
         waterfall = []
         name_display_map = {
@@ -381,6 +384,7 @@ def simulate_multi_pov(
         pred_eng_log = np.log1p(base_eng)
         pred_wiki_log = np.log(4.5 + (1.8 if trait_flags["celebrity"] else 0.0) + (1.2 if trait_flags["funny"] else 0.0))
         q10_err, q90_err = -0.32, +0.35
+        q10_wiki_err, q90_wiki_err = -0.28, +0.32
 
         waterfall = [
             {"feature": "Celebrity Presence", "impact": +0.28 if trait_flags["celebrity"] else 0.0},
@@ -395,8 +399,8 @@ def simulate_multi_pov(
     pred_eng_high = float(np.expm1(pred_eng_log + q90_err))
 
     pred_wiki_mult = float(np.exp(pred_wiki_log))
-    pred_wiki_low = float(np.exp(pred_wiki_log + q10_err))
-    pred_wiki_high = float(np.exp(pred_wiki_log + q90_err))
+    pred_wiki_low = float(np.exp(pred_wiki_log + q10_wiki_err))
+    pred_wiki_high = float(np.exp(pred_wiki_log + q90_wiki_err))
 
     return {
         "pred_eng_pct": round(max(0.05, pred_eng_pct), 2),
@@ -843,10 +847,9 @@ def search_live_superbowl_ads(
         f"&type=video&videoDuration=short&maxResults={max_results * 3}"
     )
 
-    req = urllib.request.Request(search_url, headers=api_headers)
     try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            s_data = json.loads(resp.read().decode())
+        resp = httpx.get(search_url, headers=api_headers, timeout=5.0)
+        s_data = resp.json() if resp.status_code == 200 else {}
     except Exception:
         brand_key = brand_or_topic.lower()
         for fb_name, fb_items in EXTERNAL_BRAND_FALLBACKS.items():
@@ -879,8 +882,8 @@ def search_live_superbowl_ads(
     )
 
     try:
-        with urllib.request.urlopen(urllib.request.Request(detail_url, headers=api_headers), timeout=5) as resp:
-            det_data = json.loads(resp.read().decode())
+        resp_det = httpx.get(detail_url, headers=api_headers, timeout=5.0)
+        det_data = resp_det.json() if resp_det.status_code == 200 else {}
     except Exception:
         brand_key = brand_or_topic.lower()
         for fb_name, fb_items in EXTERNAL_BRAND_FALLBACKS.items():

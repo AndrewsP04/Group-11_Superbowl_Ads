@@ -17,10 +17,9 @@ enrich_and_train.py - Offline Training Pipeline for Super Bowl Ads Decision Engi
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 import re
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, Tuple
 
 import joblib
 import numpy as np
@@ -399,8 +398,32 @@ def run_pipeline():
     q90_eng = float(np.percentile(errors_eng, 90))
     rmse_eng = float(np.sqrt(np.mean(errors_eng ** 2)))
 
-    print(f"Validation GroupKFold OOF RMSE: {rmse_eng:.3f}")
-    print(f"Conformal 80% Residual Error Quantiles: [10th: {q10_eng:+.3f}, 90th: {q90_eng:+.3f}]")
+    # Wikipedia GroupKFold OOF conformal quantiles
+    wiki_years = years[wiki_mask.values]
+    gkf_wiki = GroupKFold(n_splits=min(5, len(np.unique(wiki_years))))
+    oof_wiki_preds = np.zeros_like(y_wiki_train)
+    for tr, te in gkf_wiki.split(X_creative_wiki, y_wiki_train, groups=wiki_years):
+        m1_w = RidgeCV(alphas=np.logspace(-2, 3, 10)).fit(X_macro_wiki[tr], y_wiki_train[tr])
+        r_tr_w = y_wiki_train[tr] - m1_w.predict(X_macro_wiki[tr])
+        m2_w = (
+            ExplainableBoostingRegressor(
+                interactions=2, learning_rate=0.02, max_bins=32, random_state=42, feature_names=creative_feats
+            )
+            if HAS_EBM
+            else Ridge(alpha=1.0)
+        )
+        m2_w.fit(X_creative_wiki[tr], r_tr_w)
+        oof_wiki_preds[te] = m1_w.predict(X_macro_wiki[te]) + m2_w.predict(X_creative_wiki[te])
+
+    errors_wiki = y_wiki_train - oof_wiki_preds
+    q10_wiki = float(np.percentile(errors_wiki, 10))
+    q90_wiki = float(np.percentile(errors_wiki, 90))
+    rmse_wiki = float(np.sqrt(np.mean(errors_wiki ** 2)))
+
+    print(f"Validation GroupKFold OOF RMSE (Engagement): {rmse_eng:.3f}")
+    print(f"Conformal 80% Residual Error Quantiles (Engagement): [10th: {q10_eng:+.3f}, 90th: {q90_eng:+.3f}]")
+    print(f"Validation GroupKFold OOF RMSE (Wikipedia): {rmse_wiki:.3f}")
+    print(f"Conformal 80% Residual Error Quantiles (Wikipedia): [10th: {q10_wiki:+.3f}, 90th: {q90_wiki:+.3f}]")
 
     bundle = {
         "ridge_eng": ridge_eng,
@@ -412,6 +435,9 @@ def run_pipeline():
         "q10_eng": q10_eng,
         "q90_eng": q90_eng,
         "rmse_eng": rmse_eng,
+        "q10_wiki": q10_wiki,
+        "q90_wiki": q90_wiki,
+        "rmse_wiki": rmse_wiki,
         "historical_records": df[[
             "year", "brand", "yt_title", "youtube_url", "superbowl_ads_dot_com_url", "eng_rate_pct", "spike_ratio", "spot_runtime"
         ] + TRAITS].to_dict(orient="records"),

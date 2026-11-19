@@ -8,7 +8,6 @@ Outputs:
 - data/processed/google_trends_quarterly_decay.csv
 """
 
-import os
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -127,9 +126,6 @@ def generate_google_trends_data():
         if is_celebrity: trait_mult += 0.22
         if is_funny: trait_mult += 0.15
         if is_product: trait_mult += 0.08
-        
-        # Macro growth in mobile/digital search over time (2004-2026)
-        year_scaling = 1.0 + (year - 2004) * 0.02 if not is_pre_gt else 0.7
         
         if is_pre_gt:
             # Pre-Google Trends era (prior to Jan 2004)

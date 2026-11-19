@@ -3,7 +3,6 @@ Wikimedia pageviews data only starts July 2015, so earlier games can't be covere
 Run:  python fetch_wikipedia.py
 Outputs: data/processed/wiki_daily.csv (daily series) and data/processed/wiki_spikes.csv (one row per brand-year)
 """
-import os
 from pathlib import Path
 import time
 import urllib.parse

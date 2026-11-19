@@ -2037,7 +2037,7 @@ def compute_executive_roi_and_decision(
                 "color": "#a6e3a1",
                 "title": "Move to Game Q3",
                 "savings": f"Only +${round(q3_cost_cur - q4_cost_cur, 1)}M delta",
-                "advantage": "Restores living-room audience to 96.3M viewers and cuts Effective CPM down from ${cpm} to $66.46.",
+                "advantage": f"Restores living-room audience to 96.3M viewers and cuts Effective CPM down from ${cpm} to $66.46.",
             })
             alternatives.append({
                 "quarter": "Game Q1",
